@@ -50,7 +50,7 @@ function Modal({ open, onClose, title, children }) {
 
 function Hero({ onGoCatalog, onOpenSupplier }) {
   return (
-    <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-orange-50 via-white to-amber-50 p-6 md:p-12 border">
+   <div className="relative overflow-hidden rounded-3xl bg-blue-50 p-6 md:p-12 border">
       <div className="md:max-w-2xl">
         <div className="mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm"><Sparkles size={16}/> EasyTex</div>
         <h1 className="text-3xl md:text-5xl font-extrabold leading-tight tracking-tight">Sourcing textile, simple et local.<br/>Trouvez vos tissus en Afrique de l’Ouest.</h1>
@@ -62,7 +62,7 @@ function Hero({ onGoCatalog, onOpenSupplier }) {
         <div className="mt-6 grid grid-cols-3 gap-2 max-w-md text-xs md:text-sm">
           <div className="rounded-xl border p-3"><Shield className="mb-2" size={18}/> <div className="font-medium">Fournisseurs vérifiés</div></div>
           <div className="rounded-xl border p-3"><Truck className="mb-2" size={18}/> <div className="font-medium">Expédition régionale</div></div>
-          <div className="rounded-xl border p-3"><Globe className="mb-2" size={18}/> <div className="font-medium">UEMOA d’abord</div></div>
+          <div className="rounded-xl border p-3"><Globe className="mb-2" size={18}/> <div className="font-medium">UEMOA</div></div>
         </div>
       </div>
       <img alt="textile" className="pointer-events-none select-none hidden md:block absolute -right-10 bottom-0 w-[360px] rounded-tl-3xl shadow-2xl" src="https://images.unsplash.com/photo-1520975922284-9d09a2b1a0d8?q=80&w=1200&auto=format&fit=crop"/>
