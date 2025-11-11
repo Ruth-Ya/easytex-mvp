@@ -1,9 +1,7 @@
 export default function Footer() {
   return (
-    <footer className="text-center mt-10 py-6 border-t">
-      <span className="text-sm text-gray-500 flex items-center justify-center gap-1">
-        🧵 textile
-      </span>
+    <footer className="text-center py-6 mt-10 border-t border-gray-200 bg-blue-50 text-gray-600 text-sm">
+      © EasyTex 2025 – Tous droits réservés
     </footer>
   );
 }
