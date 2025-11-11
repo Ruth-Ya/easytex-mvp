@@ -66,7 +66,10 @@ function Hero({ onGoCatalog, onOpenSupplier }) {
           <div className="rounded-xl border p-3"><Globe className="mb-2" size={18}/> <div className="font-medium">UEMOA</div></div>
         </div>
       </div>
-     
+     <footer className="text-center py-6 mt-10 border-t border-gray-200 bg-blue-50 text-gray-600 text-sm">
+  © EasyTex 2025 – Tous droits réservés
+</footer>
+
     </div>
   );
 }
