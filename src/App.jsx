@@ -235,7 +235,7 @@ export default function App() {
     <div className="mx-auto max-w-6xl p-4 md:p-6">
       <header className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-xl bg-black text-white grid place-items-center font-bold">ET</div>
+          <img src="/logo-easytex.png" alt="EasyTex logo" className="h-9 w-auto" />
           <div className="font-semibold">EasyTex</div>
         </div>
         <nav className="hidden md:flex items-center gap-2">
