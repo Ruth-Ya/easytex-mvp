@@ -52,7 +52,7 @@ function Hero({ onGoCatalog, onOpenSupplier }) {
   return (
     <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-orange-50 via-white to-amber-50 p-6 md:p-12 border">
       <div className="md:max-w-2xl">
-        <div className="mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm"><Sparkles size={16}/> MVP EasyTex</div>
+        <div className="mb-4 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm"><Sparkles size={16}/> EasyTex</div>
         <h1 className="text-3xl md:text-5xl font-extrabold leading-tight tracking-tight">Sourcing textile, simple & local.<br/>Trouvez vos tissus en Afrique de l’Ouest.</h1>
         <p className="mt-4 text-base md:text-lg text-gray-600">Découvrez des fournisseurs vérifiés, comparez les tissus, et demandez un devis en un clic — directement sur WhatsApp.</p>
         <div className="mt-6 flex flex-wrap gap-3">
