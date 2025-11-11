@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { Search, Filter, Store, Phone, Upload, Loader2, Plus, X, Globe, Sparkles, Shield, Truck, ArrowRight } from "lucide-react";
+import Footer from "./Footer";
 
 // --- Utilitaires
 const formatPrice = (n) => new Intl.NumberFormat("fr-FR", { style: "currency", currency: "XOF", maximumFractionDigits: 0 }).format(n);
