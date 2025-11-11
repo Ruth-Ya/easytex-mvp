@@ -66,7 +66,7 @@ function Hero({ onGoCatalog, onOpenSupplier }) {
           <div className="rounded-xl border p-3"><Globe className="mb-2" size={18}/> <div className="font-medium">UEMOA</div></div>
         </div>
       </div>
-      <img alt="textile" className="pointer-events-none select-none hidden md:block absolute -right-10 bottom-0 w-[360px] rounded-tl-3xl shadow-2xl" src="https://images.unsplash.com/photo-1520975922284-9d09a2b1a0d8?q=80&w=1200&auto=format&fit=crop"/>
+     
     </div>
   );
 }
