@@ -265,12 +265,12 @@ function Catalog({ products, suppliers, onQuote }) {
 }
 
 /* -----------------------------------------------------------
-   VUES (Accueil / Catalogue / Fournisseurs)
+   VUES
 ----------------------------------------------------------- */
 function HomeView({ onGoCatalogue, onOpenSupplier }) {
   return (
     <div className="mx-auto max-w-6xl px-4 pb-16">
-      {/* HERO avec ton wording + bleu favicon */}
+      {/* HERO */}
       <div className="relative overflow-hidden rounded-3xl bg-brand-50 p-6 md:p-12 border">
         <div className="max-w-3xl">
           <span className="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-sm ring-1 ring-gray-200">
@@ -303,7 +303,6 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
             </button>
           </div>
 
-          {/* Badges / atouts */}
           <div className="mt-6 flex flex-wrap gap-3">
             <div className="rounded-2xl bg-white/70 backdrop-blur border px-3 py-2 text-sm">
               <span className="font-medium">Fournisseurs vérifiés</span>
@@ -334,7 +333,7 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
         </div>
       </section>
 
-      {/* COMMENT ÇA MARCHE ?  (restauré) */}
+      {/* COMMENT ÇA MARCHE */}
       <section className="mt-10">
         <h2 className="mb-4 text-xl font-semibold">Comment ça marche ?</h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -401,97 +400,4 @@ export default function App() {
   const [quoteProduct, setQuoteProduct] = useState(null);
   const [openSupplier, setOpenSupplier] = useState(false);
 
-  const switchTo = (key) => {
-    setTab(key);
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  return (
-    <div className="min-h-screen bg-white">
-      {/* HEADER */}
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-        <div className="flex items-center gap-3">
-          {/* Logo plus grand */}
-          <img
-            src="/logo-easytex.png"
-            alt="EasyTex logo"
-            className="h-9 w-9 rounded-md"
-          />
-          <span className="text-lg font-bold">EasyTex</span>
-        </div>
-
-        <nav className="flex items-center gap-2">
-          {[
-            { key: "accueil", label: "Accueil" },
-            { key: "catalogue", label: "Catalogue" },
-            { key: "fournisseurs", label: "Fournisseurs" },
-          ].map((item) => (
-            <button
-              key={item.key}
-              onClick={() => switchTo(item.key)}
-              className={`rounded-full px-4 py-2 text-sm font-medium ${
-                tab === item.key ? "bg-black text-white" : "text-gray-700 hover:bg-gray-100"
-              }`}
-            >
-              {item.label}
-            </button>
-          ))}
-        </nav>
-
-        <div className="hidden items-center gap-2 sm:flex">
-          <button
-            onClick={() => { switchTo("fournisseurs"); setOpenSupplier(true); }}
-            className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ring-1 ring-gray-300 hover:bg-gray-50"
-          >
-            Devenir fournisseur
-          </button>
-          <a
-            href={`https://wa.me/${WA_NUMBER}`}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-2 text-sm font-medium text-white hover:bg-gray-900"
-          >
-            WhatsApp
-          </a>
-        </div>
-      </header>
-
-      {/* VUE ACTIVE UNIQUEMENT */}
-      {tab === "accueil" && (
-        <HomeView
-          onGoCatalogue={() => switchTo("catalogue")}
-          onOpenSupplier={() => { switchTo("fournisseurs"); setOpenSupplier(true); }}
-        />
-      )}
-
-      {tab === "catalogue" && (
-        <CatalogView onQuote={(p) => setQuoteProduct(p)} />
-      )}
-
-      {tab === "fournisseurs" && (
-        <SuppliersView onCloseModal={() => setOpenSupplier(false)} />
-      )}
-
-      {/* FOOTER */}
-      <footer className="mt-10 w-full border-t bg-white">
-        <div className="mx-auto max-w-6xl px-4 py-6 text-center text-sm text-gray-600">
-          © EasyTex 2025 – Tous droits réservés
-        </div>
-      </footer>
-
-      {/* MODAUX */}
-      <QuoteModal
-        open={!!quoteProduct}
-        onClose={() => setQuoteProduct(null)}
-        product={quoteProduct}
-      />
-      <Modal
-        open={openSupplier}
-        onClose={() => setOpenSupplier(false)}
-        title="Devenir fournisseur"
-      >
-        <SupplierSignup onClose={() => setOpenSupplier(false)} />
-      </Modal>
-    </div>
-  );
-}
+  // modales footer
