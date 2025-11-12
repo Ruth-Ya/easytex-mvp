@@ -102,29 +102,46 @@ function Modal({ open, onClose, title, children, wide = false }) {
   );
 }
 
+/* >>> SEULE MODIF : Lightbox avec bouton ✕ Fermer visible <<< */
 function Lightbox({ open, images, index, onClose, onPrev, onNext }) {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50">
-      <div className="absolute inset-0 bg-black/80" onClick={onClose} />
+    <div className="fixed inset-0 z-50 bg-black/80">
+      {/* close overlay (clic en dehors) */}
+      <div className="absolute inset-0" onClick={onClose} />
       <div className="absolute inset-0 flex items-center justify-center px-4">
-        <button
-          onClick={onPrev}
-          className="mr-4 rounded-full bg-white/90 px-4 py-2 shadow hover:bg-white"
-        >
-          ←
-        </button>
-        <img
-          src={images[index]}
-          alt=""
-          className="max-h-[80vh] max-w-[90vw] rounded-xl object-contain bg-white"
-        />
-        <button
-          onClick={onNext}
-          className="ml-4 rounded-full bg-white/90 px-4 py-2 shadow hover:bg-white"
-        >
-          →
-        </button>
+        <div className="relative flex flex-col items-center">
+          {/* Bouton Fermer en haut à droite du visuel */}
+          <button
+            onClick={onClose}
+            className="absolute -top-10 right-0 rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-white"
+          >
+            ✕ Fermer
+          </button>
+
+          {/* Image principale */}
+          <img
+            src={images[index]}
+            alt=""
+            className="max-h-[80vh] max-w-[90vw] rounded-xl object-contain bg-white"
+          />
+
+          {/* Boutons navigation */}
+          <div className="mt-4 flex justify-center gap-6">
+            <button
+              onClick={(e)=>{e.stopPropagation(); onPrev();}}
+              className="rounded-full bg-white/90 px-4 py-2 shadow hover:bg-white"
+            >
+              ← Précédente
+            </button>
+            <button
+              onClick={(e)=>{e.stopPropagation(); onNext();}}
+              className="rounded-full bg-white/90 px-4 py-2 shadow hover:bg-white"
+            >
+              Suivante →
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -380,11 +397,11 @@ function Hero({ onBecomeSupplier, goCatalogue }) {
           <div className="font-medium">Fournisseurs vérifiés</div>
           <div className="text-sm text-gray-500">Qualité et confiance</div>
         </div>
-        <div className="rounded-xl border px-4 py-3">
+        <div className="rounded-2xl border px-4 py-3">
           <div className="font-medium">Expédition régionale</div>
           <div className="text-sm text-gray-500">UEMOA</div>
         </div>
-        <div className="rounded-xl border px-4 py-3">
+        <div className="rounded-2xl border px-4 py-3">
           <div className="font-medium">Support WhatsApp</div>
           <div className="text-sm text-gray-500">Réponse 24–48h</div>
         </div>
