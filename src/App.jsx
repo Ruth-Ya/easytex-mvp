@@ -11,10 +11,11 @@ const formatPrice = (n) =>
     maximumFractionDigits: 0,
   }).format(n);
 
-const WA_NUMBER = "221707546281"; // Mets ton numéro WhatsApp EasyTex
+// Ton numéro WhatsApp (format international sans +)
+const WA_NUMBER = "221707546281";
 
 /* -----------------------------------------------------------
-   DONNÉES DÉMO
+   DONNÉES DÉMO (remplaçables plus tard)
 ----------------------------------------------------------- */
 const DEMO_SUPPLIERS = [
   { id: "s1", name: "Atelier Ndar Textile", city: "Saint-Louis", country: "Sénégal", whatsapp: "221771112233" },
@@ -31,7 +32,7 @@ const DEMO_PRODUCTS = [
 ];
 
 /* -----------------------------------------------------------
-   MODAUX
+   MODAUX GÉNÉRIQUES
 ----------------------------------------------------------- */
 function Modal({ open, onClose, title, children }) {
   if (!open) return null;
@@ -265,7 +266,7 @@ function Catalog({ products, suppliers, onQuote }) {
 }
 
 /* -----------------------------------------------------------
-   VUES
+   VUES (Accueil / Catalogue / Fournisseurs)
 ----------------------------------------------------------- */
 function HomeView({ onGoCatalogue, onOpenSupplier }) {
   return (
@@ -303,12 +304,12 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
             </button>
           </div>
 
+          {/* Badges */}
           <div className="mt-6 flex flex-wrap gap-3">
             <div className="rounded-2xl bg-white/70 backdrop-blur border px-3 py-2 text-sm">
               <span className="font-medium">Fournisseurs vérifiés</span>
               <span className="text-gray-500"> — Qualité et confiance</span>
             </div>
-
             <div className="rounded-2xl bg-white/70 backdrop-blur border px-3 py-2 text-sm">
               <span className="font-medium">Expédition régionale</span>
               <span className="text-gray-500"> — UEMOA</span>
@@ -393,11 +394,169 @@ function SuppliersView({ onCloseModal }) {
 }
 
 /* -----------------------------------------------------------
-   APP
+   APP PRINCIPALE
 ----------------------------------------------------------- */
 export default function App() {
   const [tab, setTab] = useState("accueil");
   const [quoteProduct, setQuoteProduct] = useState(null);
   const [openSupplier, setOpenSupplier] = useState(false);
 
-  // modales footer
+  // Mentions légales / politique / CGU
+  const [openPrivacy, setOpenPrivacy] = useState(false);
+  const [openTerms, setOpenTerms] = useState(false);
+  const [openImprint, setOpenImprint] = useState(false);
+
+  const switchTo = (key) => {
+    setTab(key);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  return (
+    <div className="min-h-screen bg-white">
+      {/* HEADER */}
+      <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+        <div className="flex items-center gap-3">
+          {/* Logo agrandi : place /public/logo-easytex.png */}
+          <img
+            src="/logo-easytex.png"
+            alt="EasyTex logo"
+            className="h-10 w-10 rounded-md"
+          />
+          <span className="text-lg font-bold">EasyTex</span>
+        </div>
+
+        <nav className="flex items-center gap-2">
+          {[
+            { key: "accueil", label: "Accueil" },
+            { key: "catalogue", label: "Catalogue" },
+            { key: "fournisseurs", label: "Fournisseurs" },
+          ].map((item) => (
+            <button
+              key={item.key}
+              onClick={() => switchTo(item.key)}
+              className={`rounded-full px-4 py-2 text-sm font-medium ${
+                tab === item.key ? "bg-black text-white" : "text-gray-700 hover:bg-gray-100"
+              }`}
+            >
+              {item.label}
+            </button>
+          ))}
+        </nav>
+
+        <div className="hidden items-center gap-2 sm:flex">
+          <button
+            onClick={() => { switchTo("fournisseurs"); setOpenSupplier(true); }}
+            className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ring-1 ring-gray-300 hover:bg-gray-50"
+          >
+            Devenir fournisseur
+          </button>
+          <a
+            href={`https://wa.me/${WA_NUMBER}`}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-2 text-sm font-medium text-white hover:bg-gray-900"
+          >
+            WhatsApp
+          </a>
+        </div>
+      </header>
+
+      {/* VUE ACTIVE UNIQUEMENT */}
+      {tab === "accueil" && (
+        <HomeView
+          onGoCatalogue={() => switchTo("catalogue")}
+          onOpenSupplier={() => { switchTo("fournisseurs"); setOpenSupplier(true); }}
+        />
+      )}
+
+      {tab === "catalogue" && (
+        <CatalogView onQuote={(p) => setQuoteProduct(p)} />
+      )}
+
+      {tab === "fournisseurs" && (
+        <SuppliersView onCloseModal={() => setOpenSupplier(false)} />
+      )}
+
+      {/* FOOTER + Mentions */}
+      <footer className="mt-10 w-full border-top bg-white border-t">
+        <div className="mx-auto max-w-6xl px-4 py-6 text-center text-sm text-gray-600">
+          <div>© EasyTex 2025 – Tous droits réservés</div>
+          <div className="mt-2 flex flex-wrap items-center justify-center gap-3 text-gray-500">
+            <button
+              onClick={() => setOpenPrivacy(true)}
+              className="underline-offset-2 hover:text-gray-700 hover:underline"
+            >
+              Confidentialité
+            </button>
+            <span>•</span>
+            <button
+              onClick={() => setOpenTerms(true)}
+              className="underline-offset-2 hover:text-gray-700 hover:underline"
+            >
+              CGU
+            </button>
+            <span>•</span>
+            <button
+              onClick={() => setOpenImprint(true)}
+              className="underline-offset-2 hover:text-gray-700 hover:underline"
+            >
+              Mentions légales
+            </button>
+          </div>
+        </div>
+      </footer>
+
+      {/* MODAUX GLOBAUX */}
+      <QuoteModal
+        open={!!quoteProduct}
+        onClose={() => setQuoteProduct(null)}
+        product={quoteProduct}
+      />
+
+      <Modal open={openSupplier} onClose={() => setOpenSupplier(false)} title="Devenir fournisseur">
+        <SupplierSignup onClose={() => setOpenSupplier(false)} />
+      </Modal>
+
+      {/* Mentions / Politique / CGU */}
+      <Modal open={openPrivacy} onClose={() => setOpenPrivacy(false)} title="Politique de confidentialité">
+        <div className="space-y-3 text-sm text-gray-700">
+          <p>
+            EasyTex respecte votre vie privée. Les données collectées (formulaires, demandes de devis)
+            servent uniquement au traitement de vos sollicitations et à l’amélioration du service.
+          </p>
+          <ul className="list-disc pl-5">
+            <li>Base légale : intérêt légitime et exécution pré-contractuelle.</li>
+            <li>Conservation : durée nécessaire au traitement + obligations légales.</li>
+            <li>Droits : accès, rectification, effacement, opposition, portabilité.</li>
+            <li>Contact DPD : privacy@easytex.sn</li>
+          </ul>
+        </div>
+      </Modal>
+
+      <Modal open={openTerms} onClose={() => setOpenTerms(false)} title="Conditions Générales d’Utilisation (CGU)">
+        <div className="space-y-3 text-sm text-gray-700">
+          <p>
+            EasyTex met en relation acheteurs et fournisseurs de textiles dans l’espace UEMOA.
+            L’usage de la plateforme implique l’acceptation des présentes CGU.
+          </p>
+          <ul className="list-disc pl-5">
+            <li>Le contenu catalogue a une valeur indicative (prix, disponibilités).</li>
+            <li>Les échanges commerciaux se finalisent directement entre les parties.</li>
+            <li>Respect des lois applicables (douanes, propriété intellectuelle, etc.).</li>
+            <li>Compte et contenus : interdiction de fraude, spam ou usurpation.</li>
+          </ul>
+        </div>
+      </Modal>
+
+      <Modal open={openImprint} onClose={() => setOpenImprint(false)} title="Mentions légales">
+        <div className="space-y-3 text-sm text-gray-700">
+          <p><span className="font-medium">Éditeur :</span> EasyTex (raison sociale à compléter).</p>
+          <p><span className="font-medium">Siège :</span> Adresse à compléter, Sénégal.</p>
+          <p><span className="font-medium">Contact :</span> contact@easytex.sn — +221 …</p>
+          <p><span className="font-medium">Hébergement :</span> Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA.</p>
+          <p>Pour toute notification légale : legal@easytex.sn</p>
+        </div>
+      </Modal>
+    </div>
+  );
+}
