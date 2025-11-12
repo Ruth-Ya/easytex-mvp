@@ -67,9 +67,6 @@ function Hero({ onGoCatalog, onOpenSupplier }) {
         </div>
       </div>
    
-</footer>
-
-    </div>
   );
 }
 
@@ -308,14 +305,15 @@ export default function App() {
             <SupplierSignup onClose={()=>setOpenSupplier(false)} />
           </div>
         </div>
-      )}
-
+          )}
+      
       <Footer />
 
-      <QuoteModal open={!!quoteProduct} onClose={()=>setQuoteProduct(null)} product={quoteProduct} />
-      <Modal open={openSupplier} onClose={()=>setOpenSupplier(false)} title="Devenir fournisseur">
-        <SupplierSignup onClose={()=>setOpenSupplier(false)} />
+      <QuoteModal open={!!quoteProduct} onClose={() => setQuoteProduct(null)} product={quoteProduct} />
+      <Modal open={openSupplier} onClose={() => setOpenSupplier(false)} title="Devenir fournisseur">
+        <SupplierSignup onClose={() => setOpenSupplier(false)} />
       </Modal>
-    </div>
+    </div>   {/* fin du conteneur principal */}
   );
 }
+
