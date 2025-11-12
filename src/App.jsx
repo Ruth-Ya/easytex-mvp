@@ -15,7 +15,7 @@ const formatPrice = (n) =>
 const WA_NUMBER = "221707546281";
 
 /* -----------------------------------------------------------
-   DONNÉES DÉMO (remplaçables plus tard)
+   DONNÉES DÉMO
 ----------------------------------------------------------- */
 const DEMO_SUPPLIERS = [
   { id: "s1", name: "Atelier Ndar Textile", city: "Saint-Louis", country: "Sénégal", whatsapp: "221771112233" },
@@ -40,12 +40,12 @@ function Modal({ open, onClose, title, children }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
       <div className="relative z-10 w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
-        {title && <h3 className="mb-4 text-lg font-semibold">{title}</h3>}
+        {title && <h3 className="mb-4 text-lg font-semibold text-gray-900">{title}</h3>}
         <div>{children}</div>
         <div className="mt-6 flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="rounded-xl px-4 py-2 font-medium ring-1 ring-gray-300 hover:bg-gray-50"
+            className="rounded-xl px-4 py-2 font-medium ring-1 ring-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
           >
             Fermer
           </button>
@@ -76,7 +76,7 @@ function QuoteModal({ open, onClose, product }) {
         href={waLink}
         target="_blank"
         rel="noreferrer"
-        className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-brand-500 px-4 py-3 font-semibold text-white hover:bg-brand-600"
+        className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-brand-500 px-4 py-3 font-semibold text-white hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
       >
         Ouvrir WhatsApp et envoyer
       </a>
@@ -105,7 +105,7 @@ function SupplierSignup({ onClose }) {
     <form onSubmit={submit} className="space-y-4">
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
-          <label className="mb-1 block text-sm font-medium">Nom de l’entreprise</label>
+          <label className="mb-1 block text-sm font-medium text-gray-900">Nom de l’entreprise</label>
           <input
             className="w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-brand-400"
             value={name}
@@ -114,7 +114,7 @@ function SupplierSignup({ onClose }) {
           />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium">Ville</label>
+          <label className="mb-1 block text-sm font-medium text-gray-900">Ville</label>
           <input
             className="w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-brand-400"
             value={city}
@@ -123,7 +123,7 @@ function SupplierSignup({ onClose }) {
           />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium">Pays</label>
+          <label className="mb-1 block text-sm font-medium text-gray-900">Pays</label>
           <input
             className="w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-brand-400"
             value={country}
@@ -132,7 +132,7 @@ function SupplierSignup({ onClose }) {
           />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium">Numéro WhatsApp</label>
+          <label className="mb-1 block text-sm font-medium text-gray-900">Numéro WhatsApp</label>
           <input
             className="w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-brand-400"
             value={whatsapp}
@@ -144,7 +144,7 @@ function SupplierSignup({ onClose }) {
 
       <button
         type="submit"
-        className="inline-flex items-center justify-center rounded-xl bg-brand-500 px-4 py-3 font-semibold text-white hover:bg-brand-600"
+        className="inline-flex items-center justify-center rounded-xl bg-brand-500 px-4 py-3 font-semibold text-white hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
       >
         Envoyer ma demande
       </button>
@@ -192,7 +192,7 @@ function Catalog({ products, suppliers, onQuote }) {
   return (
     <section className="mx-auto max-w-6xl px-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="text-xl font-semibold">Catalogue</h2>
+        <h2 className="text-xl font-semibold text-gray-900">Catalogue</h2>
 
         <div className="flex flex-wrap gap-3">
           <input
@@ -226,12 +226,12 @@ function Catalog({ products, suppliers, onQuote }) {
         {filtered.map((p) => {
           const s = supplierById.get(p.supplierId);
           return (
-            <div key={p.id} className="rounded-2xl border p-4">
-              <div className="text-base font-semibold">{p.name}</div>
+            <div key={p.id} className="rounded-2xl border p-4 hover:shadow-sm transition">
+              <div className="text-base font-semibold text-gray-900">{p.name}</div>
               <div className="mt-1 text-sm text-gray-600">
                 {p.type} • {p.color} • {p.origin}
               </div>
-              <div className="mt-3 text-lg font-extrabold">{formatPrice(p.price)}</div>
+              <div className="mt-3 text-lg font-extrabold text-gray-900">{formatPrice(p.price)}</div>
 
               {s && (
                 <div className="mt-2 text-sm text-gray-600">
@@ -242,7 +242,7 @@ function Catalog({ products, suppliers, onQuote }) {
               <div className="mt-4 flex gap-3">
                 <button
                   onClick={() => onQuote(p)}
-                  className="inline-flex flex-1 items-center justify-center rounded-xl bg-brand-500 px-3 py-2 text-sm font-semibold text-white hover:bg-brand-600"
+                  className="inline-flex flex-1 items-center justify-center rounded-xl bg-brand-500 px-3 py-2 text-sm font-semibold text-white hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
                 >
                   Demander un devis
                 </button>
@@ -251,7 +251,7 @@ function Catalog({ products, suppliers, onQuote }) {
                     href={`https://wa.me/${s.whatsapp}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center justify-center rounded-xl px-3 py-2 text-sm font-semibold ring-1 ring-brand-500 text-brand-600 hover:bg-brand-50"
+                    className="inline-flex items-center justify-center rounded-xl px-3 py-2 text-sm font-semibold ring-1 ring-brand-500 text-brand-600 hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
                   >
                     Contacter
                   </a>
@@ -272,18 +272,18 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
   return (
     <div className="mx-auto max-w-6xl px-4 pb-16">
       {/* HERO */}
-      <div className="relative overflow-hidden rounded-3xl bg-brand-50 p-6 md:p-12 border">
+      <div className="relative overflow-hidden rounded-3xl bg-brand-50 p-6 md:p-16 border">
         <div className="max-w-3xl">
           <span className="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-sm ring-1 ring-gray-200">
             <span className="inline-block h-2 w-2 rounded-full bg-brand-500" />
             EasyTex
           </span>
 
-          <h1 className="mt-4 text-4xl font-extrabold tracking-tight md:text-6xl">
+          <h1 className="mt-4 text-4xl md:text-6xl font-extrabold tracking-tight text-gray-900">
             Sourcing textile, simple et rapide.
           </h1>
 
-          <p className="mt-4 text-gray-600 md:text-lg">
+          <p className="mt-4 text-gray-700 md:text-lg">
             Comparez les tissus, demandez un devis en un clic et échangez
             directement sur WhatsApp avec des fournisseurs vérifiés.
           </p>
@@ -291,14 +291,14 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
           <div className="mt-6 flex flex-wrap gap-3">
             <button
               onClick={onGoCatalogue}
-              className="inline-flex items-center justify-center rounded-xl bg-brand-500 px-5 py-3 font-semibold text-white hover:bg-brand-600"
+              className="inline-flex items-center justify-center rounded-xl bg-brand-500 px-5 py-3 font-semibold text-white hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
             >
               Explorer le catalogue
             </button>
 
             <button
               onClick={onOpenSupplier}
-              className="inline-flex items-center justify-center rounded-xl px-5 py-3 font-semibold ring-1 ring-brand-500 text-brand-600 hover:bg-brand-50"
+              className="inline-flex items-center justify-center rounded-xl px-5 py-3 font-semibold ring-1 ring-brand-500 text-brand-600 hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
             >
               Devenir fournisseur
             </button>
@@ -307,12 +307,12 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
           {/* Badges */}
           <div className="mt-6 flex flex-wrap gap-3">
             <div className="rounded-2xl bg-white/70 backdrop-blur border px-3 py-2 text-sm">
-              <span className="font-medium">Fournisseurs vérifiés</span>
-              <span className="text-gray-500"> — Qualité et confiance</span>
+              <span className="font-medium text-gray-900">Fournisseurs vérifiés</span>
+              <span className="text-gray-600"> — Qualité et confiance</span>
             </div>
             <div className="rounded-2xl bg-white/70 backdrop-blur border px-3 py-2 text-sm">
-              <span className="font-medium">Expédition régionale</span>
-              <span className="text-gray-500"> — UEMOA</span>
+              <span className="font-medium text-gray-900">Expédition régionale</span>
+              <span className="text-gray-600"> — UEMOA</span>
             </div>
           </div>
         </div>
@@ -321,40 +321,34 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
       {/* STATS */}
       <section className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="rounded-2xl border p-4">
-          <div className="text-3xl font-extrabold">100</div>
+          <div className="text-3xl font-extrabold text-gray-900">100</div>
           <div className="text-gray-600">Tissus disponibles</div>
         </div>
         <div className="rounded-2xl border p-4">
-          <div className="text-3xl font-extrabold">UEMOA</div>
+          <div className="text-3xl font-extrabold text-gray-900">UEMOA</div>
           <div className="text-gray-600">Zone desservie</div>
         </div>
         <div className="rounded-2xl border p-4">
-          <div className="text-3xl font-extrabold">24–48h</div>
+          <div className="text-3xl font-extrabold text-gray-900">24–48h</div>
           <div className="text-gray-600">Délai de réponse</div>
         </div>
       </section>
 
-      {/* COMMENT ÇA MARCHE */}
+      {/* COMMENT ÇA MARCHE – compact */}
       <section className="mt-10">
-        <h2 className="mb-4 text-xl font-semibold">Comment ça marche ?</h2>
+        <h2 className="mb-4 text-xl font-semibold text-gray-900">Comment ça marche ?</h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <div className="rounded-2xl border p-4">
-            <div className="font-semibold">1) Explorez</div>
-            <p className="mt-1 text-sm text-gray-600">
-              le catalogue et filtrez par type, couleur, pays.
-            </p>
+            <div className="font-semibold text-gray-900">1) Explorez</div>
+            <p className="mt-1 text-sm text-gray-600">Filtrez par type, couleur, origine.</p>
           </div>
           <div className="rounded-2xl border p-4">
-            <div className="font-semibold">2) Demandez un devis</div>
-            <p className="mt-1 text-sm text-gray-600">
-              en un clic via WhatsApp avec des détails auto-remplis.
-            </p>
+            <div className="font-semibold text-gray-900">2) Demandez un devis</div>
+            <p className="mt-1 text-sm text-gray-600">En un clic via WhatsApp.</p>
           </div>
           <div className="rounded-2xl border p-4">
-            <div className="font-semibold">3) Recevez & finalisez</div>
-            <p className="mt-1 text-sm text-gray-600">
-              Comparez les offres, choisissez et confirmez votre commande.
-            </p>
+            <div className="font-semibold text-gray-900">3) Recevez & finalisez</div>
+            <p className="mt-1 text-sm text-gray-600">Comparez puis confirmez.</p>
           </div>
         </div>
       </section>
@@ -364,7 +358,7 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
 
 function CatalogView({ onQuote }) {
   return (
-    <div className="mx-auto max-w-6xl px-4 pb-16">
+    <div id="catalogue" className="mx-auto max-w-6xl px-4 pb-16">
       <Catalog
         products={DEMO_PRODUCTS}
         suppliers={DEMO_SUPPLIERS}
@@ -376,12 +370,12 @@ function CatalogView({ onQuote }) {
 
 function SuppliersView({ onCloseModal }) {
   return (
-    <div className="mx-auto max-w-6xl px-4 pb-16">
+    <div id="fournisseurs" className="mx-auto max-w-6xl px-4 pb-16">
       <section className="rounded-2xl border p-5">
-        <h2 className="text-lg font-semibold">
+        <h2 className="text-lg font-semibold text-gray-900">
           Vous vendez du textile ? Rejoignez EasyTex
         </h2>
-        <p className="mt-1 text-sm text-gray-600">
+        <p className="mt-1 text-sm text-gray-700">
           Créez une vitrine simple, recevez des demandes qualifiées et
           développez votre clientèle dans l’espace UEMOA.
         </p>
@@ -415,15 +409,20 @@ export default function App() {
     <div className="min-h-screen bg-white">
       {/* HEADER */}
       <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
-        <div className="flex items-center gap-3">
-          {/* Logo agrandi : place /public/logo-easytex.png */}
+        <a
+          href="#"
+          onClick={(e) => { e.preventDefault(); switchTo("accueil"); }}
+          className="flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400 rounded-md"
+        >
+          {/* Logo agrandi et cliquable */}
           <img
             src="/logo-easytex.png"
-            alt="EasyTex logo"
-            className="h-10 w-10 rounded-md"
+            alt="Logo EasyTex"
+            className="h-11 w-11 rounded-md"
+            loading="eager"
           />
-          <span className="text-lg font-bold">EasyTex</span>
-        </div>
+          <span className="text-lg font-bold text-gray-900">EasyTex</span>
+        </a>
 
         <nav className="flex items-center gap-2">
           {[
@@ -434,7 +433,7 @@ export default function App() {
             <button
               key={item.key}
               onClick={() => switchTo(item.key)}
-              className={`rounded-full px-4 py-2 text-sm font-medium ${
+              className={`rounded-full px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400 ${
                 tab === item.key ? "bg-black text-white" : "text-gray-700 hover:bg-gray-100"
               }`}
             >
@@ -446,7 +445,7 @@ export default function App() {
         <div className="hidden items-center gap-2 sm:flex">
           <button
             onClick={() => { switchTo("fournisseurs"); setOpenSupplier(true); }}
-            className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ring-1 ring-gray-300 hover:bg-gray-50"
+            className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ring-1 ring-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
           >
             Devenir fournisseur
           </button>
@@ -454,7 +453,7 @@ export default function App() {
             href={`https://wa.me/${WA_NUMBER}`}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-2 text-sm font-medium text-white hover:bg-gray-900"
+            className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-2 text-sm font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
           >
             WhatsApp
           </a>
@@ -478,27 +477,27 @@ export default function App() {
       )}
 
       {/* FOOTER + Mentions */}
-      <footer className="mt-10 w-full border-top bg-white border-t">
+      <footer className="mt-10 w-full border-t bg-white">
         <div className="mx-auto max-w-6xl px-4 py-6 text-center text-sm text-gray-600">
           <div>© EasyTex 2025 – Tous droits réservés</div>
           <div className="mt-2 flex flex-wrap items-center justify-center gap-3 text-gray-500">
             <button
               onClick={() => setOpenPrivacy(true)}
-              className="underline-offset-2 hover:text-gray-700 hover:underline"
+              className="underline-offset-2 hover:text-gray-700 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400 rounded"
             >
               Confidentialité
             </button>
             <span>•</span>
             <button
               onClick={() => setOpenTerms(true)}
-              className="underline-offset-2 hover:text-gray-700 hover:underline"
+              className="underline-offset-2 hover:text-gray-700 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400 rounded"
             >
               CGU
             </button>
             <span>•</span>
             <button
               onClick={() => setOpenImprint(true)}
-              className="underline-offset-2 hover:text-gray-700 hover:underline"
+              className="underline-offset-2 hover:text-gray-700 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400 rounded"
             >
               Mentions légales
             </button>
