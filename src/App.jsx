@@ -14,7 +14,7 @@ const formatPrice = (n) =>
 const WA_NUMBER = "221707546281"; // Mets ton numéro WhatsApp EasyTex
 
 /* -----------------------------------------------------------
-   DONNÉES DÉMO (tu pourras brancher un Google Sheet plus tard)
+   DONNÉES DÉMO
 ----------------------------------------------------------- */
 const DEMO_SUPPLIERS = [
   { id: "s1", name: "Atelier Ndar Textile", city: "Saint-Louis", country: "Sénégal", whatsapp: "221771112233" },
@@ -23,55 +23,15 @@ const DEMO_SUPPLIERS = [
 ];
 
 const DEMO_PRODUCTS = [
-  {
-    id: "p1",
-    name: "Bazin Riche 1.8m",
-    type: "Bazin",
-    color: "Bleu roi",
-    origin: "Sénégal",
-    price: 8500,
-    supplierId: "s1",
-  },
-  {
-    id: "p2",
-    name: "Pagne tissé (lot de 5)",
-    type: "Tissé",
-    color: "Multicolore",
-    origin: "Côte d’Ivoire",
-    price: 24000,
-    supplierId: "s2",
-  },
-  {
-    id: "p3",
-    name: "Wax premium 6 yards",
-    type: "Wax",
-    color: "Rouge",
-    origin: "Côte d’Ivoire",
-    price: 19000,
-    supplierId: "s3",
-  },
-  {
-    id: "p4",
-    name: "Indigo artisanal",
-    type: "Indigo",
-    color: "Indigo",
-    origin: "Mali",
-    price: 17500,
-    supplierId: "s2",
-  },
-  {
-    id: "p5",
-    name: "Kente mix 6 yards",
-    type: "Kente",
-    color: "Jaune",
-    origin: "Ghana",
-    price: 28000,
-    supplierId: "s3",
-  },
+  { id: "p1", name: "Bazin Riche 1.8m", type: "Bazin", color: "Bleu roi", origin: "Sénégal", price: 8500, supplierId: "s1" },
+  { id: "p2", name: "Pagne tissé (lot de 5)", type: "Tissé", color: "Multicolore", origin: "Côte d’Ivoire", price: 24000, supplierId: "s2" },
+  { id: "p3", name: "Wax premium 6 yards", type: "Wax", color: "Rouge", origin: "Côte d’Ivoire", price: 19000, supplierId: "s3" },
+  { id: "p4", name: "Indigo artisanal", type: "Indigo", color: "Indigo", origin: "Mali", price: 17500, supplierId: "s2" },
+  { id: "p5", name: "Kente mix 6 yards", type: "Kente", color: "Jaune", origin: "Ghana", price: 28000, supplierId: "s3" },
 ];
 
 /* -----------------------------------------------------------
-   MODAUX GÉNÉRIQUES
+   MODAUX
 ----------------------------------------------------------- */
 function Modal({ open, onClose, title, children }) {
   if (!open) return null;
@@ -124,7 +84,7 @@ function QuoteModal({ open, onClose, product }) {
 }
 
 /* -----------------------------------------------------------
-   FORMULAIRE FOURNISSEUR (simple)
+   FORMULAIRE FOURNISSEUR
 ----------------------------------------------------------- */
 function SupplierSignup({ onClose }) {
   const [name, setName] = useState("");
@@ -192,7 +152,7 @@ function SupplierSignup({ onClose }) {
 }
 
 /* -----------------------------------------------------------
-   CATALOGUE (recherche + filtres simples)
+   CATALOGUE
 ----------------------------------------------------------- */
 function Catalog({ products, suppliers, onQuote }) {
   const [q, setQ] = useState("");
@@ -229,7 +189,7 @@ function Catalog({ products, suppliers, onQuote }) {
   }, [suppliers]);
 
   return (
-    <section id="catalogue" className="mx-auto mt-10 max-w-6xl px-4">
+    <section className="mx-auto max-w-6xl px-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 className="text-xl font-semibold">Catalogue</h2>
 
@@ -246,9 +206,7 @@ function Catalog({ products, suppliers, onQuote }) {
             onChange={(e) => setType(e.target.value)}
           >
             {types.map((t) => (
-              <option key={t} value={t}>
-                {t}
-              </option>
+              <option key={t} value={t}>{t}</option>
             ))}
           </select>
           <select
@@ -257,9 +215,7 @@ function Catalog({ products, suppliers, onQuote }) {
             onChange={(e) => setOrigin(e.target.value)}
           >
             {origins.map((o) => (
-              <option key={o} value={o}>
-                {o}
-              </option>
+              <option key={o} value={o}>{o}</option>
             ))}
           </select>
         </div>
@@ -289,7 +245,6 @@ function Catalog({ products, suppliers, onQuote }) {
                 >
                   Demander un devis
                 </button>
-
                 {s && (
                   <a
                     href={`https://wa.me/${s.whatsapp}`}
@@ -310,19 +265,145 @@ function Catalog({ products, suppliers, onQuote }) {
 }
 
 /* -----------------------------------------------------------
-   APP PRINCIPALE
+   VUES (Accueil / Catalogue / Fournisseurs)
+----------------------------------------------------------- */
+function HomeView({ onGoCatalogue, onOpenSupplier }) {
+  return (
+    <div className="mx-auto max-w-6xl px-4 pb-16">
+      {/* HERO avec ton wording + bleu favicon */}
+      <div className="relative overflow-hidden rounded-3xl bg-brand-50 p-6 md:p-12 border">
+        <div className="max-w-3xl">
+          <span className="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-sm ring-1 ring-gray-200">
+            <span className="inline-block h-2 w-2 rounded-full bg-brand-500" />
+            EasyTex
+          </span>
+
+          <h1 className="mt-4 text-4xl font-extrabold tracking-tight md:text-6xl">
+            Sourcing textile, simple et rapide.
+          </h1>
+
+          <p className="mt-4 text-gray-600 md:text-lg">
+            Comparez les tissus, demandez un devis en un clic et échangez
+            directement sur WhatsApp avec des fournisseurs vérifiés.
+          </p>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <button
+              onClick={onGoCatalogue}
+              className="inline-flex items-center justify-center rounded-xl bg-brand-500 px-5 py-3 font-semibold text-white hover:bg-brand-600"
+            >
+              Explorer le catalogue
+            </button>
+
+            <button
+              onClick={onOpenSupplier}
+              className="inline-flex items-center justify-center rounded-xl px-5 py-3 font-semibold ring-1 ring-brand-500 text-brand-600 hover:bg-brand-50"
+            >
+              Devenir fournisseur
+            </button>
+          </div>
+
+          {/* Badges / atouts */}
+          <div className="mt-6 flex flex-wrap gap-3">
+            <div className="rounded-2xl bg-white/70 backdrop-blur border px-3 py-2 text-sm">
+              <span className="font-medium">Fournisseurs vérifiés</span>
+              <span className="text-gray-500"> — Qualité et confiance</span>
+            </div>
+
+            <div className="rounded-2xl bg-white/70 backdrop-blur border px-3 py-2 text-sm">
+              <span className="font-medium">Expédition régionale</span>
+              <span className="text-gray-500"> — UEMOA</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* STATS */}
+      <section className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="rounded-2xl border p-4">
+          <div className="text-3xl font-extrabold">100</div>
+          <div className="text-gray-600">Tissus disponibles</div>
+        </div>
+        <div className="rounded-2xl border p-4">
+          <div className="text-3xl font-extrabold">UEMOA</div>
+          <div className="text-gray-600">Zone desservie</div>
+        </div>
+        <div className="rounded-2xl border p-4">
+          <div className="text-3xl font-extrabold">24–48h</div>
+          <div className="text-gray-600">Délai de réponse</div>
+        </div>
+      </section>
+
+      {/* COMMENT ÇA MARCHE ?  (restauré) */}
+      <section className="mt-10">
+        <h2 className="mb-4 text-xl font-semibold">Comment ça marche ?</h2>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div className="rounded-2xl border p-4">
+            <div className="font-semibold">1) Explorez</div>
+            <p className="mt-1 text-sm text-gray-600">
+              le catalogue et filtrez par type, couleur, pays.
+            </p>
+          </div>
+          <div className="rounded-2xl border p-4">
+            <div className="font-semibold">2) Demandez un devis</div>
+            <p className="mt-1 text-sm text-gray-600">
+              en un clic via WhatsApp avec des détails auto-remplis.
+            </p>
+          </div>
+          <div className="rounded-2xl border p-4">
+            <div className="font-semibold">3) Recevez & finalisez</div>
+            <p className="mt-1 text-sm text-gray-600">
+              Comparez les offres, choisissez et confirmez votre commande.
+            </p>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function CatalogView({ onQuote }) {
+  return (
+    <div className="mx-auto max-w-6xl px-4 pb-16">
+      <Catalog
+        products={DEMO_PRODUCTS}
+        suppliers={DEMO_SUPPLIERS}
+        onQuote={onQuote}
+      />
+    </div>
+  );
+}
+
+function SuppliersView({ onCloseModal }) {
+  return (
+    <div className="mx-auto max-w-6xl px-4 pb-16">
+      <section className="rounded-2xl border p-5">
+        <h2 className="text-lg font-semibold">
+          Vous vendez du textile ? Rejoignez EasyTex
+        </h2>
+        <p className="mt-1 text-sm text-gray-600">
+          Créez une vitrine simple, recevez des demandes qualifiées et
+          développez votre clientèle dans l’espace UEMOA.
+        </p>
+        <div className="mt-4">
+          <SupplierSignup onClose={onCloseModal} />
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* -----------------------------------------------------------
+   APP
 ----------------------------------------------------------- */
 export default function App() {
   const [tab, setTab] = useState("accueil");
   const [quoteProduct, setQuoteProduct] = useState(null);
   const [openSupplier, setOpenSupplier] = useState(false);
 
-  const goCatalogue = () => {
-    setTab("catalogue");
-    // scroll doux vers la section catalogue
-    setTimeout(() => {
-      document.querySelector("#catalogue")?.scrollIntoView({ behavior: "smooth" });
-    }, 0);
+  const switchTo = (key) => {
+    setTab(key);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -330,11 +411,11 @@ export default function App() {
       {/* HEADER */}
       <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
         <div className="flex items-center gap-3">
-          {/* Logo dans /public/logo-easytex.png */}
+          {/* Logo plus grand */}
           <img
             src="/logo-easytex.png"
             alt="EasyTex logo"
-            className="h-7 w-7 rounded-md"
+            className="h-9 w-9 rounded-md"
           />
           <span className="text-lg font-bold">EasyTex</span>
         </div>
@@ -347,11 +428,9 @@ export default function App() {
           ].map((item) => (
             <button
               key={item.key}
-              onClick={() => setTab(item.key)}
+              onClick={() => switchTo(item.key)}
               className={`rounded-full px-4 py-2 text-sm font-medium ${
-                tab === item.key
-                  ? "bg-black text-white"
-                  : "text-gray-700 hover:bg-gray-100"
+                tab === item.key ? "bg-black text-white" : "text-gray-700 hover:bg-gray-100"
               }`}
             >
               {item.label}
@@ -361,7 +440,7 @@ export default function App() {
 
         <div className="hidden items-center gap-2 sm:flex">
           <button
-            onClick={() => setOpenSupplier(true)}
+            onClick={() => { switchTo("fournisseurs"); setOpenSupplier(true); }}
             className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ring-1 ring-gray-300 hover:bg-gray-50"
           >
             Devenir fournisseur
@@ -377,102 +456,21 @@ export default function App() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-4 pb-16">
-        {/* HERO — fond bleu clair + nouveau texte */}
-        <div className="relative overflow-hidden rounded-3xl bg-brand-50 p-6 md:p-12 border">
-          <div className="max-w-3xl">
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-sm ring-1 ring-gray-200">
-              <span className="inline-block h-2 w-2 rounded-full bg-brand-500" />
-              EasyTex
-            </span>
+      {/* VUE ACTIVE UNIQUEMENT */}
+      {tab === "accueil" && (
+        <HomeView
+          onGoCatalogue={() => switchTo("catalogue")}
+          onOpenSupplier={() => { switchTo("fournisseurs"); setOpenSupplier(true); }}
+        />
+      )}
 
-            <h1 className="mt-4 text-4xl font-extrabold tracking-tight md:text-6xl">
-              Sourcing textile, simple et rapide.
-            </h1>
+      {tab === "catalogue" && (
+        <CatalogView onQuote={(p) => setQuoteProduct(p)} />
+      )}
 
-            <p className="mt-4 text-gray-600 md:text-lg">
-              Comparez les tissus, demandez un devis en un clic et échangez
-              directement sur WhatsApp avec des fournisseurs vérifiés.
-            </p>
-
-            <div className="mt-6 flex flex-wrap gap-3">
-              <button
-                onClick={goCatalogue}
-                className="inline-flex items-center justify-center rounded-xl bg-brand-500 px-5 py-3 font-semibold text-white hover:bg-brand-600"
-              >
-                Explorer le catalogue
-              </button>
-
-              <button
-                onClick={() => {
-                  setTab("fournisseurs");
-                  setOpenSupplier(true);
-                }}
-                className="inline-flex items-center justify-center rounded-xl px-5 py-3 font-semibold ring-1 ring-brand-500 text-brand-600 hover:bg-brand-50"
-              >
-                Devenir fournisseur
-              </button>
-            </div>
-
-            {/* Badges / atouts */}
-            <div className="mt-6 flex flex-wrap gap-3">
-              <div className="rounded-2xl bg-white/70 backdrop-blur border px-3 py-2 text-sm">
-                <span className="font-medium">Fournisseurs vérifiés</span>
-                <span className="text-gray-500"> — Qualité et confiance</span>
-              </div>
-
-              <div className="rounded-2xl bg-white/70 backdrop-blur border px-3 py-2 text-sm">
-                <span className="font-medium">Expédition régionale</span>
-                <span className="text-gray-500"> — UEMOA</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* STATISTIQUES */}
-        <section className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <div className="rounded-2xl border p-4">
-            <div className="text-3xl font-extrabold">100</div>
-            <div className="text-gray-600">Tissus disponibles</div>
-          </div>
-
-          <div className="rounded-2xl border p-4">
-            <div className="text-3xl font-extrabold">UEMOA</div>
-            <div className="text-gray-600">Zone desservie</div>
-          </div>
-
-          <div className="rounded-2xl border p-4">
-            <div className="text-3xl font-extrabold">24–48h</div>
-            <div className="text-gray-600">Délai de réponse</div>
-          </div>
-        </section>
-
-        {/* CATALOGUE */}
-        {tab === "catalogue" && (
-          <Catalog
-            products={DEMO_PRODUCTS}
-            suppliers={DEMO_SUPPLIERS}
-            onQuote={(p) => setQuoteProduct(p)}
-          />
-        )}
-
-        {/* SECTION FOURNISSEURS (texte + formulaire simple) */}
-        {tab === "fournisseurs" && (
-          <section id="fournisseurs" className="mt-10 rounded-2xl border p-5">
-            <h2 className="text-lg font-semibold">
-              Vous vendez du textile ? Rejoignez EasyTex
-            </h2>
-            <p className="mt-1 text-sm text-gray-600">
-              Créez une vitrine simple, recevez des demandes qualifiées et
-              développez votre clientèle dans l’espace UEMOA.
-            </p>
-
-            <div className="mt-4">
-              <SupplierSignup onClose={() => setOpenSupplier(false)} />
-            </div>
-          </section>
-        )}
-      </main>
+      {tab === "fournisseurs" && (
+        <SuppliersView onCloseModal={() => setOpenSupplier(false)} />
+      )}
 
       {/* FOOTER */}
       <footer className="mt-10 w-full border-t bg-white">
@@ -487,7 +485,6 @@ export default function App() {
         onClose={() => setQuoteProduct(null)}
         product={quoteProduct}
       />
-
       <Modal
         open={openSupplier}
         onClose={() => setOpenSupplier(false)}
@@ -498,4 +495,3 @@ export default function App() {
     </div>
   );
 }
-
