@@ -131,7 +131,7 @@ function QuoteModal({ open, onClose, product }) {
 }
 
 /* -----------------------------------------------------------
-   LIGHTBOX (Nouveau : agrandissement + ✕ Fermer + navigation)
+   LIGHTBOX (agrandissement + ✕ Fermer + navigation)
 ----------------------------------------------------------- */
 function Lightbox({ open, images, index, onClose, onPrev, onNext }) {
   if (!open) return null;
@@ -323,7 +323,7 @@ function Catalog({ products, suppliers, onQuote, openLightbox }) {
 
           return (
             <div key={p.id} className="rounded-2xl border p-4 hover:shadow-sm transition">
-              {/* Ajout: image cliquable (ouvre la lightbox) */}
+              {/* image cliquable (ouvre la lightbox) */}
               {firstImg && (
                 <button
                   className="block w-full overflow-hidden rounded-xl"
@@ -412,7 +412,7 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
               Explorer le catalogue
             </button>
 
-            <button
+          <button
               onClick={onOpenSupplier}
               className="inline-flex items-center justify-center rounded-xl px-5 py-3 font-semibold ring-1 ring-brand-500 text-brand-600 hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
             >
@@ -479,7 +479,7 @@ function CatalogView({ onQuote, openLightbox }) {
         products={DEMO_PRODUCTS}
         suppliers={DEMO_SUPPLIERS}
         onQuote={onQuote}
-        openLightbox={openLightbox}   {/* (ajout) on passe la lightbox */}
+        openLightbox={openLightbox}
       />
     </div>
   );
@@ -603,7 +603,7 @@ export default function App() {
       {tab === "catalogue" && (
         <CatalogView
           onQuote={(p) => setQuoteProduct(p)}
-          openLightbox={openLightbox}   // (ajout) passe l’ouverture de lightbox
+          openLightbox={openLightbox}
         />
       )}
 
@@ -692,7 +692,7 @@ export default function App() {
         </div>
       </Modal>
 
-      {/* LIGHTBOX globale (nouveau) */}
+      {/* LIGHTBOX globale */}
       <Lightbox
         open={lbOpen}
         images={lbImages}
