@@ -16,6 +16,7 @@ const WA_NUMBER = "221707546281";
 
 /* -----------------------------------------------------------
    DONNÉES DÉMO
+   (Ajout: images[] pour chaque produit, 2 images par article)
 ----------------------------------------------------------- */
 const DEMO_SUPPLIERS = [
   { id: "s1", name: "Atelier Ndar Textile", city: "Saint-Louis", country: "Sénégal", whatsapp: "221771112233" },
@@ -24,11 +25,56 @@ const DEMO_SUPPLIERS = [
 ];
 
 const DEMO_PRODUCTS = [
-  { id: "p1", name: "Bazin Riche 1.8m", type: "Bazin", color: "Bleu roi", origin: "Sénégal", price: 8500, supplierId: "s1" },
-  { id: "p2", name: "Pagne tissé (lot de 5)", type: "Tissé", color: "Multicolore", origin: "Côte d’Ivoire", price: 24000, supplierId: "s2" },
-  { id: "p3", name: "Wax premium 6 yards", type: "Wax", color: "Rouge", origin: "Côte d’Ivoire", price: 19000, supplierId: "s3" },
-  { id: "p4", name: "Indigo artisanal", type: "Indigo", color: "Indigo", origin: "Mali", price: 17500, supplierId: "s2" },
-  { id: "p5", name: "Kente mix 6 yards", type: "Kente", color: "Jaune", origin: "Ghana", price: 28000, supplierId: "s3" },
+  {
+    id: "p1",
+    name: "Bazin Riche 1.8m",
+    type: "Bazin",
+    color: "Bleu roi",
+    origin: "Sénégal",
+    price: 8500,
+    supplierId: "s1",
+    images: ["/p1-1.jpg", "/p1-2.jpg"],
+  },
+  {
+    id: "p2",
+    name: "Pagne tissé (lot de 5)",
+    type: "Tissé",
+    color: "Multicolore",
+    origin: "Côte d’Ivoire",
+    price: 24000,
+    supplierId: "s2",
+    images: ["/p2-1.jpg", "/p2-2.jpg"],
+  },
+  {
+    id: "p3",
+    name: "Wax premium 6 yards",
+    type: "Wax",
+    color: "Rouge",
+    origin: "Côte d’Ivoire",
+    price: 19000,
+    supplierId: "s3",
+    images: ["/p3-1.jpg", "/p3-2.jpg"],
+  },
+  {
+    id: "p4",
+    name: "Indigo artisanal",
+    type: "Indigo",
+    color: "Indigo",
+    origin: "Mali",
+    price: 17500,
+    supplierId: "s2",
+    images: ["/p4-1.jpg", "/p4-2.jpg"],
+  },
+  {
+    id: "p5",
+    name: "Kente mix 6 yards",
+    type: "Kente",
+    color: "Jaune",
+    origin: "Ghana",
+    price: 28000,
+    supplierId: "s3",
+    images: ["/p5-1.jpg", "/p5-2.jpg"],
+  },
 ];
 
 /* -----------------------------------------------------------
@@ -81,6 +127,53 @@ function QuoteModal({ open, onClose, product }) {
         Ouvrir WhatsApp et envoyer
       </a>
     </Modal>
+  );
+}
+
+/* -----------------------------------------------------------
+   LIGHTBOX (Nouveau : agrandissement + ✕ Fermer + navigation)
+----------------------------------------------------------- */
+function Lightbox({ open, images, index, onClose, onPrev, onNext }) {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 z-50 bg-black/80">
+      {/* fermer en cliquant hors de l’image */}
+      <div className="absolute inset-0" onClick={onClose} />
+      <div className="absolute inset-0 flex items-center justify-center px-4">
+        <div className="relative flex flex-col items-center">
+          {/* bouton ✕ Fermer clair */}
+          <button
+            onClick={onClose}
+            className="absolute -top-10 right-0 rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-white"
+          >
+            ✕ Fermer
+          </button>
+
+          {/* image agrandie */}
+          <img
+            src={images[index]}
+            alt=""
+            className="max-h-[80vh] max-w-[90vw] rounded-xl object-contain bg-white"
+          />
+
+          {/* navigation */}
+          <div className="mt-4 flex justify-center gap-6">
+            <button
+              onClick={(e) => { e.stopPropagation(); onPrev(); }}
+              className="rounded-full bg-white/90 px-4 py-2 shadow hover:bg-white"
+            >
+              ← Précédente
+            </button>
+            <button
+              onClick={(e) => { e.stopPropagation(); onNext(); }}
+              className="rounded-full bg-white/90 px-4 py-2 shadow hover:bg-white"
+            >
+              Suivante →
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -154,8 +247,9 @@ function SupplierSignup({ onClose }) {
 
 /* -----------------------------------------------------------
    CATALOGUE
+   (Seul ajout visuel dans tes cartes: l’image cliquable)
 ----------------------------------------------------------- */
-function Catalog({ products, suppliers, onQuote }) {
+function Catalog({ products, suppliers, onQuote, openLightbox }) {
   const [q, setQ] = useState("");
   const [type, setType] = useState("Tous");
   const [origin, setOrigin] = useState("Toutes");
@@ -225,9 +319,30 @@ function Catalog({ products, suppliers, onQuote }) {
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {filtered.map((p) => {
           const s = supplierById.get(p.supplierId);
+          const firstImg = p.images?.[0];
+
           return (
             <div key={p.id} className="rounded-2xl border p-4 hover:shadow-sm transition">
-              <div className="text-base font-semibold text-gray-900">{p.name}</div>
+              {/* Ajout: image cliquable (ouvre la lightbox) */}
+              {firstImg && (
+                <button
+                  className="block w-full overflow-hidden rounded-xl"
+                  onClick={() => openLightbox(p.images, 0)}
+                  aria-label={`Voir ${p.name}`}
+                >
+                  <img
+                    src={firstImg}
+                    alt={p.name}
+                    className="w-full h-44 object-cover"
+                    onError={(e) => {
+                      e.currentTarget.onerror = null;
+                      e.currentTarget.src = "/logo-easytex.png";
+                    }}
+                  />
+                </button>
+              )}
+
+              <div className="mt-3 text-base font-semibold text-gray-900">{p.name}</div>
               <div className="mt-1 text-sm text-gray-600">
                 {p.type} • {p.color} • {p.origin}
               </div>
@@ -267,6 +382,7 @@ function Catalog({ products, suppliers, onQuote }) {
 
 /* -----------------------------------------------------------
    VUES (Accueil / Catalogue / Fournisseurs)
+   (Aucune modif de rendu ici)
 ----------------------------------------------------------- */
 function HomeView({ onGoCatalogue, onOpenSupplier }) {
   return (
@@ -356,13 +472,14 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
   );
 }
 
-function CatalogView({ onQuote }) {
+function CatalogView({ onQuote, openLightbox }) {
   return (
     <div id="catalogue" className="mx-auto max-w-6xl px-4 pb-16">
       <Catalog
         products={DEMO_PRODUCTS}
         suppliers={DEMO_SUPPLIERS}
         onQuote={onQuote}
+        openLightbox={openLightbox}   {/* (ajout) on passe la lightbox */}
       />
     </div>
   );
@@ -389,6 +506,7 @@ function SuppliersView({ onCloseModal }) {
 
 /* -----------------------------------------------------------
    APP PRINCIPALE
+   (Ajout: état lightbox, aucun autre changement de rendu)
 ----------------------------------------------------------- */
 export default function App() {
   const [tab, setTab] = useState("accueil");
@@ -399,6 +517,20 @@ export default function App() {
   const [openPrivacy, setOpenPrivacy] = useState(false);
   const [openTerms, setOpenTerms] = useState(false);
   const [openImprint, setOpenImprint] = useState(false);
+
+  // Lightbox global
+  const [lbOpen, setLbOpen] = useState(false);
+  const [lbImages, setLbImages] = useState([]);
+  const [lbIndex, setLbIndex] = useState(0);
+
+  const openLightbox = (images, index = 0) => {
+    setLbImages(images || []);
+    setLbIndex(index);
+    setLbOpen(true);
+  };
+  const closeLightbox = () => setLbOpen(false);
+  const prevLightbox = () => setLbIndex((i) => (i - 1 + lbImages.length) % lbImages.length);
+  const nextLightbox = () => setLbIndex((i) => (i + 1) % lbImages.length);
 
   const switchTo = (key) => {
     setTab(key);
@@ -469,7 +601,10 @@ export default function App() {
       )}
 
       {tab === "catalogue" && (
-        <CatalogView onQuote={(p) => setQuoteProduct(p)} />
+        <CatalogView
+          onQuote={(p) => setQuoteProduct(p)}
+          openLightbox={openLightbox}   // (ajout) passe l’ouverture de lightbox
+        />
       )}
 
       {tab === "fournisseurs" && (
@@ -556,6 +691,16 @@ export default function App() {
           <p>Pour toute notification légale : legal@easytex.sn</p>
         </div>
       </Modal>
+
+      {/* LIGHTBOX globale (nouveau) */}
+      <Lightbox
+        open={lbOpen}
+        images={lbImages}
+        index={lbIndex}
+        onClose={closeLightbox}
+        onPrev={prevLightbox}
+        onNext={nextLightbox}
+      />
     </div>
   );
 }
