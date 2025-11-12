@@ -298,22 +298,38 @@ export default function App() {
       )}
 
       {tab === "fournisseurs" && (
-        <div className="rounded-2xl border p-5">
-          <h2 className="text-lg font-semibold">Vous vendez du textile ? Rejoignez EasyTex</h2>
-          <p className="mt-1 text-gray-600 text-sm">Créez une vitrine simple, recevez des demandes qualifiées et développez votre clientèle régionale.</p>
-          <div className="mt-4">
-            <SupplierSignup onClose={()=>setOpenSupplier(false)} />
-          </div>
-        </div>
-          )}
-      
-      <Footer />
+  <div className="rounded-2xl border p-5">
+    <h2 className="text-lg font-semibold">
+      Vous vendez du textile ? Rejoignez EasyTex
+    </h2>
+    <p className="mt-1 text-gray-600 text-sm">
+      Créez une vitrine simple, recevez des demandes qualifiées et développez votre clientèle.
+    </p>
+    <div className="mt-4">
+      <SupplierSignup onClose={() => setOpenSupplier(false)} />
+    </div>
+  </div>
+)}
 
-      <QuoteModal open={!!quoteProduct} onClose={() => setQuoteProduct(null)} product={quoteProduct} />
-      <Modal open={openSupplier} onClose={() => setOpenSupplier(false)} title="Devenir fournisseur">
-        <SupplierSignup onClose={() => setOpenSupplier(false)} />
-      </Modal>
-    </div>   {/* fin du conteneur principal */}
+<Footer />
+
+<QuoteModal
+  open={!!quoteProduct}
+  onClose={() => setQuoteProduct(null)}
+  product={quoteProduct}
+/>
+
+<Modal
+  open={openSupplier}
+  onClose={() => setOpenSupplier(false)}
+  title="Devenir fournisseur"
+>
+  <SupplierSignup onClose={() => setOpenSupplier(false)} />
+</Modal>
+
+</div>  {/* fin du conteneur principal */}
+);
+}
   );
 }
 
