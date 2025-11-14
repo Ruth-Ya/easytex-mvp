@@ -16,11 +16,6 @@ const WA_NUMBER = "221707546281";
 
 /* -----------------------------------------------------------
    DONNÉES DÉMO
-   Catégories principales :
-   1. Tissus habillement
-   2. Tissus Maison et Linge
-   3. Tissus Ameublement et Décoration
-   4. Tissus spécifiques et traditionnels
 ----------------------------------------------------------- */
 const DEMO_SUPPLIERS = [
   {
@@ -223,7 +218,7 @@ function QuoteModal({ open, onClose, product }) {
 }
 
 /* -----------------------------------------------------------
-   LIGHTBOX (agrandissement + navigation)
+   LIGHTBOX
 ----------------------------------------------------------- */
 function Lightbox({ open, images, index, onClose, onPrev, onNext }) {
   if (!open) return null;
@@ -348,7 +343,7 @@ function SupplierSignup({ onClose }) {
 }
 
 /* -----------------------------------------------------------
-   CATALOGUE AVEC CATÉGORIES + FILTRES
+   CATALOGUE
 ----------------------------------------------------------- */
 function Catalog({ products, suppliers, onQuote, openLightbox }) {
   const [q, setQ] = useState("");
@@ -401,7 +396,9 @@ function Catalog({ products, suppliers, onQuote, openLightbox }) {
       const matchWeight = weight === "Tous poids" || p.weight === weight;
       const matchAspect = aspect === "Tous motifs" || p.aspect === aspect;
 
-      return matchQ && matchCategory && matchMaterial && matchWeight && matchAspect;
+      return (
+        matchQ && matchCategory && matchMaterial && matchWeight && matchAspect
+      );
     });
   }, [products, q, category, material, weight, aspect]);
 
@@ -570,7 +567,7 @@ function Catalog({ products, suppliers, onQuote, openLightbox }) {
 }
 
 /* -----------------------------------------------------------
-   VUES (Accueil / Catalogue / Fournisseurs)
+   VUES
 ----------------------------------------------------------- */
 function HomeView({ onGoCatalogue, onOpenSupplier }) {
   return (
@@ -713,7 +710,6 @@ function SuppliersView({ onCloseModal }) {
 
 /* -----------------------------------------------------------
    APP PRINCIPALE
-   (avec header responsive léger : logo + EasyTex + 3 onglets)
 ----------------------------------------------------------- */
 export default function App() {
   const [tab, setTab] = useState("accueil");
@@ -756,16 +752,15 @@ export default function App() {
             e.preventDefault();
             switchTo("accueil");
           }}
-          className="flex items-center gap-3 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2"
+          className="flex items-center rounded-md focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2"
         >
-          {/* Nouveau logo : pictogramme seul, plus petit sur mobile */}
+          {/* Ancien logo complet avec le nom, bien visible */}
           <img
             src="/logo-easytex.png"
-            alt="Logo EasyTex"
-            className="h-9 w-9 rounded-md sm:h-11 sm:w-11"
+            alt="EasyTex"
+            className="h-10 w-auto sm:h-12"
             loading="eager"
           />
-          <span className="text-lg font-bold text-gray-900">EasyTex</span>
         </a>
 
         <nav className="flex items-center gap-2">
