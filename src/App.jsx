@@ -178,24 +178,6 @@ function Lightbox({ open, images, index, onClose, onPrev, onNext }) {
 }
 
 /* -----------------------------------------------------------
-   BOUTON WHATSAPP FLOTTANT (MOBILE UNIQUEMENT)
------------------------------------------------------------ */
-function FloatingWhatsappButton() {
-  const waLink = `https://wa.me/${WA_NUMBER}`;
-
-  return (
-    <a
-      href={waLink}
-      target="_blank"
-      rel="noreferrer"
-      className="fixed bottom-4 right-4 z-40 inline-flex items-center justify-center rounded-full bg-brand-500 px-4 py-3 text-sm font-semibold text-white shadow-lg hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400 sm:hidden"
-    >
-      WhatsApp
-    </a>
-  );
-}
-
-/* -----------------------------------------------------------
    FORMULAIRE FOURNISSEUR
 ----------------------------------------------------------- */
 function SupplierSignup({ onClose }) {
@@ -415,11 +397,10 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
             Sourcing textile, simple et rapide.
           </h1>
 
-          {/* TEXTE PRINCIPAL – facile à modifier */}
           <p className="mt-4 text-gray-700 md:text-lg">
-            EasyTex connecte les acheteurs de textile aux meilleurs fournisseurs de la
-            zone UEMOA, directement sur WhatsApp. Comparez les tissus, demandez un devis
-            en un clic et échangez avec des fournisseurs vérifiés.
+            EasyTex connecte les acheteurs de textile aux meilleurs fournisseurs de la zone UEMOA,
+            directement sur WhatsApp. Comparez les tissus, demandez un devis en un clic et échangez
+            avec des fournisseurs vérifiés.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
@@ -510,10 +491,9 @@ function SuppliersView({ onCloseModal }) {
         <h2 className="text-lg font-semibold text-gray-900">
           Vous vendez du textile ? Rejoignez EasyTex
         </h2>
-        {/* TEXTE FOURNISSEURS – facile à modifier */}
         <p className="mt-1 text-sm text-gray-700">
-          Créez une vitrine simple, recevez des demandes qualifiées et développez votre
-          clientèle dans l’espace UEMOA.
+          Créez une vitrine simple, recevez des demandes qualifiées et
+          développez votre clientèle dans l’espace UEMOA.
         </p>
         <div className="mt-4">
           <SupplierSignup onClose={onCloseModal} />
@@ -525,6 +505,7 @@ function SuppliersView({ onCloseModal }) {
 
 /* -----------------------------------------------------------
    APP PRINCIPALE
+   (Header responsive + menu hamburger mobile)
 ----------------------------------------------------------- */
 export default function App() {
   const [tab, setTab] = useState("accueil");
@@ -541,6 +522,9 @@ export default function App() {
   const [lbImages, setLbImages] = useState([]);
   const [lbIndex, setLbIndex] = useState(0);
 
+  // Menu mobile
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const openLightbox = (images, index = 0) => {
     setLbImages(images || []);
     setLbIndex(index);
@@ -553,34 +537,40 @@ export default function App() {
   const switchTo = (key) => {
     setTab(key);
     window.scrollTo({ top: 0, behavior: "smooth" });
+    setMobileMenuOpen(false);
   };
+
+  const navItems = [
+    { key: "accueil", label: "Accueil" },
+    { key: "catalogue", label: "Catalogue" },
+    { key: "fournisseurs", label: "Fournisseurs" },
+  ];
 
   return (
     <div className="min-h-screen bg-white">
       {/* HEADER STICKY */}
       <header className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
+          {/* Logo + marque (cliquable) */}
           <a
             href="#"
             onClick={(e) => { e.preventDefault(); switchTo("accueil"); }}
-            className="flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400 rounded-md"
+            className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400 rounded-md"
           >
-            {/* Logo agrandi et cliquable */}
             <img
               src="/logo-easytex.png"
               alt="Logo EasyTex"
-              className="h-11 w-11 rounded-md"
+              className="h-9 w-9 rounded-md"
               loading="eager"
             />
-            <span className="text-lg font-bold text-gray-900">EasyTex</span>
+            <span className="hidden text-lg font-bold text-gray-900 sm:inline">
+              EasyTex
+            </span>
           </a>
 
-          <nav className="flex items-center gap-2">
-            {[
-              { key: "accueil", label: "Accueil" },
-              { key: "catalogue", label: "Catalogue" },
-              { key: "fournisseurs", label: "Fournisseurs" },
-            ].map((item) => (
+          {/* NAV DESKTOP */}
+          <nav className="hidden items-center gap-2 lg:flex">
+            {navItems.map((item) => (
               <button
                 key={item.key}
                 onClick={() => switchTo(item.key)}
@@ -593,7 +583,8 @@ export default function App() {
             ))}
           </nav>
 
-          <div className="hidden items-center gap-2 sm:flex">
+          {/* Actions à droite : desktop */}
+          <div className="hidden items-center gap-2 lg:flex">
             <button
               onClick={() => { switchTo("fournisseurs"); setOpenSupplier(true); }}
               className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ring-1 ring-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
@@ -609,7 +600,69 @@ export default function App() {
               WhatsApp
             </a>
           </div>
+
+          {/* Actions mobile : WhatsApp + hamburger */}
+          <div className="flex items-center gap-2 lg:hidden">
+            <a
+              href={`https://wa.me/${WA_NUMBER}`}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium ring-1 ring-gray-300 text-gray-800 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
+            >
+              WhatsApp
+            </a>
+            <button
+              onClick={() => setMobileMenuOpen((o) => !o)}
+              className="inline-flex items-center justify-center rounded-full p-2 text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
+              aria-label="Ouvrir le menu"
+            >
+              <div className="space-y-1">
+                <span className="block h-0.5 w-4 bg-gray-800" />
+                <span className="block h-0.5 w-4 bg-gray-800" />
+                <span className="block h-0.5 w-4 bg-gray-800" />
+              </div>
+            </button>
+          </div>
         </div>
+
+        {/* MENU MOBILE déroulant */}
+        {mobileMenuOpen && (
+          <div className="border-t bg-white lg:hidden">
+            <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-3">
+              {navItems.map((item) => (
+                <button
+                  key={item.key}
+                  onClick={() => switchTo(item.key)}
+                  className={`w-full rounded-full px-4 py-2 text-left text-sm font-medium ${
+                    tab === item.key
+                      ? "bg-black text-white"
+                      : "text-gray-800 hover:bg-gray-100"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+
+              <button
+                onClick={() => {
+                  switchTo("fournisseurs");
+                  setOpenSupplier(true);
+                }}
+                className="mt-2 w-full rounded-full px-4 py-2 text-sm font-semibold text-brand-600 ring-1 ring-brand-500 hover:bg-brand-50"
+              >
+                Devenir fournisseur
+              </button>
+              <a
+                href={`https://wa.me/${WA_NUMBER}`}
+                target="_blank"
+                rel="noreferrer"
+                className="w-full rounded-full bg-black px-4 py-2 text-center text-sm font-semibold text-white hover:bg-gray-900"
+              >
+                Ouvrir WhatsApp
+              </a>
+            </div>
+          </div>
+        )}
       </header>
 
       {/* VUE ACTIVE UNIQUEMENT */}
@@ -659,9 +712,6 @@ export default function App() {
           </div>
         </div>
       </footer>
-
-      {/* BOUTON WHATSAPP FLOTTANT (MOBILE) */}
-      <FloatingWhatsappButton />
 
       {/* MODAUX GLOBAUX */}
       <QuoteModal
