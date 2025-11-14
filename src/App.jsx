@@ -16,7 +16,6 @@ const WA_NUMBER = "221707546281";
 
 /* -----------------------------------------------------------
    DONNÉES DÉMO
-   (Ajout: images[] pour chaque produit, 2 images par article)
 ----------------------------------------------------------- */
 const DEMO_SUPPLIERS = [
   { id: "s1", name: "Atelier Ndar Textile", city: "Saint-Louis", country: "Sénégal", whatsapp: "221771112233" },
@@ -131,17 +130,15 @@ function QuoteModal({ open, onClose, product }) {
 }
 
 /* -----------------------------------------------------------
-   LIGHTBOX (agrandissement + ✕ Fermer + navigation)
+   LIGHTBOX
 ----------------------------------------------------------- */
 function Lightbox({ open, images, index, onClose, onPrev, onNext }) {
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-50 bg-black/80">
-      {/* fermer en cliquant hors de l’image */}
       <div className="absolute inset-0" onClick={onClose} />
       <div className="absolute inset-0 flex items-center justify-center px-4">
         <div className="relative flex flex-col items-center">
-          {/* bouton ✕ Fermer clair */}
           <button
             onClick={onClose}
             className="absolute -top-10 right-0 rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-white"
@@ -149,14 +146,12 @@ function Lightbox({ open, images, index, onClose, onPrev, onNext }) {
             ✕ Fermer
           </button>
 
-          {/* image agrandie */}
           <img
             src={images[index]}
             alt=""
             className="max-h-[80vh] max-w-[90vw] rounded-xl object-contain bg-white"
           />
 
-          {/* navigation */}
           <div className="mt-4 flex justify-center gap-6">
             <button
               onClick={(e) => { e.stopPropagation(); onPrev(); }}
@@ -247,7 +242,6 @@ function SupplierSignup({ onClose }) {
 
 /* -----------------------------------------------------------
    CATALOGUE
-   (Seul ajout visuel dans tes cartes: l’image cliquable)
 ----------------------------------------------------------- */
 function Catalog({ products, suppliers, onQuote, openLightbox }) {
   const [q, setQ] = useState("");
@@ -323,7 +317,6 @@ function Catalog({ products, suppliers, onQuote, openLightbox }) {
 
           return (
             <div key={p.id} className="rounded-2xl border p-4 hover:shadow-sm transition">
-              {/* image cliquable (ouvre la lightbox) */}
               {firstImg && (
                 <button
                   className="block w-full overflow-hidden rounded-xl"
@@ -381,12 +374,11 @@ function Catalog({ products, suppliers, onQuote, openLightbox }) {
 }
 
 /* -----------------------------------------------------------
-   VUES (Accueil / Catalogue / Fournisseurs)
+   VUES
 ----------------------------------------------------------- */
 function HomeView({ onGoCatalogue, onOpenSupplier }) {
   return (
     <div className="mx-auto max-w-6xl px-4 pb-16">
-      {/* HERO */}
       <div className="relative overflow-hidden rounded-3xl bg-brand-50 p-6 md:p-16 border">
         <div className="max-w-3xl">
           <span className="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-sm ring-1 ring-gray-200">
@@ -419,7 +411,6 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
             </button>
           </div>
 
-          {/* Badges */}
           <div className="mt-6 flex flex-wrap gap-3">
             <div className="rounded-2xl bg-white/70 backdrop-blur border px-3 py-2 text-sm">
               <span className="font-medium text-gray-900">Fournisseurs vérifiés</span>
@@ -433,7 +424,6 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
         </div>
       </div>
 
-      {/* STATS */}
       <section className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="rounded-2xl border p-4">
           <div className="text-3xl font-extrabold text-gray-900">100</div>
@@ -449,7 +439,6 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
         </div>
       </section>
 
-      {/* COMMENT ÇA MARCHE – compact */}
       <section className="mt-10">
         <h2 className="mb-4 text-xl font-semibold text-gray-900">Comment ça marche ?</h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
@@ -505,22 +494,25 @@ function SuppliersView({ onCloseModal }) {
 
 /* -----------------------------------------------------------
    APP PRINCIPALE
-   (Ajout: état lightbox, aucun autre changement de rendu)
 ----------------------------------------------------------- */
 export default function App() {
   const [tab, setTab] = useState("accueil");
   const [quoteProduct, setQuoteProduct] = useState(null);
   const [openSupplier, setOpenSupplier] = useState(false);
 
-  // Mentions légales / politique / CGU
   const [openPrivacy, setOpenPrivacy] = useState(false);
   const [openTerms, setOpenTerms] = useState(false);
   const [openImprint, setOpenImprint] = useState(false);
 
-  // Lightbox global
   const [lbOpen, setLbOpen] = useState(false);
   const [lbImages, setLbImages] = useState([]);
   const [lbIndex, setLbIndex] = useState(0);
+
+  const tabs = [
+    { key: "accueil", label: "Accueil" },
+    { key: "catalogue", label: "Catalogue" },
+    { key: "fournisseurs", label: "Fournisseurs" },
+  ];
 
   const openLightbox = (images, index = 0) => {
     setLbImages(images || []);
@@ -539,59 +531,83 @@ export default function App() {
   return (
     <div className="min-h-screen bg-white">
       {/* HEADER */}
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:py-4">
-        <a
-          href="#"
-          onClick={(e) => { e.preventDefault(); switchTo("accueil"); }}
-          className="flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400 rounded-md"
-        >
-          {/* Logo légèrement plus compact sur mobile */}
-          <img
-            src="/logo-easytex.png"
-            alt="Logo EasyTex"
-            className="h-9 w-9 sm:h-11 sm:w-11 rounded-md"
-            loading="eager"
-          />
-          <span className="text-base sm:text-lg font-bold text-gray-900">EasyTex</span>
-        </a>
+      <header className="mx-auto max-w-6xl px-4 pt-3 pb-2 sm:py-4">
+        <div className="flex items-center justify-between gap-3">
+          <a
+            href="#"
+            onClick={(e) => { e.preventDefault(); switchTo("accueil"); }}
+            className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400 rounded-md"
+          >
+            <img
+              src="/logo-easytex.png"
+              alt="Logo EasyTex"
+              className="h-9 w-9 rounded-md sm:h-11 sm:w-11"
+              loading="eager"
+            />
+            <span className="text-base font-bold text-gray-900 sm:text-lg">EasyTex</span>
+          </a>
 
-        <nav className="flex items-center gap-2">
-          {[
-            { key: "accueil", label: "Accueil" },
-            { key: "catalogue", label: "Catalogue" },
-            { key: "fournisseurs", label: "Fournisseurs" },
-          ].map((item) => (
+          {/* Navigation desktop */}
+          <nav className="hidden sm:flex items-center gap-2">
+            {tabs.map((item) => (
+              <button
+                key={item.key}
+                onClick={() => switchTo(item.key)}
+                className={`rounded-full px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400 ${
+                  tab === item.key ? "bg-black text-white" : "text-gray-700 hover:bg-gray-100"
+                }`}
+              >
+                {item.label}
+              </button>
+            ))}
+          </nav>
+
+          {/* Actions desktop */}
+          <div className="hidden sm:flex items-center gap-2">
+            <button
+              onClick={() => { switchTo("fournisseurs"); setOpenSupplier(true); }}
+              className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ring-1 ring-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
+            >
+              Devenir fournisseur
+            </button>
+            <a
+              href={`https://wa.me/${WA_NUMBER}`}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-2 text-sm font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
+            >
+              WhatsApp
+            </a>
+          </div>
+
+          {/* Action mobile : petit bouton WhatsApp */}
+          <a
+            href={`https://wa.me/${WA_NUMBER}`}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center justify-center rounded-full bg-black px-3 py-1 text-xs font-medium text-white sm:hidden focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
+          >
+            WhatsApp
+          </a>
+        </div>
+
+        {/* Ruban de navigation mobile */}
+        <nav className="mt-3 flex gap-2 overflow-x-auto sm:hidden text-sm">
+          {tabs.map((item) => (
             <button
               key={item.key}
               onClick={() => switchTo(item.key)}
-              className={`rounded-full px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400 ${
-                tab === item.key ? "bg-black text-white" : "text-gray-700 hover:bg-gray-100"
+              className={`whitespace-nowrap rounded-full px-3 py-1 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400 ${
+                tab === item.key ? "bg-black text-white" : "bg-gray-100 text-gray-700"
               }`}
             >
               {item.label}
             </button>
           ))}
         </nav>
-
-        <div className="hidden items-center gap-2 sm:flex">
-          <button
-            onClick={() => { switchTo("fournisseurs"); setOpenSupplier(true); }}
-            className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ring-1 ring-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
-          >
-            Devenir fournisseur
-          </button>
-          <a
-            href={`https://wa.me/${WA_NUMBER}`}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-2 text-sm font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
-          >
-            WhatsApp
-          </a>
-        </div>
       </header>
 
-      {/* VUE ACTIVE UNIQUEMENT */}
+      {/* VUES */}
       {tab === "accueil" && (
         <HomeView
           onGoCatalogue={() => switchTo("catalogue")}
@@ -610,7 +626,7 @@ export default function App() {
         <SuppliersView onCloseModal={() => setOpenSupplier(false)} />
       )}
 
-      {/* FOOTER + Mentions */}
+      {/* FOOTER */}
       <footer className="mt-10 w-full border-t bg-white">
         <div className="mx-auto max-w-6xl px-4 py-6 text-center text-sm text-gray-600">
           <div>© EasyTex 2025 – Tous droits réservés</div>
@@ -650,7 +666,6 @@ export default function App() {
         <SupplierSignup onClose={() => setOpenSupplier(false)} />
       </Modal>
 
-      {/* Mentions / Politique / CGU */}
       <Modal open={openPrivacy} onClose={() => setOpenPrivacy(false)} title="Politique de confidentialité">
         <div className="space-y-3 text-sm text-gray-700">
           <p>
@@ -691,7 +706,6 @@ export default function App() {
         </div>
       </Modal>
 
-      {/* LIGHTBOX globale */}
       <Lightbox
         open={lbOpen}
         images={lbImages}
