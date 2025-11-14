@@ -16,112 +16,132 @@ const WA_NUMBER = "221707546281";
 
 /* -----------------------------------------------------------
    DONNÉES DÉMO
-   (Ajout: usage, material, weight, aspect pour les filtres)
+   Catégories principales :
+   1. Tissus habillement
+   2. Tissus Maison et Linge
+   3. Tissus Ameublement et Décoration
+   4. Tissus spécifiques et traditionnels
 ----------------------------------------------------------- */
 const DEMO_SUPPLIERS = [
-  { id: "s1", name: "Atelier Ndar Textile", city: "Saint-Louis", country: "Sénégal", whatsapp: "221771112233" },
-  { id: "s2", name: "Tissages de Korhogo", city: "Korhogo", country: "Côte d’Ivoire", whatsapp: "2250501020304" },
-  { id: "s3", name: "Wax & Co Abidjan", city: "Abidjan", country: "Côte d’Ivoire", whatsapp: "2250703040506" },
+  {
+    id: "s1",
+    name: "Atelier Ndar Textile",
+    city: "Saint-Louis",
+    country: "Sénégal",
+    whatsapp: "221771112233",
+  },
+  {
+    id: "s2",
+    name: "Tissages de Korhogo",
+    city: "Korhogo",
+    country: "Côte d’Ivoire",
+    whatsapp: "2250501020304",
+  },
+  {
+    id: "s3",
+    name: "Wax & Co Abidjan",
+    city: "Abidjan",
+    country: "Côte d’Ivoire",
+    whatsapp: "2250703040506",
+  },
 ];
 
 const DEMO_PRODUCTS = [
   {
     id: "p1",
-    name: "Bazin riche 1.8m",
-    type: "Bazin",
-    color: "Bleu roi",
-    origin: "Sénégal",
-    price: 8500,
-    supplierId: "s1",
-    images: ["/p1-1.jpg", "/p1-2.jpg"],
-    usage: "Tissus spécifiques et traditionnels",
-    material: "Coton",
-    weight: "Lourd",
-    aspect: "Texturé",
-  },
-  {
-    id: "p2",
-    name: "Pagne tissé (lot de 5)",
-    type: "Pagne tissé",
-    color: "Multicolore",
-    origin: "Côte d’Ivoire",
-    price: 24000,
-    supplierId: "s2",
-    images: ["/p2-1.jpg", "/p2-2.jpg"],
-    usage: "Tissus spécifiques et traditionnels",
-    material: "Coton",
-    weight: "Moyen",
-    aspect: "Texturé",
-  },
-  {
-    id: "p3",
-    name: "Wax premium 6 yards",
-    type: "Wax",
-    color: "Rouge",
-    origin: "Côte d’Ivoire",
-    price: 19000,
-    supplierId: "s3",
-    images: ["/p3-1.jpg", "/p3-2.jpg"],
-    usage: "Tissus spécifiques et traditionnels",
-    material: "Coton",
-    weight: "Moyen",
-    aspect: "Wax",
-  },
-  {
-    id: "p4",
-    name: "Popeline unie 150 cm",
-    type: "Popeline",
-    color: "Blanc",
-    origin: "Sénégal",
-    price: 6500,
-    supplierId: "s1",
-    images: ["/p4-1.jpg", "/p4-2.jpg"],
-    usage: "Tissus habillement",
+    name: "Popeline de coton",
+    category: "Tissus habillement",
     material: "Coton",
     weight: "Léger",
     aspect: "Uni",
+    origin: "Sénégal",
+    price: 6500,
+    supplierId: "s1",
+    images: ["/p1-1.jpg", "/p1-2.jpg"],
+  },
+  {
+    id: "p2",
+    name: "Serge de coton workwear",
+    category: "Tissus habillement",
+    material: "Coton",
+    weight: "Lourd",
+    aspect: "Uni",
+    origin: "Côte d’Ivoire",
+    price: 9800,
+    supplierId: "s2",
+    images: ["/p2-1.jpg", "/p2-2.jpg"],
+  },
+  {
+    id: "p3",
+    name: "Drap 100% coton 300TC",
+    category: "Tissus Maison et Linge",
+    material: "Coton",
+    weight: "Moyen",
+    aspect: "Uni",
+    origin: "Sénégal",
+    price: 15000,
+    supplierId: "s1",
+    images: ["/p3-1.jpg", "/p3-2.jpg"],
+  },
+  {
+    id: "p4",
+    name: "Éponge serviette hôtel",
+    category: "Tissus Maison et Linge",
+    material: "Coton",
+    weight: "Lourd",
+    aspect: "Uni",
+    origin: "Mali",
+    price: 12000,
+    supplierId: "s2",
+    images: ["/p4-1.jpg", "/p4-2.jpg"],
   },
   {
     id: "p5",
-    name: "Gabardine workwear",
-    type: "Gabardine",
-    color: "Marine",
-    origin: "Sénégal",
-    price: 12000,
-    supplierId: "s1",
-    images: ["/p5-1.jpg", "/p5-2.jpg"],
-    usage: "Tissus habillement",
-    material: "Mélange",
+    name: "Tissu canapé outdoor",
+    category: "Tissus Ameublement et Décoration",
+    material: "Polyester",
     weight: "Lourd",
-    aspect: "Uni",
+    aspect: "Jacquard",
+    origin: "Côte d’Ivoire",
+    price: 22000,
+    supplierId: "s3",
+    images: ["/p5-1.jpg", "/p5-2.jpg"],
   },
   {
     id: "p6",
-    name: "Nid d’abeille éponge",
-    type: "Éponge",
-    color: "Blanc cassé",
-    origin: "Turquie",
-    price: 10500,
-    supplierId: "s2",
+    name: "Tissu rideau occultant",
+    category: "Tissus Ameublement et Décoration",
+    material: "Mélange",
+    weight: "Moyen",
+    aspect: "Uni",
+    origin: "Ghana",
+    price: 18000,
+    supplierId: "s3",
     images: ["/p6-1.jpg", "/p6-2.jpg"],
-    usage: "Tissus Maison et Linge",
-    material: "Coton",
-    weight: "Lourd",
-    aspect: "Texturé",
   },
   {
     id: "p7",
-    name: "Toile d’ameublement outdoor",
-    type: "Toile",
-    color: "Beige",
-    origin: "Chine",
-    price: 15500,
-    supplierId: "s3",
-    images: ["/p7-1.jpg", "/p7-2.jpg"],
-    usage: "Tissus Ameublement et Décoration",
-    material: "Synthétique",
-    weight: "Lourd",
+    name: "Bazin riche 1.8 m",
+    category: "Tissus spécifiques et traditionnels",
+    material: "Coton",
+    weight: "Moyen",
     aspect: "Uni",
+    origin: "Mali",
+    price: 8500,
+    supplierId: "s2",
+    images: ["/p7-1.jpg", "/p7-2.jpg"],
+  },
+  {
+    id: "p8",
+    name: "Wax premium 6 yards",
+    category: "Tissus spécifiques et traditionnels",
+    material: "Coton",
+    weight: "Moyen",
+    aspect: "Imprimé Wax",
+    origin: "Côte d’Ivoire",
+    price: 19000,
+    supplierId: "s3",
+    images: ["/p8-1.jpg", "/p8-2.jpg"],
   },
 ];
 
@@ -134,12 +154,16 @@ function Modal({ open, onClose, title, children }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
       <div className="relative z-10 w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
-        {title && <h3 className="mb-4 text-lg font-semibold text-gray-900">{title}</h3>}
+        {title && (
+          <h3 className="mb-4 text-lg font-semibold text-gray-900">
+            {title}
+          </h3>
+        )}
         <div>{children}</div>
         <div className="mt-6 flex justify-end gap-3">
           <button
             onClick={onClose}
-            className="rounded-xl px-4 py-2 font-medium ring-1 ring-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
+            className="rounded-xl px-4 py-2 font-medium ring-1 ring-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2"
           >
             Fermer
           </button>
@@ -152,9 +176,9 @@ function Modal({ open, onClose, title, children }) {
 function QuoteModal({ open, onClose, product }) {
   if (!open || !product) return null;
   const waText = encodeURIComponent(
-    `Bonjour EasyTex,\n\nJe souhaite un devis pour:\n- Produit: ${product.name}\n- Usage: ${product.usage}\n- Type: ${product.type}\n- Matière: ${product.material}\n- Poids: ${product.weight}\n- Aspect: ${product.aspect}\n- Origine: ${product.origin}\n- Prix indicatif: ${formatPrice(
+    `Bonjour EasyTex,\n\nJe souhaite un devis pour :\n- Produit : ${product.name}\n- Catégorie : ${product.category}\n- Matière : ${product.material}\n- Poids : ${product.weight}\n- Motif / aspect : ${product.aspect}\n- Origine : ${product.origin}\n- Prix indicatif : ${formatPrice(
       product.price
-    )}\n\nPrécisions (quantité, délais, livraison, etc.):\n`
+    )}\n\nPrécisions (quantité, délais, livraison, etc.) :\n`
   );
   const waLink = `https://wa.me/${WA_NUMBER}?text=${waText}`;
 
@@ -162,25 +186,27 @@ function QuoteModal({ open, onClose, product }) {
     <Modal open={open} onClose={onClose} title="Demande de devis">
       <div className="space-y-2 text-sm text-gray-700">
         <div>
-          <span className="font-medium">Produit:</span> {product.name}
+          <span className="font-medium">Produit :</span> {product.name}
         </div>
         <div>
-          <span className="font-medium">Usage:</span> {product.usage}
+          <span className="font-medium">Catégorie :</span> {product.category}
         </div>
         <div>
-          <span className="font-medium">Matière:</span> {product.material}
+          <span className="font-medium">Matière :</span> {product.material}
         </div>
         <div>
-          <span className="font-medium">Poids:</span> {product.weight}
+          <span className="font-medium">Poids :</span> {product.weight}
         </div>
         <div>
-          <span className="font-medium">Aspect:</span> {product.aspect}
+          <span className="font-medium">Motif / aspect :</span>{" "}
+          {product.aspect}
         </div>
         <div>
-          <span className="font-medium">Origine:</span> {product.origin}
+          <span className="font-medium">Origine :</span> {product.origin}
         </div>
         <div>
-          <span className="font-medium">Prix indicatif:</span> {formatPrice(product.price)}
+          <span className="font-medium">Prix indicatif :</span>{" "}
+          {formatPrice(product.price)}
         </div>
       </div>
 
@@ -188,7 +214,7 @@ function QuoteModal({ open, onClose, product }) {
         href={waLink}
         target="_blank"
         rel="noreferrer"
-        className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-brand-500 px-4 py-3 font-semibold text-white hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
+        className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-brand-500 px-4 py-3 font-semibold text-white hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2"
       >
         Ouvrir WhatsApp et envoyer
       </a>
@@ -213,7 +239,11 @@ function Lightbox({ open, images, index, onClose, onPrev, onNext }) {
             ✕ Fermer
           </button>
 
-          <img src={images[index]} alt="" className="max-h-[80vh] max-w-[90vw] rounded-xl object-contain bg-white" />
+          <img
+            src={images[index]}
+            alt=""
+            className="max-h-[80vh] max-w-[90vw] rounded-xl bg-white object-contain"
+          />
 
           <div className="mt-4 flex justify-center gap-6">
             <button
@@ -253,7 +283,7 @@ function SupplierSignup({ onClose }) {
   const submit = (e) => {
     e.preventDefault();
     alert(
-      `Merci !\n\nNom: ${name}\nVille: ${city}\nPays: ${country}\nWhatsApp: ${whatsapp}\n\nL’équipe EasyTex vous recontactera.`
+      `Merci !\n\nNom : ${name}\nVille : ${city}\nPays : ${country}\nWhatsApp : ${whatsapp}\n\nL’équipe EasyTex vous recontactera.`
     );
     onClose?.();
   };
@@ -262,7 +292,9 @@ function SupplierSignup({ onClose }) {
     <form onSubmit={submit} className="space-y-4">
       <div className="grid gap-3 sm:grid-cols-2">
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-900">Nom de l’entreprise</label>
+          <label className="mb-1 block text-sm font-medium text-gray-900">
+            Nom de l’entreprise
+          </label>
           <input
             className="w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-brand-400"
             value={name}
@@ -271,7 +303,9 @@ function SupplierSignup({ onClose }) {
           />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-900">Ville</label>
+          <label className="mb-1 block text-sm font-medium text-gray-900">
+            Ville
+          </label>
           <input
             className="w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-brand-400"
             value={city}
@@ -280,7 +314,9 @@ function SupplierSignup({ onClose }) {
           />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-900">Pays</label>
+          <label className="mb-1 block text-sm font-medium text-gray-900">
+            Pays
+          </label>
           <input
             className="w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-brand-400"
             value={country}
@@ -289,7 +325,9 @@ function SupplierSignup({ onClose }) {
           />
         </div>
         <div>
-          <label className="mb-1 block text-sm font-medium text-gray-900">Numéro WhatsApp</label>
+          <label className="mb-1 block text-sm font-medium text-gray-900">
+            Numéro WhatsApp
+          </label>
           <input
             className="w-full rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-brand-400"
             value={whatsapp}
@@ -301,7 +339,7 @@ function SupplierSignup({ onClose }) {
 
       <button
         type="submit"
-        className="inline-flex items-center justify-center rounded-xl bg-brand-500 px-4 py-3 font-semibold text-white hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
+        className="inline-flex items-center justify-center rounded-xl bg-brand-500 px-4 py-3 font-semibold text-white hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2"
       >
         Envoyer ma demande
       </button>
@@ -310,42 +348,62 @@ function SupplierSignup({ onClose }) {
 }
 
 /* -----------------------------------------------------------
-   CATALOGUE avec catégories + filtres
+   CATALOGUE AVEC CATÉGORIES + FILTRES
 ----------------------------------------------------------- */
-
-const USAGE_OPTIONS = [
-  "Tissus habillement",
-  "Tissus Maison et Linge",
-  "Tissus Ameublement et Décoration",
-  "Tissus spécifiques et traditionnels",
-];
-
 function Catalog({ products, suppliers, onQuote, openLightbox }) {
   const [q, setQ] = useState("");
-  const [usage, setUsage] = useState("Tous les usages");
-  const [material, setMaterial] = useState("Toutes les matières");
-  const [weight, setWeight] = useState("Tous les poids");
-  const [aspect, setAspect] = useState("Tous les aspects");
+  const [category, setCategory] = useState("Toutes catégories");
+  const [material, setMaterial] = useState("Toutes matières");
+  const [weight, setWeight] = useState("Tous poids");
+  const [aspect, setAspect] = useState("Tous motifs");
 
-  const usages = useMemo(
-    () => ["Tous les usages", ...USAGE_OPTIONS.filter((u) => products.some((p) => p.usage === u))],
+  const categories = useMemo(
+    () => [
+      "Toutes catégories",
+      ...Array.from(new Set(products.map((p) => p.category))),
+    ],
     [products]
   );
   const materials = useMemo(
     () => [
-      "Toutes les matières",
-      ...Array.from(new Set(products.map((p) => p.material))).filter(Boolean),
+      "Toutes matières",
+      ...Array.from(new Set(products.map((p) => p.material))),
     ],
     [products]
   );
   const weights = useMemo(
-    () => ["Tous les poids", ...Array.from(new Set(products.map((p) => p.weight))).filter(Boolean)],
+    () => [
+      "Tous poids",
+      ...Array.from(new Set(products.map((p) => p.weight))),
+    ],
     [products]
   );
   const aspects = useMemo(
-    () => ["Tous les aspects", ...Array.from(new Set(products.map((p) => p.aspect))).filter(Boolean)],
+    () => [
+      "Tous motifs",
+      ...Array.from(new Set(products.map((p) => p.aspect))),
+    ],
     [products]
   );
+
+  const filtered = useMemo(() => {
+    return products.filter((p) => {
+      const matchQ =
+        !q ||
+        p.name.toLowerCase().includes(q.toLowerCase()) ||
+        p.origin.toLowerCase().includes(q.toLowerCase()) ||
+        p.material.toLowerCase().includes(q.toLowerCase());
+
+      const matchCategory =
+        category === "Toutes catégories" || p.category === category;
+      const matchMaterial =
+        material === "Toutes matières" || p.material === material;
+      const matchWeight = weight === "Tous poids" || p.weight === weight;
+      const matchAspect = aspect === "Tous motifs" || p.aspect === aspect;
+
+      return matchQ && matchCategory && matchMaterial && matchWeight && matchAspect;
+    });
+  }, [products, q, category, material, weight, aspect]);
 
   const supplierById = useMemo(() => {
     const map = new Map();
@@ -353,87 +411,73 @@ function Catalog({ products, suppliers, onQuote, openLightbox }) {
     return map;
   }, [suppliers]);
 
-  const filtered = useMemo(() => {
-    return products.filter((p) => {
-      const search = q.toLowerCase();
-      const matchQ =
-        !search ||
-        p.name.toLowerCase().includes(search) ||
-        p.type.toLowerCase().includes(search) ||
-        p.color.toLowerCase().includes(search) ||
-        p.origin.toLowerCase().includes(search) ||
-        (p.usage && p.usage.toLowerCase().includes(search));
-
-      const matchUsage = usage === "Tous les usages" || p.usage === usage;
-      const matchMaterial = material === "Toutes les matières" || p.material === material;
-      const matchWeight = weight === "Tous les poids" || p.weight === weight;
-      const matchAspect = aspect === "Tous les aspects" || p.aspect === aspect;
-
-      return matchQ && matchUsage && matchMaterial && matchWeight && matchAspect;
-    });
-  }, [products, q, usage, material, weight, aspect]);
-
   return (
     <section className="mx-auto max-w-6xl px-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="text-xl font-semibold text-gray-900">Catalogue EasyTex</h2>
+        <div>
+          <h2 className="text-xl font-semibold text-gray-900">Catalogue</h2>
+          <p className="mt-1 text-sm text-gray-600">
+            Parcourez les tissus par usage, matière et motif. Demandez un devis
+            en un clic.
+          </p>
+        </div>
 
-        <div className="flex w-full flex-wrap gap-3 sm:justify-end">
+        <div className="flex flex-wrap gap-3">
           <input
-            placeholder="Rechercher (nom, type, couleur, usage, origine)"
-            className="w-full min-w-[260px] flex-1 rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-400"
+            placeholder="Rechercher (nom, origine, matière...)"
+            className="w-full min-w-[220px] flex-1 rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-400"
             value={q}
             onChange={(e) => setQ(e.target.value)}
           />
         </div>
       </div>
 
-      {/* Filtres avancés */}
-      <div className="mt-4 flex flex-wrap gap-3">
+      {/* Filtres */}
+      <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-4">
         <select
-          className="min-w-[180px] flex-1 rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-400"
-          value={usage}
-          onChange={(e) => setUsage(e.target.value)}
+          className="rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-400"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
         >
-          {usages.map((u) => (
-            <option key={u} value={u}>
-              {u}
+          {categories.map((c) => (
+            <option key={c} value={c}>
+              {c}
             </option>
           ))}
         </select>
 
         <select
-          className="min-w-[160px] flex-1 rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-400"
+          className="rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-400"
           value={material}
           onChange={(e) => setMaterial(e.target.value)}
         >
           {materials.map((m) => (
             <option key={m} value={m}>
-              {m}
+              Matière : {m}
             </option>
           ))}
         </select>
 
         <select
-          className="min-w-[140px] flex-1 rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-400"
+          className="rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-400"
           value={weight}
           onChange={(e) => setWeight(e.target.value)}
         >
           {weights.map((w) => (
             <option key={w} value={w}>
-              {w}
+              Poids : {w}
             </option>
           ))}
         </select>
 
         <select
-          className="min-w-[160px] flex-1 rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-400"
+          className="rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-400"
           value={aspect}
           onChange={(e) => setAspect(e.target.value)}
         >
           {aspects.map((a) => (
             <option key={a} value={a}>
-              {a}
+              Motif : {a}
             </option>
           ))}
         </select>
@@ -446,8 +490,10 @@ function Catalog({ products, suppliers, onQuote, openLightbox }) {
           const firstImg = p.images?.[0];
 
           return (
-            <div key={p.id} className="flex flex-col rounded-2xl border p-4 transition hover:shadow-sm">
-              {/* image cliquable */}
+            <div
+              key={p.id}
+              className="flex flex-col rounded-2xl border p-4 transition hover:shadow-sm"
+            >
               {firstImg && (
                 <button
                   className="block w-full overflow-hidden rounded-xl"
@@ -466,29 +512,34 @@ function Catalog({ products, suppliers, onQuote, openLightbox }) {
                 </button>
               )}
 
-              {/* Usage */}
-              {p.usage && (
-                <div className="mt-3 inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
-                  {p.usage}
-                </div>
-              )}
-
-              <div className="mt-2 text-base font-semibold text-gray-900">{p.name}</div>
-              <div className="mt-1 text-xs text-gray-600">
-                {p.type} • {p.material} • {p.weight} • {p.aspect}
+              <div className="mt-3 text-base font-semibold text-gray-900">
+                {p.name}
               </div>
-              <div className="mt-3 text-lg font-extrabold text-gray-900">{formatPrice(p.price)}</div>
+              <div className="mt-1 text-xs font-medium uppercase tracking-wide text-brand-600">
+                {p.category}
+              </div>
+              <div className="mt-1 text-sm text-gray-600">
+                {p.material} • Poids {p.weight.toLowerCase()} • {p.aspect}
+              </div>
+              <div className="mt-2 text-sm text-gray-600">
+                Origine : {p.origin}
+              </div>
+
+              <div className="mt-3 text-lg font-extrabold text-gray-900">
+                {formatPrice(p.price)}
+              </div>
 
               {s && (
                 <div className="mt-2 text-sm text-gray-600">
-                  <span className="font-medium">{s.name}</span> — {s.city}, {s.country}
+                  <span className="font-medium">{s.name}</span> — {s.city},{" "}
+                  {s.country}
                 </div>
               )}
 
               <div className="mt-4 flex gap-3">
                 <button
                   onClick={() => onQuote(p)}
-                  className="inline-flex flex-1 items-center justify-center rounded-xl bg-brand-500 px-3 py-2 text-sm font-semibold text-white hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
+                  className="inline-flex flex-1 items-center justify-center rounded-xl bg-brand-500 px-3 py-2 text-sm font-semibold text-white hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2"
                 >
                   Demander un devis
                 </button>
@@ -497,7 +548,7 @@ function Catalog({ products, suppliers, onQuote, openLightbox }) {
                     href={`https://wa.me/${s.whatsapp}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center justify-center rounded-xl px-3 py-2 text-sm font-semibold text-brand-600 ring-1 ring-brand-500 hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
+                    className="inline-flex items-center justify-center rounded-xl px-3 py-2 text-sm font-semibold text-brand-600 ring-1 ring-brand-500 hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2"
                   >
                     Contacter
                   </a>
@@ -510,8 +561,8 @@ function Catalog({ products, suppliers, onQuote, openLightbox }) {
 
       {filtered.length === 0 && (
         <p className="mt-6 text-sm text-gray-500">
-          Aucun tissu ne correspond à votre recherche pour le moment. Essayez d’élargir les filtres ou contactez EasyTex
-          directement via WhatsApp.
+          Aucun tissu ne correspond encore à ces critères. Réduisez les filtres
+          ou contactez directement l’équipe EasyTex.
         </p>
       )}
     </section>
@@ -521,7 +572,6 @@ function Catalog({ products, suppliers, onQuote, openLightbox }) {
 /* -----------------------------------------------------------
    VUES (Accueil / Catalogue / Fournisseurs)
 ----------------------------------------------------------- */
-
 function HomeView({ onGoCatalogue, onOpenSupplier }) {
   return (
     <div className="mx-auto max-w-6xl px-4 pb-16">
@@ -538,21 +588,23 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
           </h1>
 
           <p className="mt-4 text-gray-700 md:text-lg">
-            EasyTex connecte les acheteurs de textile aux meilleurs fournisseurs de la zone UEMOA, directement sur
-            WhatsApp. Comparez les tissus, demandez un devis en un clic et échangez avec des fournisseurs vérifiés.
+            EasyTex connecte les acheteurs de textile aux meilleurs
+            fournisseurs de la zone UEMOA, directement sur WhatsApp. Comparez
+            les tissus, demandez un devis en un clic et échangez avec des
+            fournisseurs vérifiés.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
             <button
               onClick={onGoCatalogue}
-              className="inline-flex items-center justify-center rounded-xl bg-brand-500 px-5 py-3 font-semibold text-white hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
+              className="inline-flex items-center justify-center rounded-xl bg-brand-500 px-5 py-3 font-semibold text-white hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2"
             >
               Explorer le catalogue
             </button>
 
             <button
               onClick={onOpenSupplier}
-              className="inline-flex items-center justify-center rounded-xl px-5 py-3 font-semibold ring-1 ring-brand-500 text-brand-600 hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
+              className="inline-flex items-center justify-center rounded-xl px-5 py-3 font-semibold text-brand-600 ring-1 ring-brand-500 hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2"
             >
               Devenir fournisseur
             </button>
@@ -561,11 +613,15 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
           {/* Badges */}
           <div className="mt-6 flex flex-wrap gap-3">
             <div className="rounded-2xl border bg-white/70 px-3 py-2 text-sm backdrop-blur">
-              <span className="font-medium text-gray-900">Fournisseurs vérifiés</span>
+              <span className="font-medium text-gray-900">
+                Fournisseurs vérifiés
+              </span>
               <span className="text-gray-600"> — Qualité et confiance</span>
             </div>
             <div className="rounded-2xl border bg-white/70 px-3 py-2 text-sm backdrop-blur">
-              <span className="font-medium text-gray-900">Expédition régionale</span>
+              <span className="font-medium text-gray-900">
+                Expédition régionale
+              </span>
               <span className="text-gray-600"> — UEMOA</span>
             </div>
           </div>
@@ -576,7 +632,7 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
       <section className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="rounded-2xl border p-4">
           <div className="text-3xl font-extrabold text-gray-900">100</div>
-          <div className="text-gray-600">Tissus disponibles</div>
+          <div className="text-gray-600">Tissus disponibles (démo)</div>
         </div>
         <div className="rounded-2xl border p-4">
           <div className="text-3xl font-extrabold text-gray-900">UEMOA</div>
@@ -584,25 +640,38 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
         </div>
         <div className="rounded-2xl border p-4">
           <div className="text-3xl font-extrabold text-gray-900">24–48h</div>
-          <div className="text-gray-600">Délai de réponse</div>
+          <div className="text-gray-600">Délai de réponse cible</div>
         </div>
       </section>
 
       {/* COMMENT ÇA MARCHE */}
       <section className="mt-10">
-        <h2 className="mb-4 text-xl font-semibold text-gray-900">Comment ça marche ?</h2>
+        <h2 className="mb-4 text-xl font-semibold text-gray-900">
+          Comment ça marche ?
+        </h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <div className="rounded-2xl border p-4">
-            <div className="font-semibold text-gray-900">1) Explorez</div>
-            <p className="mt-1 text-sm text-gray-600">Filtrez par usage, matière, poids ou aspect.</p>
+            <div className="font-semibold text-gray-900">1) Expliquez</div>
+            <p className="mt-1 text-sm text-gray-600">
+              Indiquez ce que vous cherchez : usage, matière, quantité,
+              délais.
+            </p>
           </div>
           <div className="rounded-2xl border p-4">
-            <div className="font-semibold text-gray-900">2) Demandez un devis</div>
-            <p className="mt-1 text-sm text-gray-600">En un clic via WhatsApp, directement au fournisseur.</p>
+            <div className="font-semibold text-gray-900">
+              2) Recevez des propositions
+            </div>
+            <p className="mt-1 text-sm text-gray-600">
+              Les fournisseurs qualifiés répondent directement via WhatsApp.
+            </p>
           </div>
           <div className="rounded-2xl border p-4">
-            <div className="font-semibold text-gray-900">3) Recevez & finalisez</div>
-            <p className="mt-1 text-sm text-gray-600">Comparez les offres et confirmez votre commande.</p>
+            <div className="font-semibold text-gray-900">
+              3) Comparez et confirmez
+            </div>
+            <p className="mt-1 text-sm text-gray-600">
+              Vous choisissez la meilleure offre et finalisez hors plateforme.
+            </p>
           </div>
         </div>
       </section>
@@ -613,7 +682,12 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
 function CatalogView({ onQuote, openLightbox }) {
   return (
     <div id="catalogue" className="mx-auto max-w-6xl px-4 pb-16">
-      <Catalog products={DEMO_PRODUCTS} suppliers={DEMO_SUPPLIERS} onQuote={onQuote} openLightbox={openLightbox} />
+      <Catalog
+        products={DEMO_PRODUCTS}
+        suppliers={DEMO_SUPPLIERS}
+        onQuote={onQuote}
+        openLightbox={openLightbox}
+      />
     </div>
   );
 }
@@ -622,9 +696,12 @@ function SuppliersView({ onCloseModal }) {
   return (
     <div id="fournisseurs" className="mx-auto max-w-6xl px-4 pb-16">
       <section className="rounded-2xl border p-5">
-        <h2 className="text-lg font-semibold text-gray-900">Vous vendez du textile ? Rejoignez EasyTex</h2>
+        <h2 className="text-lg font-semibold text-gray-900">
+          Vous vendez du textile ? Rejoignez EasyTex
+        </h2>
         <p className="mt-1 text-sm text-gray-700">
-          Créez une vitrine simple, recevez des demandes qualifiées et développez votre clientèle dans l’espace UEMOA.
+          Créez une vitrine simple, recevez des demandes qualifiées et
+          développez votre clientèle dans l’espace UEMOA.
         </p>
         <div className="mt-4">
           <SupplierSignup onClose={onCloseModal} />
@@ -636,13 +713,14 @@ function SuppliersView({ onCloseModal }) {
 
 /* -----------------------------------------------------------
    APP PRINCIPALE
+   (avec header responsive léger : logo + EasyTex + 3 onglets)
 ----------------------------------------------------------- */
 export default function App() {
   const [tab, setTab] = useState("accueil");
   const [quoteProduct, setQuoteProduct] = useState(null);
   const [openSupplier, setOpenSupplier] = useState(false);
 
-  // Mentions légales / politique / CGU
+  // Mentions / politique / CGU
   const [openPrivacy, setOpenPrivacy] = useState(false);
   const [openTerms, setOpenTerms] = useState(false);
   const [openImprint, setOpenImprint] = useState(false);
@@ -658,8 +736,10 @@ export default function App() {
     setLbOpen(true);
   };
   const closeLightbox = () => setLbOpen(false);
-  const prevLightbox = () => setLbIndex((i) => (i - 1 + lbImages.length) % lbImages.length);
-  const nextLightbox = () => setLbIndex((i) => (i + 1) % lbImages.length);
+  const prevLightbox = () =>
+    setLbIndex((i) => (i - 1 + lbImages.length) % lbImages.length);
+  const nextLightbox = () =>
+    setLbIndex((i) => (i + 1) % lbImages.length);
 
   const switchTo = (key) => {
     setTab(key);
@@ -678,8 +758,13 @@ export default function App() {
           }}
           className="flex items-center gap-3 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2"
         >
-          {/* Logo : utiliser ici la version icône seule */}
-          <img src="/logo-easytex.png" alt="Logo EasyTex" className="h-11 w-11 rounded-md" loading="eager" />
+          {/* Nouveau logo : pictogramme seul, plus petit sur mobile */}
+          <img
+            src="/logo-easytex.png"
+            alt="Logo EasyTex"
+            className="h-9 w-9 rounded-md sm:h-11 sm:w-11"
+            loading="eager"
+          />
           <span className="text-lg font-bold text-gray-900">EasyTex</span>
         </a>
 
@@ -692,8 +777,10 @@ export default function App() {
             <button
               key={item.key}
               onClick={() => switchTo(item.key)}
-              className={`rounded-full px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2 ${
-                tab === item.key ? "bg-black text-white" : "text-gray-700 hover:bg-gray-100"
+              className={`rounded-full px-3 py-1.5 text-xs font-medium focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2 sm:px-4 sm:py-2 sm:text-sm ${
+                tab === item.key
+                  ? "bg-black text-white"
+                  : "text-gray-700 hover:bg-gray-100"
               }`}
             >
               {item.label}
@@ -717,7 +804,10 @@ export default function App() {
       {tab === "accueil" && (
         <HomeView
           onGoCatalogue={() => switchTo("catalogue")}
-          onOpenSupplier={() => setOpenSupplier(true)}
+          onOpenSupplier={() => {
+            switchTo("fournisseurs");
+            setOpenSupplier(true);
+          }}
         />
       )}
 
@@ -762,63 +852,97 @@ export default function App() {
       </footer>
 
       {/* MODAUX GLOBAUX */}
-      <QuoteModal open={!!quoteProduct} onClose={() => setQuoteProduct(null)} product={quoteProduct} />
+      <QuoteModal
+        open={!!quoteProduct}
+        onClose={() => setQuoteProduct(null)}
+        product={quoteProduct}
+      />
 
-      <Modal open={openSupplier} onClose={() => setOpenSupplier(false)} title="Devenir fournisseur">
+      <Modal
+        open={openSupplier}
+        onClose={() => setOpenSupplier(false)}
+        title="Devenir fournisseur EasyTex"
+      >
         <SupplierSignup onClose={() => setOpenSupplier(false)} />
       </Modal>
 
-      {/* Mentions / Politique / CGU */}
-      <Modal open={openPrivacy} onClose={() => setOpenPrivacy(false)} title="Politique de confidentialité">
+      <Modal
+        open={openPrivacy}
+        onClose={() => setOpenPrivacy(false)}
+        title="Politique de confidentialité"
+      >
         <div className="space-y-3 text-sm text-gray-700">
           <p>
-            EasyTex respecte votre vie privée. Les données collectées (formulaires, demandes de devis)
-            servent uniquement au traitement de vos sollicitations et à l’amélioration du service.
+            EasyTex respecte votre vie privée. Les données collectées
+            (formulaires, demandes de devis) servent uniquement au traitement de
+            vos sollicitations et à l’amélioration du service.
           </p>
           <ul className="list-disc pl-5">
-            <li>Base légale : intérêt légitime et exécution pré-contractuelle.</li>
-            <li>Conservation : durée nécessaire au traitement, complétée par les obligations légales.</li>
-            <li>Droits : accès, rectification, effacement, opposition, portabilité.</li>
-            <li>Contact : privacy@easytex.sn</li>
+            <li>
+              Base légale : intérêt légitime et exécution pré-contractuelle.
+            </li>
+            <li>Conservation : durée nécessaire + obligations légales.</li>
+            <li>Droits : accès, rectification, effacement, opposition.</li>
+            <li>Contact DPD : privacy@easytex.sn</li>
           </ul>
         </div>
       </Modal>
 
-      <Modal open={openTerms} onClose={() => setOpenTerms(false)} title="Conditions Générales d’Utilisation (CGU)">
+      <Modal
+        open={openTerms}
+        onClose={() => setOpenTerms(false)}
+        title="Conditions Générales d’Utilisation (CGU)"
+      >
         <div className="space-y-3 text-sm text-gray-700">
           <p>
-            EasyTex met en relation acheteurs et fournisseurs de textiles dans l’espace UEMOA.
-            L’usage de la plateforme implique l’acceptation des présentes CGU.
+            EasyTex met en relation acheteurs et fournisseurs de textiles dans
+            l’espace UEMOA. L’usage de la plateforme implique l’acceptation des
+            présentes CGU.
           </p>
           <ul className="list-disc pl-5">
-            <li>Le contenu du catalogue a une valeur indicative (prix, disponibilités, caractéristiques).</li>
-            <li>Les échanges commerciaux se finalisent directement entre acheteurs et fournisseurs.</li>
-            <li>Les utilisateurs s’engagent à respecter les lois applicables (douanes, propriété intellectuelle, etc.).</li>
-            <li>Tout usage frauduleux de la plateforme est interdit.</li>
+            <li>
+              Les prix et disponibilités indiqués dans le catalogue sont à titre
+              indicatif.
+            </li>
+            <li>
+              Les échanges commerciaux se finalisent directement entre les
+              parties.
+            </li>
+            <li>
+              Respect des lois applicables (douanes, propriété intellectuelle,
+              etc.).
+            </li>
+            <li>Interdiction de fraude, spam ou usurpation d’identité.</li>
           </ul>
         </div>
       </Modal>
 
-      <Modal open={openImprint} onClose={() => setOpenImprint(false)} title="Mentions légales">
+      <Modal
+        open={openImprint}
+        onClose={() => setOpenImprint(false)}
+        title="Mentions légales"
+      >
         <div className="space-y-3 text-sm text-gray-700">
           <p>
-            <span className="font-medium">Éditeur :</span> EasyTex (raison sociale à compléter).
+            <span className="font-medium">Éditeur :</span> EasyTex (raison
+            sociale à compléter).
           </p>
           <p>
-            <span className="font-medium">Siège :</span> Adresse à compléter, Sénégal.
+            <span className="font-medium">Siège :</span> Adresse à compléter,
+            Sénégal.
           </p>
           <p>
-            <span className="font-medium">Contact :</span> contact@easytex.sn — +221 …
+            <span className="font-medium">Contact :</span> contact@easytex.sn —
+            +221 …
           </p>
           <p>
-            <span className="font-medium">Hébergement :</span> Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723,
-            USA.
+            <span className="font-medium">Hébergement :</span> Vercel Inc., 440
+            N Barranca Ave #4133, Covina, CA 91723, USA.
           </p>
           <p>Pour toute notification légale : legal@easytex.sn</p>
         </div>
       </Modal>
 
-      {/* LIGHTBOX globale */}
       <Lightbox
         open={lbOpen}
         images={lbImages}
