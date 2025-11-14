@@ -16,7 +16,7 @@ const WA_NUMBER = "221707546281";
 
 /* -----------------------------------------------------------
    DONNÉES DÉMO
-   (Ajout: images[] pour chaque produit, 2 images par article)
+   (Ajout: usage, material, weight, aspect pour les filtres)
 ----------------------------------------------------------- */
 const DEMO_SUPPLIERS = [
   { id: "s1", name: "Atelier Ndar Textile", city: "Saint-Louis", country: "Sénégal", whatsapp: "221771112233" },
@@ -27,23 +27,31 @@ const DEMO_SUPPLIERS = [
 const DEMO_PRODUCTS = [
   {
     id: "p1",
-    name: "Bazin Riche 1.8m",
+    name: "Bazin riche 1.8m",
     type: "Bazin",
     color: "Bleu roi",
     origin: "Sénégal",
     price: 8500,
     supplierId: "s1",
     images: ["/p1-1.jpg", "/p1-2.jpg"],
+    usage: "Tissus spécifiques et traditionnels",
+    material: "Coton",
+    weight: "Lourd",
+    aspect: "Texturé",
   },
   {
     id: "p2",
     name: "Pagne tissé (lot de 5)",
-    type: "Tissé",
+    type: "Pagne tissé",
     color: "Multicolore",
     origin: "Côte d’Ivoire",
     price: 24000,
     supplierId: "s2",
     images: ["/p2-1.jpg", "/p2-2.jpg"],
+    usage: "Tissus spécifiques et traditionnels",
+    material: "Coton",
+    weight: "Moyen",
+    aspect: "Texturé",
   },
   {
     id: "p3",
@@ -54,26 +62,66 @@ const DEMO_PRODUCTS = [
     price: 19000,
     supplierId: "s3",
     images: ["/p3-1.jpg", "/p3-2.jpg"],
+    usage: "Tissus spécifiques et traditionnels",
+    material: "Coton",
+    weight: "Moyen",
+    aspect: "Wax",
   },
   {
     id: "p4",
-    name: "Indigo artisanal",
-    type: "Indigo",
-    color: "Indigo",
-    origin: "Mali",
-    price: 17500,
-    supplierId: "s2",
+    name: "Popeline unie 150 cm",
+    type: "Popeline",
+    color: "Blanc",
+    origin: "Sénégal",
+    price: 6500,
+    supplierId: "s1",
     images: ["/p4-1.jpg", "/p4-2.jpg"],
+    usage: "Tissus habillement",
+    material: "Coton",
+    weight: "Léger",
+    aspect: "Uni",
   },
   {
     id: "p5",
-    name: "Kente mix 6 yards",
-    type: "Kente",
-    color: "Jaune",
-    origin: "Ghana",
-    price: 28000,
-    supplierId: "s3",
+    name: "Gabardine workwear",
+    type: "Gabardine",
+    color: "Marine",
+    origin: "Sénégal",
+    price: 12000,
+    supplierId: "s1",
     images: ["/p5-1.jpg", "/p5-2.jpg"],
+    usage: "Tissus habillement",
+    material: "Mélange",
+    weight: "Lourd",
+    aspect: "Uni",
+  },
+  {
+    id: "p6",
+    name: "Nid d’abeille éponge",
+    type: "Éponge",
+    color: "Blanc cassé",
+    origin: "Turquie",
+    price: 10500,
+    supplierId: "s2",
+    images: ["/p6-1.jpg", "/p6-2.jpg"],
+    usage: "Tissus Maison et Linge",
+    material: "Coton",
+    weight: "Lourd",
+    aspect: "Texturé",
+  },
+  {
+    id: "p7",
+    name: "Toile d’ameublement outdoor",
+    type: "Toile",
+    color: "Beige",
+    origin: "Chine",
+    price: 15500,
+    supplierId: "s3",
+    images: ["/p7-1.jpg", "/p7-2.jpg"],
+    usage: "Tissus Ameublement et Décoration",
+    material: "Synthétique",
+    weight: "Lourd",
+    aspect: "Uni",
   },
 ];
 
@@ -104,18 +152,36 @@ function Modal({ open, onClose, title, children }) {
 function QuoteModal({ open, onClose, product }) {
   if (!open || !product) return null;
   const waText = encodeURIComponent(
-    `Bonjour EasyTex,\n\nJe souhaite un devis pour:\n- Produit: ${product.name}\n- Type: ${product.type}\n- Couleur: ${product.color}\n- Origine: ${product.origin}\n- Prix indicatif: ${formatPrice(product.price)}\n\nPrécisions (quantité, délais, livraison, etc.):\n`
+    `Bonjour EasyTex,\n\nJe souhaite un devis pour:\n- Produit: ${product.name}\n- Usage: ${product.usage}\n- Type: ${product.type}\n- Matière: ${product.material}\n- Poids: ${product.weight}\n- Aspect: ${product.aspect}\n- Origine: ${product.origin}\n- Prix indicatif: ${formatPrice(
+      product.price
+    )}\n\nPrécisions (quantité, délais, livraison, etc.):\n`
   );
   const waLink = `https://wa.me/${WA_NUMBER}?text=${waText}`;
 
   return (
     <Modal open={open} onClose={onClose} title="Demande de devis">
       <div className="space-y-2 text-sm text-gray-700">
-        <div><span className="font-medium">Produit:</span> {product.name}</div>
-        <div><span className="font-medium">Type:</span> {product.type}</div>
-        <div><span className="font-medium">Couleur:</span> {product.color}</div>
-        <div><span className="font-medium">Origine:</span> {product.origin}</div>
-        <div><span className="font-medium">Prix indicatif:</span> {formatPrice(product.price)}</div>
+        <div>
+          <span className="font-medium">Produit:</span> {product.name}
+        </div>
+        <div>
+          <span className="font-medium">Usage:</span> {product.usage}
+        </div>
+        <div>
+          <span className="font-medium">Matière:</span> {product.material}
+        </div>
+        <div>
+          <span className="font-medium">Poids:</span> {product.weight}
+        </div>
+        <div>
+          <span className="font-medium">Aspect:</span> {product.aspect}
+        </div>
+        <div>
+          <span className="font-medium">Origine:</span> {product.origin}
+        </div>
+        <div>
+          <span className="font-medium">Prix indicatif:</span> {formatPrice(product.price)}
+        </div>
       </div>
 
       <a
@@ -131,17 +197,15 @@ function QuoteModal({ open, onClose, product }) {
 }
 
 /* -----------------------------------------------------------
-   LIGHTBOX (agrandissement + ✕ Fermer + navigation)
+   LIGHTBOX (agrandissement + navigation)
 ----------------------------------------------------------- */
 function Lightbox({ open, images, index, onClose, onPrev, onNext }) {
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-50 bg-black/80">
-      {/* fermer en cliquant hors de l’image */}
       <div className="absolute inset-0" onClick={onClose} />
       <div className="absolute inset-0 flex items-center justify-center px-4">
         <div className="relative flex flex-col items-center">
-          {/* bouton ✕ Fermer clair */}
           <button
             onClick={onClose}
             className="absolute -top-10 right-0 rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-white"
@@ -149,23 +213,23 @@ function Lightbox({ open, images, index, onClose, onPrev, onNext }) {
             ✕ Fermer
           </button>
 
-          {/* image agrandie */}
-          <img
-            src={images[index]}
-            alt=""
-            className="max-h-[80vh] max-w-[90vw] rounded-xl object-contain bg-white"
-          />
+          <img src={images[index]} alt="" className="max-h-[80vh] max-w-[90vw] rounded-xl object-contain bg-white" />
 
-          {/* navigation */}
           <div className="mt-4 flex justify-center gap-6">
             <button
-              onClick={(e) => { e.stopPropagation(); onPrev(); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onPrev();
+              }}
               className="rounded-full bg-white/90 px-4 py-2 shadow hover:bg-white"
             >
               ← Précédente
             </button>
             <button
-              onClick={(e) => { e.stopPropagation(); onNext(); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onNext();
+              }}
               className="rounded-full bg-white/90 px-4 py-2 shadow hover:bg-white"
             >
               Suivante →
@@ -246,35 +310,42 @@ function SupplierSignup({ onClose }) {
 }
 
 /* -----------------------------------------------------------
-   CATALOGUE
+   CATALOGUE avec catégories + filtres
 ----------------------------------------------------------- */
+
+const USAGE_OPTIONS = [
+  "Tissus habillement",
+  "Tissus Maison et Linge",
+  "Tissus Ameublement et Décoration",
+  "Tissus spécifiques et traditionnels",
+];
+
 function Catalog({ products, suppliers, onQuote, openLightbox }) {
   const [q, setQ] = useState("");
-  const [type, setType] = useState("Tous");
-  const [origin, setOrigin] = useState("Toutes");
+  const [usage, setUsage] = useState("Tous les usages");
+  const [material, setMaterial] = useState("Toutes les matières");
+  const [weight, setWeight] = useState("Tous les poids");
+  const [aspect, setAspect] = useState("Tous les aspects");
 
-  const types = useMemo(
-    () => ["Tous", ...Array.from(new Set(products.map((p) => p.type)))],
+  const usages = useMemo(
+    () => ["Tous les usages", ...USAGE_OPTIONS.filter((u) => products.some((p) => p.usage === u))],
     [products]
   );
-  const origins = useMemo(
-    () => ["Toutes", ...Array.from(new Set(products.map((p) => p.origin)))],
+  const materials = useMemo(
+    () => [
+      "Toutes les matières",
+      ...Array.from(new Set(products.map((p) => p.material))).filter(Boolean),
+    ],
     [products]
   );
-
-  const filtered = useMemo(() => {
-    return products.filter((p) => {
-      const matchQ =
-        !q ||
-        p.name.toLowerCase().includes(q.toLowerCase()) ||
-        p.type.toLowerCase().includes(q.toLowerCase()) ||
-        p.color.toLowerCase().includes(q.toLowerCase()) ||
-        p.origin.toLowerCase().includes(q.toLowerCase());
-      const matchType = type === "Tous" || p.type === type;
-      const matchOrigin = origin === "Toutes" || p.origin === origin;
-      return matchQ && matchType && matchOrigin;
-    });
-  }, [products, q, type, origin]);
+  const weights = useMemo(
+    () => ["Tous les poids", ...Array.from(new Set(products.map((p) => p.weight))).filter(Boolean)],
+    [products]
+  );
+  const aspects = useMemo(
+    () => ["Tous les aspects", ...Array.from(new Set(products.map((p) => p.aspect))).filter(Boolean)],
+    [products]
+  );
 
   const supplierById = useMemo(() => {
     const map = new Map();
@@ -282,47 +353,101 @@ function Catalog({ products, suppliers, onQuote, openLightbox }) {
     return map;
   }, [suppliers]);
 
+  const filtered = useMemo(() => {
+    return products.filter((p) => {
+      const search = q.toLowerCase();
+      const matchQ =
+        !search ||
+        p.name.toLowerCase().includes(search) ||
+        p.type.toLowerCase().includes(search) ||
+        p.color.toLowerCase().includes(search) ||
+        p.origin.toLowerCase().includes(search) ||
+        (p.usage && p.usage.toLowerCase().includes(search));
+
+      const matchUsage = usage === "Tous les usages" || p.usage === usage;
+      const matchMaterial = material === "Toutes les matières" || p.material === material;
+      const matchWeight = weight === "Tous les poids" || p.weight === weight;
+      const matchAspect = aspect === "Tous les aspects" || p.aspect === aspect;
+
+      return matchQ && matchUsage && matchMaterial && matchWeight && matchAspect;
+    });
+  }, [products, q, usage, material, weight, aspect]);
+
   return (
     <section className="mx-auto max-w-6xl px-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 className="text-xl font-semibold text-gray-900">Catalogue</h2>
+        <h2 className="text-xl font-semibold text-gray-900">Catalogue EasyTex</h2>
 
-        <div className="flex flex-wrap gap-3">
+        <div className="flex w-full flex-wrap gap-3 sm:justify-end">
           <input
-            placeholder="Rechercher (nom, type, couleur, origine)"
-            className="w-full min-w-[260px] flex-1 rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-brand-400"
+            placeholder="Rechercher (nom, type, couleur, usage, origine)"
+            className="w-full min-w-[260px] flex-1 rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-400"
             value={q}
             onChange={(e) => setQ(e.target.value)}
           />
-          <select
-            className="rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-brand-400"
-            value={type}
-            onChange={(e) => setType(e.target.value)}
-          >
-            {types.map((t) => (
-              <option key={t} value={t}>{t}</option>
-            ))}
-          </select>
-          <select
-            className="rounded-xl border px-3 py-2 outline-none focus:ring-2 focus:ring-brand-400"
-            value={origin}
-            onChange={(e) => setOrigin(e.target.value)}
-          >
-            {origins.map((o) => (
-              <option key={o} value={o}>{o}</option>
-            ))}
-          </select>
         </div>
       </div>
 
+      {/* Filtres avancés */}
+      <div className="mt-4 flex flex-wrap gap-3">
+        <select
+          className="min-w-[180px] flex-1 rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-400"
+          value={usage}
+          onChange={(e) => setUsage(e.target.value)}
+        >
+          {usages.map((u) => (
+            <option key={u} value={u}>
+              {u}
+            </option>
+          ))}
+        </select>
+
+        <select
+          className="min-w-[160px] flex-1 rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-400"
+          value={material}
+          onChange={(e) => setMaterial(e.target.value)}
+        >
+          {materials.map((m) => (
+            <option key={m} value={m}>
+              {m}
+            </option>
+          ))}
+        </select>
+
+        <select
+          className="min-w-[140px] flex-1 rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-400"
+          value={weight}
+          onChange={(e) => setWeight(e.target.value)}
+        >
+          {weights.map((w) => (
+            <option key={w} value={w}>
+              {w}
+            </option>
+          ))}
+        </select>
+
+        <select
+          className="min-w-[160px] flex-1 rounded-xl border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-brand-400"
+          value={aspect}
+          onChange={(e) => setAspect(e.target.value)}
+        >
+          {aspects.map((a) => (
+            <option key={a} value={a}>
+              {a}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* Résultats */}
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {filtered.map((p) => {
           const s = supplierById.get(p.supplierId);
           const firstImg = p.images?.[0];
 
           return (
-            <div key={p.id} className="rounded-2xl border p-4 hover:shadow-sm transition">
-              {/* image cliquable (ouvre la lightbox) */}
+            <div key={p.id} className="flex flex-col rounded-2xl border p-4 transition hover:shadow-sm">
+              {/* image cliquable */}
               {firstImg && (
                 <button
                   className="block w-full overflow-hidden rounded-xl"
@@ -332,7 +457,7 @@ function Catalog({ products, suppliers, onQuote, openLightbox }) {
                   <img
                     src={firstImg}
                     alt={p.name}
-                    className="w-full h-44 object-cover"
+                    className="h-44 w-full object-cover"
                     onError={(e) => {
                       e.currentTarget.onerror = null;
                       e.currentTarget.src = "/logo-easytex.png";
@@ -341,9 +466,16 @@ function Catalog({ products, suppliers, onQuote, openLightbox }) {
                 </button>
               )}
 
-              <div className="mt-3 text-base font-semibold text-gray-900">{p.name}</div>
-              <div className="mt-1 text-sm text-gray-600">
-                {p.type} • {p.color} • {p.origin}
+              {/* Usage */}
+              {p.usage && (
+                <div className="mt-3 inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
+                  {p.usage}
+                </div>
+              )}
+
+              <div className="mt-2 text-base font-semibold text-gray-900">{p.name}</div>
+              <div className="mt-1 text-xs text-gray-600">
+                {p.type} • {p.material} • {p.weight} • {p.aspect}
               </div>
               <div className="mt-3 text-lg font-extrabold text-gray-900">{formatPrice(p.price)}</div>
 
@@ -365,7 +497,7 @@ function Catalog({ products, suppliers, onQuote, openLightbox }) {
                     href={`https://wa.me/${s.whatsapp}`}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center justify-center rounded-xl px-3 py-2 text-sm font-semibold ring-1 ring-brand-500 text-brand-600 hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
+                    className="inline-flex items-center justify-center rounded-xl px-3 py-2 text-sm font-semibold text-brand-600 ring-1 ring-brand-500 hover:bg-brand-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
                   >
                     Contacter
                   </a>
@@ -375,6 +507,13 @@ function Catalog({ products, suppliers, onQuote, openLightbox }) {
           );
         })}
       </div>
+
+      {filtered.length === 0 && (
+        <p className="mt-6 text-sm text-gray-500">
+          Aucun tissu ne correspond à votre recherche pour le moment. Essayez d’élargir les filtres ou contactez EasyTex
+          directement via WhatsApp.
+        </p>
+      )}
     </section>
   );
 }
@@ -382,25 +521,25 @@ function Catalog({ products, suppliers, onQuote, openLightbox }) {
 /* -----------------------------------------------------------
    VUES (Accueil / Catalogue / Fournisseurs)
 ----------------------------------------------------------- */
+
 function HomeView({ onGoCatalogue, onOpenSupplier }) {
   return (
     <div className="mx-auto max-w-6xl px-4 pb-16">
       {/* HERO */}
-      <div className="relative overflow-hidden rounded-3xl bg-brand-50 p-6 md:p-16 border">
+      <div className="relative overflow-hidden rounded-3xl border bg-brand-50 p-6 md:p-16">
         <div className="max-w-3xl">
           <span className="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-sm ring-1 ring-gray-200">
             <span className="inline-block h-2 w-2 rounded-full bg-brand-500" />
             EasyTex
           </span>
 
-          <h1 className="mt-4 text-4xl md:text-6xl font-extrabold tracking-tight text-gray-900">
+          <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-gray-900 md:text-6xl">
             Sourcing textile, simple et rapide.
           </h1>
 
           <p className="mt-4 text-gray-700 md:text-lg">
-            EasyTex connecte les acheteurs de textile aux meilleurs fournisseurs de la zone UEMOA,
-            directement sur WhatsApp. Comparez les tissus, demandez un devis en un clic et échangez
-            avec des fournisseurs vérifiés.
+            EasyTex connecte les acheteurs de textile aux meilleurs fournisseurs de la zone UEMOA, directement sur
+            WhatsApp. Comparez les tissus, demandez un devis en un clic et échangez avec des fournisseurs vérifiés.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
@@ -421,11 +560,11 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
 
           {/* Badges */}
           <div className="mt-6 flex flex-wrap gap-3">
-            <div className="rounded-2xl bg-white/70 backdrop-blur border px-3 py-2 text-sm">
+            <div className="rounded-2xl border bg-white/70 px-3 py-2 text-sm backdrop-blur">
               <span className="font-medium text-gray-900">Fournisseurs vérifiés</span>
               <span className="text-gray-600"> — Qualité et confiance</span>
             </div>
-            <div className="rounded-2xl bg-white/70 backdrop-blur border px-3 py-2 text-sm">
+            <div className="rounded-2xl border bg-white/70 px-3 py-2 text-sm backdrop-blur">
               <span className="font-medium text-gray-900">Expédition régionale</span>
               <span className="text-gray-600"> — UEMOA</span>
             </div>
@@ -449,21 +588,21 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
         </div>
       </section>
 
-      {/* COMMENT ÇA MARCHE – compact */}
+      {/* COMMENT ÇA MARCHE */}
       <section className="mt-10">
         <h2 className="mb-4 text-xl font-semibold text-gray-900">Comment ça marche ?</h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <div className="rounded-2xl border p-4">
             <div className="font-semibold text-gray-900">1) Explorez</div>
-            <p className="mt-1 text-sm text-gray-600">Filtrez par type, couleur, origine.</p>
+            <p className="mt-1 text-sm text-gray-600">Filtrez par usage, matière, poids ou aspect.</p>
           </div>
           <div className="rounded-2xl border p-4">
             <div className="font-semibold text-gray-900">2) Demandez un devis</div>
-            <p className="mt-1 text-sm text-gray-600">En un clic via WhatsApp.</p>
+            <p className="mt-1 text-sm text-gray-600">En un clic via WhatsApp, directement au fournisseur.</p>
           </div>
           <div className="rounded-2xl border p-4">
             <div className="font-semibold text-gray-900">3) Recevez & finalisez</div>
-            <p className="mt-1 text-sm text-gray-600">Comparez puis confirmez.</p>
+            <p className="mt-1 text-sm text-gray-600">Comparez les offres et confirmez votre commande.</p>
           </div>
         </div>
       </section>
@@ -474,12 +613,7 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
 function CatalogView({ onQuote, openLightbox }) {
   return (
     <div id="catalogue" className="mx-auto max-w-6xl px-4 pb-16">
-      <Catalog
-        products={DEMO_PRODUCTS}
-        suppliers={DEMO_SUPPLIERS}
-        onQuote={onQuote}
-        openLightbox={openLightbox}
-      />
+      <Catalog products={DEMO_PRODUCTS} suppliers={DEMO_SUPPLIERS} onQuote={onQuote} openLightbox={openLightbox} />
     </div>
   );
 }
@@ -488,12 +622,9 @@ function SuppliersView({ onCloseModal }) {
   return (
     <div id="fournisseurs" className="mx-auto max-w-6xl px-4 pb-16">
       <section className="rounded-2xl border p-5">
-        <h2 className="text-lg font-semibold text-gray-900">
-          Vous vendez du textile ? Rejoignez EasyTex
-        </h2>
+        <h2 className="text-lg font-semibold text-gray-900">Vous vendez du textile ? Rejoignez EasyTex</h2>
         <p className="mt-1 text-sm text-gray-700">
-          Créez une vitrine simple, recevez des demandes qualifiées et
-          développez votre clientèle dans l’espace UEMOA.
+          Créez une vitrine simple, recevez des demandes qualifiées et développez votre clientèle dans l’espace UEMOA.
         </p>
         <div className="mt-4">
           <SupplierSignup onClose={onCloseModal} />
@@ -505,7 +636,6 @@ function SuppliersView({ onCloseModal }) {
 
 /* -----------------------------------------------------------
    APP PRINCIPALE
-   (Header responsive + menu hamburger mobile)
 ----------------------------------------------------------- */
 export default function App() {
   const [tab, setTab] = useState("accueil");
@@ -522,9 +652,6 @@ export default function App() {
   const [lbImages, setLbImages] = useState([]);
   const [lbIndex, setLbIndex] = useState(0);
 
-  // Menu mobile
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
   const openLightbox = (images, index = 0) => {
     setLbImages(images || []);
     setLbIndex(index);
@@ -537,139 +664,60 @@ export default function App() {
   const switchTo = (key) => {
     setTab(key);
     window.scrollTo({ top: 0, behavior: "smooth" });
-    setMobileMenuOpen(false);
   };
-
-  const navItems = [
-    { key: "accueil", label: "Accueil" },
-    { key: "catalogue", label: "Catalogue" },
-    { key: "fournisseurs", label: "Fournisseurs" },
-  ];
 
   return (
     <div className="min-h-screen bg-white">
-      {/* HEADER STICKY */}
-      <header className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-          {/* Logo + marque (cliquable) */}
+      {/* HEADER */}
+      <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            switchTo("accueil");
+          }}
+          className="flex items-center gap-3 rounded-md focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2"
+        >
+          {/* Logo : utiliser ici la version icône seule */}
+          <img src="/logo-easytex.png" alt="Logo EasyTex" className="h-11 w-11 rounded-md" loading="eager" />
+          <span className="text-lg font-bold text-gray-900">EasyTex</span>
+        </a>
+
+        <nav className="flex items-center gap-2">
+          {[
+            { key: "accueil", label: "Accueil" },
+            { key: "catalogue", label: "Catalogue" },
+            { key: "fournisseurs", label: "Devenir fournisseur" },
+          ].map((item) => (
+            <button
+              key={item.key}
+              onClick={() => switchTo(item.key)}
+              className={`rounded-full px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2 ${
+                tab === item.key ? "bg-black text-white" : "text-gray-700 hover:bg-gray-100"
+              }`}
+            >
+              {item.label}
+            </button>
+          ))}
+        </nav>
+
+        <div className="hidden items-center gap-2 sm:flex">
           <a
-            href="#"
-            onClick={(e) => { e.preventDefault(); switchTo("accueil"); }}
-            className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400 rounded-md"
+            href={`https://wa.me/${WA_NUMBER}`}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-2 text-sm font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2"
           >
-            <img
-              src="/logo-easytex.png"
-              alt="Logo EasyTex"
-              className="h-9 w-9 rounded-md"
-              loading="eager"
-            />
-            <span className="hidden text-lg font-bold text-gray-900 sm:inline">
-              EasyTex
-            </span>
+            WhatsApp
           </a>
-
-          {/* NAV DESKTOP */}
-          <nav className="hidden items-center gap-2 lg:flex">
-            {navItems.map((item) => (
-              <button
-                key={item.key}
-                onClick={() => switchTo(item.key)}
-                className={`rounded-full px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400 ${
-                  tab === item.key ? "bg-black text-white" : "text-gray-700 hover:bg-gray-100"
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
-          </nav>
-
-          {/* Actions à droite : desktop */}
-          <div className="hidden items-center gap-2 lg:flex">
-            <button
-              onClick={() => { switchTo("fournisseurs"); setOpenSupplier(true); }}
-              className="inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium ring-1 ring-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
-            >
-              Devenir fournisseur
-            </button>
-            <a
-              href={`https://wa.me/${WA_NUMBER}`}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center gap-2 rounded-full bg-black px-4 py-2 text-sm font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
-            >
-              WhatsApp
-            </a>
-          </div>
-
-          {/* Actions mobile : WhatsApp + hamburger */}
-          <div className="flex items-center gap-2 lg:hidden">
-            <a
-              href={`https://wa.me/${WA_NUMBER}`}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex items-center rounded-full px-3 py-1.5 text-xs font-medium ring-1 ring-gray-300 text-gray-800 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
-            >
-              WhatsApp
-            </a>
-            <button
-              onClick={() => setMobileMenuOpen((o) => !o)}
-              className="inline-flex items-center justify-center rounded-full p-2 text-gray-800 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
-              aria-label="Ouvrir le menu"
-            >
-              <div className="space-y-1">
-                <span className="block h-0.5 w-4 bg-gray-800" />
-                <span className="block h-0.5 w-4 bg-gray-800" />
-                <span className="block h-0.5 w-4 bg-gray-800" />
-              </div>
-            </button>
-          </div>
         </div>
-
-        {/* MENU MOBILE déroulant */}
-        {mobileMenuOpen && (
-          <div className="border-t bg-white lg:hidden">
-            <div className="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-3">
-              {navItems.map((item) => (
-                <button
-                  key={item.key}
-                  onClick={() => switchTo(item.key)}
-                  className={`w-full rounded-full px-4 py-2 text-left text-sm font-medium ${
-                    tab === item.key
-                      ? "bg-black text-white"
-                      : "text-gray-800 hover:bg-gray-100"
-                  }`}
-                >
-                  {item.label}
-                </button>
-              ))}
-
-              <button
-                onClick={() => {
-                  switchTo("fournisseurs");
-                  setOpenSupplier(true);
-                }}
-                className="mt-2 w-full rounded-full px-4 py-2 text-sm font-semibold text-brand-600 ring-1 ring-brand-500 hover:bg-brand-50"
-              >
-                Devenir fournisseur
-              </button>
-              <a
-                href={`https://wa.me/${WA_NUMBER}`}
-                target="_blank"
-                rel="noreferrer"
-                className="w-full rounded-full bg-black px-4 py-2 text-center text-sm font-semibold text-white hover:bg-gray-900"
-              >
-                Ouvrir WhatsApp
-              </a>
-            </div>
-          </div>
-        )}
       </header>
 
-      {/* VUE ACTIVE UNIQUEMENT */}
+      {/* VUE ACTIVE */}
       {tab === "accueil" && (
         <HomeView
           onGoCatalogue={() => switchTo("catalogue")}
-          onOpenSupplier={() => { switchTo("fournisseurs"); setOpenSupplier(true); }}
+          onOpenSupplier={() => setOpenSupplier(true)}
         />
       )}
 
@@ -691,21 +739,21 @@ export default function App() {
           <div className="mt-2 flex flex-wrap items-center justify-center gap-3 text-gray-500">
             <button
               onClick={() => setOpenPrivacy(true)}
-              className="underline-offset-2 hover:text-gray-700 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400 rounded"
+              className="rounded underline-offset-2 hover:text-gray-700 hover:underline focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2"
             >
               Confidentialité
             </button>
             <span>•</span>
             <button
               onClick={() => setOpenTerms(true)}
-              className="underline-offset-2 hover:text-gray-700 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400 rounded"
+              className="rounded underline-offset-2 hover:text-gray-700 hover:underline focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2"
             >
               CGU
             </button>
             <span>•</span>
             <button
               onClick={() => setOpenImprint(true)}
-              className="underline-offset-2 hover:text-gray-700 hover:underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400 rounded"
+              className="rounded underline-offset-2 hover:text-gray-700 hover:underline focus:outline-none focus:ring-2 focus:ring-brand-400 focus:ring-offset-2"
             >
               Mentions légales
             </button>
@@ -714,11 +762,7 @@ export default function App() {
       </footer>
 
       {/* MODAUX GLOBAUX */}
-      <QuoteModal
-        open={!!quoteProduct}
-        onClose={() => setQuoteProduct(null)}
-        product={quoteProduct}
-      />
+      <QuoteModal open={!!quoteProduct} onClose={() => setQuoteProduct(null)} product={quoteProduct} />
 
       <Modal open={openSupplier} onClose={() => setOpenSupplier(false)} title="Devenir fournisseur">
         <SupplierSignup onClose={() => setOpenSupplier(false)} />
@@ -733,9 +777,9 @@ export default function App() {
           </p>
           <ul className="list-disc pl-5">
             <li>Base légale : intérêt légitime et exécution pré-contractuelle.</li>
-            <li>Conservation : durée nécessaire au traitement + obligations légales.</li>
+            <li>Conservation : durée nécessaire au traitement, complétée par les obligations légales.</li>
             <li>Droits : accès, rectification, effacement, opposition, portabilité.</li>
-            <li>Contact DPD : privacy@easytex.sn</li>
+            <li>Contact : privacy@easytex.sn</li>
           </ul>
         </div>
       </Modal>
@@ -747,20 +791,29 @@ export default function App() {
             L’usage de la plateforme implique l’acceptation des présentes CGU.
           </p>
           <ul className="list-disc pl-5">
-            <li>Le contenu catalogue a une valeur indicative (prix, disponibilités).</li>
-            <li>Les échanges commerciaux se finalisent directement entre les parties.</li>
-            <li>Respect des lois applicables (douanes, propriété intellectuelle, etc.).</li>
-            <li>Compte et contenus : interdiction de fraude, spam ou usurpation.</li>
+            <li>Le contenu du catalogue a une valeur indicative (prix, disponibilités, caractéristiques).</li>
+            <li>Les échanges commerciaux se finalisent directement entre acheteurs et fournisseurs.</li>
+            <li>Les utilisateurs s’engagent à respecter les lois applicables (douanes, propriété intellectuelle, etc.).</li>
+            <li>Tout usage frauduleux de la plateforme est interdit.</li>
           </ul>
         </div>
       </Modal>
 
       <Modal open={openImprint} onClose={() => setOpenImprint(false)} title="Mentions légales">
         <div className="space-y-3 text-sm text-gray-700">
-          <p><span className="font-medium">Éditeur :</span> EasyTex (raison sociale à compléter).</p>
-          <p><span className="font-medium">Siège :</span> Adresse à compléter, Sénégal.</p>
-          <p><span className="font-medium">Contact :</span> contact@easytex.sn — +221 …</p>
-          <p><span className="font-medium">Hébergement :</span> Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723, USA.</p>
+          <p>
+            <span className="font-medium">Éditeur :</span> EasyTex (raison sociale à compléter).
+          </p>
+          <p>
+            <span className="font-medium">Siège :</span> Adresse à compléter, Sénégal.
+          </p>
+          <p>
+            <span className="font-medium">Contact :</span> contact@easytex.sn — +221 …
+          </p>
+          <p>
+            <span className="font-medium">Hébergement :</span> Vercel Inc., 440 N Barranca Ave #4133, Covina, CA 91723,
+            USA.
+          </p>
           <p>Pour toute notification légale : legal@easytex.sn</p>
         </div>
       </Modal>
