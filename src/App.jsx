@@ -79,17 +79,16 @@ const DEMO_PRODUCTS = [
 
 /* -----------------------------------------------------------
    MODAUX GÉNÉRIQUES
-   (Légèrement adaptés pour mobile: bottom sheet + padding)
 ----------------------------------------------------------- */
 function Modal({ open, onClose, title, children }) {
   if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative z-10 w-full max-w-full sm:max-w-lg rounded-t-2xl sm:rounded-2xl bg-white p-4 sm:p-6 shadow-xl">
-        {title && <h3 className="mb-3 sm:mb-4 text-lg font-semibold text-gray-900">{title}</h3>}
+      <div className="relative z-10 w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
+        {title && <h3 className="mb-4 text-lg font-semibold text-gray-900">{title}</h3>}
         <div>{children}</div>
-        <div className="mt-4 sm:mt-6 flex justify-end gap-3">
+        <div className="mt-6 flex justify-end gap-3">
           <button
             onClick={onClose}
             className="rounded-xl px-4 py-2 font-medium ring-1 ring-gray-300 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
@@ -123,7 +122,7 @@ function QuoteModal({ open, onClose, product }) {
         href={waLink}
         target="_blank"
         rel="noreferrer"
-        className="mt-4 sm:mt-6 inline-flex w-full items-center justify-center rounded-xl bg-brand-500 px-4 py-3 font-semibold text-white hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
+        className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-brand-500 px-4 py-3 font-semibold text-white hover:bg-brand-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
       >
         Ouvrir WhatsApp et envoyer
       </a>
@@ -248,7 +247,7 @@ function SupplierSignup({ onClose }) {
 
 /* -----------------------------------------------------------
    CATALOGUE
-   (image cliquable + grilles déjà responsive)
+   (Seul ajout visuel dans tes cartes: l’image cliquable)
 ----------------------------------------------------------- */
 function Catalog({ products, suppliers, onQuote, openLightbox }) {
   const [q, setQ] = useState("");
@@ -506,11 +505,10 @@ function SuppliersView({ onCloseModal }) {
 
 /* -----------------------------------------------------------
    APP PRINCIPALE
-   (Ajout: mobileOpen pour le menu burger)
+   (Ajout: état lightbox, aucun autre changement de rendu)
 ----------------------------------------------------------- */
 export default function App() {
   const [tab, setTab] = useState("accueil");
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [quoteProduct, setQuoteProduct] = useState(null);
   const [openSupplier, setOpenSupplier] = useState(false);
 
@@ -535,31 +533,29 @@ export default function App() {
 
   const switchTo = (key) => {
     setTab(key);
-    setMobileOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
     <div className="min-h-screen bg-white">
       {/* HEADER */}
-      <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4">
+      <header className="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 sm:py-4">
         <a
           href="#"
           onClick={(e) => { e.preventDefault(); switchTo("accueil"); }}
           className="flex items-center gap-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400 rounded-md"
         >
-          {/* Logo agrandi et cliquable */}
+          {/* Logo légèrement plus compact sur mobile */}
           <img
             src="/logo-easytex.png"
             alt="Logo EasyTex"
-            className="h-11 w-11 rounded-md"
+            className="h-9 w-9 sm:h-11 sm:w-11 rounded-md"
             loading="eager"
           />
-          <span className="text-lg font-bold text-gray-900">EasyTex</span>
+          <span className="text-base sm:text-lg font-bold text-gray-900">EasyTex</span>
         </a>
 
-        {/* Navigation desktop */}
-        <nav className="hidden sm:flex items-center gap-2">
+        <nav className="flex items-center gap-2">
           {[
             { key: "accueil", label: "Accueil" },
             { key: "catalogue", label: "Catalogue" },
@@ -577,7 +573,6 @@ export default function App() {
           ))}
         </nav>
 
-        {/* Boutons à droite (desktop uniquement) */}
         <div className="hidden items-center gap-2 sm:flex">
           <button
             onClick={() => { switchTo("fournisseurs"); setOpenSupplier(true); }}
@@ -594,55 +589,7 @@ export default function App() {
             WhatsApp
           </a>
         </div>
-
-        {/* Bouton burger (mobile uniquement) */}
-        <button
-          className="sm:hidden inline-flex h-10 w-10 items-center justify-center rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-400"
-          onClick={() => setMobileOpen((v) => !v)}
-          aria-label="Ouvrir le menu"
-        >
-          <span className="text-xl">≡</span>
-        </button>
       </header>
-
-      {/* Menu mobile déroulant */}
-      {mobileOpen && (
-        <div className="sm:hidden mx-auto max-w-6xl px-4 pb-4">
-          <div className="rounded-2xl border p-2">
-            {[
-              { key: "accueil", label: "Accueil" },
-              { key: "catalogue", label: "Catalogue" },
-              { key: "fournisseurs", label: "Fournisseurs" },
-            ].map((item) => (
-              <button
-                key={item.key}
-                onClick={() => switchTo(item.key)}
-                className={`w-full text-left rounded-lg px-3 py-3 text-base ${
-                  tab === item.key ? "bg-black text-white" : "hover:bg-gray-100"
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
-            <div className="mt-2 grid grid-cols-2 gap-2">
-              <button
-                onClick={() => { switchTo("fournisseurs"); setOpenSupplier(true); }}
-                className="rounded-lg px-3 py-3 text-sm font-medium ring-1 ring-gray-300 hover:bg-gray-50"
-              >
-                Devenir fournisseur
-              </button>
-              <a
-                href={`https://wa.me/${WA_NUMBER}`}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center justify-center rounded-lg bg-black px-3 py-3 text-sm font-medium text-white"
-              >
-                WhatsApp
-              </a>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* VUE ACTIVE UNIQUEMENT */}
       {tab === "accueil" && (
