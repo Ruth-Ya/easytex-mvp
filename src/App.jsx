@@ -139,8 +139,7 @@ const DEMO_PRODUCTS = [
 ];
 
 /* -----------------------------------------------------------
-   LIGHTBOX / SLIDER “VERSION PRO”
-   (modifié uniquement ici : swipe mobile + gestion scroll)
+   LIGHTBOX / SLIDER “VERSION PRO” (avec swipe mobile)
 ----------------------------------------------------------- */
 
 function Lightbox({
@@ -152,7 +151,6 @@ function Lightbox({
   onNext,
   onSelect,
 }) {
-  // Hooks toujours appelés (règle des hooks OK)
   const [touchStartX, setTouchStartX] = useState(null);
   const [touchEndX, setTouchEndX] = useState(null);
 
@@ -181,7 +179,6 @@ function Lightbox({
     };
   }, [isOpen, onClose, onPrev, onNext]);
 
-  // Si non ouvert, on ne rend rien
   if (!isOpen) return null;
 
   // Gestion du swipe tactile (mobile)
@@ -199,14 +196,12 @@ function Lightbox({
   const handleTouchEnd = () => {
     if (touchStartX === null || touchEndX === null) return;
     const deltaX = touchEndX - touchStartX;
-    const threshold = 40; // distance minimale pour valider le swipe
+    const threshold = 40;
 
     if (Math.abs(deltaX) > threshold) {
       if (deltaX < 0) {
-        // swipe vers la gauche => image suivante
         onNext?.();
       } else {
-        // swipe vers la droite => image précédente
         onPrev?.();
       }
     }
@@ -705,13 +700,443 @@ function SupplierSignupView() {
           <div className="md:col-span-2 flex justify-start">
             <button
               type="submit"
-              className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+              className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 font-semibold text.white text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
             >
               Envoyer ma demande
             </button>
           </div>
         </form>
       </section>
+    </div>
+  );
+}
+
+/* -----------------------------------------------------------
+   FAQ / CGU / POLITIQUE DE CONFIDENTIALITÉ
+----------------------------------------------------------- */
+
+function FaqView() {
+  return (
+    <div className="mx-auto max-w-6xl px-4 pb-16 pt-6">
+      <h1 className="text-2xl font-semibold text-gray-900 mb-4">
+        FAQ – EasyTex
+      </h1>
+      <div className="space-y-4 text-sm text-gray-700">
+        <div>
+          <h2 className="font-semibold text-gray-900">
+            1. Qu’est-ce qu’EasyTex ?
+          </h2>
+          <p className="mt-1">
+            EasyTex est une plateforme de mise en relation entre acheteurs de
+            textile (professionnels ou particuliers) et des fournisseurs
+            situés principalement dans la zone UEMOA. Le site vous permet
+            d’explorer un catalogue de tissus et d’envoyer vos demandes de
+            devis directement aux fournisseurs via WhatsApp.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">
+            2. Est-ce qu’EasyTex vend directement les tissus ?
+          </h2>
+          <p className="mt-1">
+            Non. EasyTex n’est pas vendeur de textile. Nous facilitons la mise
+            en relation entre vous et des fournisseurs partenaires. Les
+            commandes, paiements et livraisons sont conclus directement entre
+            vous et le fournisseur.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">
+            3. Les prix affichés sont-ils définitifs ?
+          </h2>
+          <p className="mt-1">
+            Les prix indiqués sur le site sont des prix indicatifs basés sur
+            les informations fournies par nos partenaires. Ils peuvent varier
+            en fonction de la quantité, de la finition, des délais de
+            livraison ou d’autres conditions commerciales. Le prix ferme est
+            confirmé par le fournisseur lors de l’échange sur WhatsApp.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">
+            4. Comment demander un devis ?
+          </h2>
+          <p className="mt-1">
+            Lorsque vous trouvez un tissu qui vous intéresse, cliquez sur le
+            bouton « Demander un devis sur WhatsApp ». Un message pré-rempli
+            s’ouvre avec les principales informations du produit. Vous pouvez
+            l’ajuster et l’envoyer directement au numéro EasyTex ou au
+            fournisseur indiqué.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">
+            5. Est-ce que je dois créer un compte pour utiliser EasyTex ?
+          </h2>
+          <p className="mt-1">
+            Non, vous n’avez pas besoin de créer un compte pour consulter le
+            catalogue ou envoyer une demande de devis. L’échange se fait via
+            WhatsApp à partir des informations que vous partagez
+            volontairement.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">
+            6. Comment devenir fournisseur sur EasyTex ?
+          </h2>
+          <p className="mt-1">
+            Si vous êtes fournisseur de textile, vous pouvez remplir le
+            formulaire dans la section « Devenir fournisseur ». Nous étudions
+            ensuite votre profil (type de produits, capacité, localisation,
+            etc.) et revenons vers vous pour la suite.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">
+            7. EasyTex vérifie-t-il les fournisseurs ?
+          </h2>
+          <p className="mt-1">
+            Nous cherchons à collaborer avec des fournisseurs sérieux et
+            fiables. Avant de référencer un fournisseur, nous effectuons des
+            vérifications de base (type d’activité, références, échanges
+            préalables). Cependant, EasyTex ne peut pas garantir la
+            performance de chaque fournisseur et ne se substitue pas à votre
+            propre vigilance dans le choix de vos partenaires.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">
+            8. Qui est responsable en cas de problème de commande ?
+          </h2>
+          <p className="mt-1">
+            Les commandes et les paiements sont conclus directement entre vous
+            et le fournisseur. En cas de litige, c’est donc le fournisseur qui
+            est votre interlocuteur principal. EasyTex n’est pas partie au
+            contrat de vente, mais vous pouvez nous signaler tout problème
+            récurrent afin que nous puissions, le cas échéant, revoir notre
+            collaboration avec le fournisseur concerné.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">
+            9. Est-ce qu’EasyTex collecte mes données personnelles ?
+          </h2>
+          <p className="mt-1">
+            Nous collectons uniquement les informations que vous nous
+            fournissez volontairement, par exemple via le formulaire « Devenir
+            fournisseur » ou lors de vos échanges avec nous sur WhatsApp. Ces
+            données sont utilisées pour répondre à vos demandes et améliorer
+            le service. Pour plus de détails, veuillez consulter notre
+            Politique de confidentialité.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">
+            10. Comment contacter EasyTex en dehors de WhatsApp ?
+          </h2>
+          <p className="mt-1">
+            Vous pouvez nous contacter via WhatsApp au numéro indiqué sur le
+            site. D’autres canaux (email, réseaux sociaux…) seront
+            progressivement ajoutés et indiqués sur easytex.sn.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function CguView() {
+  return (
+    <div className="mx-auto max-w-6xl px-4 pb-16 pt-6">
+      <h1 className="text-2xl font-semibold text-gray-900 mb-4">
+        Conditions Générales d’Utilisation – EasyTex
+      </h1>
+      <div className="space-y-4 text-sm text-gray-700">
+        <div>
+          <h2 className="font-semibold text-gray-900">1. Préambule</h2>
+          <p className="mt-1">
+            Les présentes Conditions Générales d’Utilisation (ci-après les
+            « CGU ») ont pour objet de définir les modalités d’accès et
+            d’utilisation du site internet easytex.sn (ci-après le « Site »).
+            En accédant au Site, l’utilisateur reconnaît avoir pris
+            connaissance des CGU et les accepter sans réserve.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">2. Objet du Site</h2>
+          <p className="mt-1">
+            EasyTex est une plateforme de mise en relation entre acheteurs de
+            textile (professionnels ou particuliers) et des fournisseurs
+            partenaires, principalement situés dans la zone UEMOA. Le Site
+            permet de consulter un catalogue de tissus et d’envoyer des
+            demandes de devis via WhatsApp.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">3. Rôle d’EasyTex</h2>
+          <p className="mt-1">
+            EasyTex n’est pas vendeur de textile. Les produits présentés sur
+            le Site sont proposés par des fournisseurs tiers. Les contrats de
+            vente, conditions de paiement, de livraison, de retour ou de
+            réclamation sont conclus directement entre l’acheteur et le
+            fournisseur. EasyTex ne devient à aucun moment partie au contrat
+            de vente.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">4. Accès au Site</h2>
+          <p className="mt-1">
+            L’accès au Site est gratuit (hors coûts de connexion internet
+            supportés par l’utilisateur). EasyTex s’efforce de maintenir le
+            Site accessible en permanence, mais ne peut garantir une
+            disponibilité continue. L’accès peut être suspendu temporairement
+            pour des raisons techniques, de maintenance ou de mise à jour.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">5. Utilisation du Site</h2>
+          <p className="mt-1">
+            L’utilisateur s’engage à utiliser le Site de manière loyale et
+            conforme aux lois en vigueur, notamment à ne pas usurper
+            l’identité d’un tiers, envoyer des informations fausses ou
+            injurieuses, ou tenter de porter atteinte au bon fonctionnement du
+            Site. EasyTex se réserve le droit de limiter ou de suspendre
+            l’accès au Site à tout utilisateur qui ne respecterait pas les
+            présentes CGU.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">
+            6. Informations produits et prix
+          </h2>
+          <p className="mt-1">
+            Les caractéristiques et prix des tissus sont fournis par les
+            fournisseurs partenaires ou estimés à titre indicatif. Les prix
+            affichés peuvent varier en fonction de la quantité commandée, de
+            la finition, des conditions logistiques et des délais de
+            livraison. Le prix définitif est confirmé par le fournisseur lors
+            des échanges avec l’acheteur.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">
+            7. Demande de devis et échanges via WhatsApp
+          </h2>
+          <p className="mt-1">
+            Lorsque l’utilisateur clique sur « Demander un devis sur
+            WhatsApp », un message pré-rempli est généré pour faciliter
+            l’échange. Les échanges se déroulent ensuite sur WhatsApp, une
+            plateforme tierce soumise à ses propres conditions d’utilisation
+            et politiques de confidentialité. EasyTex ne peut être tenu
+            responsable du fonctionnement de WhatsApp.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">
+            8. Responsabilité d’EasyTex
+          </h2>
+          <p className="mt-1">
+            EasyTex intervient comme intermédiaire de mise en relation. EasyTex
+            ne saurait être tenu responsable de la disponibilité des produits,
+            de la qualité, de la conformité ou de la livraison des tissus, ni
+            des litiges relatifs aux paiements ou remboursements. En cas de
+            problème récurrent avec un fournisseur, l’utilisateur est invité à
+            en informer EasyTex.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">
+            9. Propriété intellectuelle
+          </h2>
+          <p className="mt-1">
+            Le contenu du Site (textes, visuels, logo, mise en page, etc.) est
+            protégé par la législation applicable en matière de propriété
+            intellectuelle. Toute reproduction, représentation ou exploitation
+            non autorisée est interdite, sauf accord préalable écrit d’EasyTex.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">10. Données personnelles</h2>
+          <p className="mt-1">
+            Dans le cadre de l’utilisation du Site, certaines données
+            personnelles peuvent être collectées. Les modalités de collecte et
+            de traitement sont détaillées dans la Politique de confidentialité
+            d’EasyTex, accessible sur le Site.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">
+            11. Liens vers des sites tiers
+          </h2>
+          <p className="mt-1">
+            Le Site peut contenir des liens vers des sites web tiers. EasyTex
+            n’exerce aucun contrôle sur ces sites et ne saurait être tenu
+            responsable de leur contenu, fonctionnement ou conformité
+            juridique.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">
+            12. Modification des CGU
+          </h2>
+          <p className="mt-1">
+            EasyTex se réserve le droit de modifier à tout moment les présentes
+            CGU. La version applicable est celle en vigueur au moment de la
+            consultation du Site. Les utilisateurs sont invités à consulter
+            régulièrement cette page.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PrivacyView() {
+  return (
+    <div className="mx-auto max-w-6xl px-4 pb-16 pt-6">
+      <h1 className="text-2xl font-semibold text-gray-900 mb-4">
+        Politique de confidentialité – EasyTex
+      </h1>
+      <div className="space-y-4 text-sm text-gray-700">
+        <div>
+          <h2 className="font-semibold text-gray-900">
+            1. Objet de la politique
+          </h2>
+          <p className="mt-1">
+            La présente Politique de confidentialité explique comment EasyTex
+            collecte, utilise et protège les données personnelles des
+            utilisateurs du site easytex.sn.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">2. Données collectées</h2>
+          <p className="mt-1">
+            EasyTex collecte uniquement les données nécessaires au
+            fonctionnement du service, notamment :
+          </p>
+          <ul className="mt-1 list-disc pl-5">
+            <li>
+              Via le formulaire « Devenir fournisseur » : nom de l’entreprise,
+              ville, pays, numéro WhatsApp, et informations supplémentaires
+              transmises dans les champs libres.
+            </li>
+            <li>
+              Via WhatsApp : les informations que vous partagez lors des
+              échanges avec EasyTex.
+            </li>
+            <li>
+              Éventuellement, des données techniques anonymisées (date et heure
+              de visite, pages consultées), si un outil de mesure d’audience
+              est ajouté ultérieurement.
+            </li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">
+            3. Finalités du traitement
+          </h2>
+          <p className="mt-1">
+            Les données collectées sont utilisées pour répondre aux demandes
+            des utilisateurs (devis, informations, devenir fournisseur),
+            faciliter la mise en relation entre acheteurs et fournisseurs,
+            suivre la relation avec les partenaires et améliorer le
+            fonctionnement du Site.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">4. Base légale</h2>
+          <p className="mt-1">
+            Les traitements reposent sur votre consentement lorsque vous
+            remplissez un formulaire ou nous contactez volontairement, et sur
+            l’intérêt légitime d’EasyTex à organiser, suivre et améliorer son
+            service de mise en relation.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">
+            5. Durée de conservation
+          </h2>
+          <p className="mt-1">
+            Les données sont conservées pendant une durée strictement
+            nécessaire aux finalités poursuivies (gestion des demandes,
+            relation avec les fournisseurs, statistiques anonymisées). Certaines
+            données peuvent être conservées plus longtemps en cas d’obligation
+            légale ou de nécessité de preuve.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">
+            6. Partage des données
+          </h2>
+          <p className="mt-1">
+            EasyTex ne vend pas les données personnelles des utilisateurs. Les
+            données peuvent être partagées en interne (équipe EasyTex), avec
+            des prestataires techniques soumis à une obligation de
+            confidentialité, et avec des fournisseurs partenaires lorsque
+            l’utilisateur demande explicitement un devis ou une mise en
+            relation.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">
+            7. Sécurité des données
+          </h2>
+          <p className="mt-1">
+            EasyTex met en œuvre des mesures raisonnables pour protéger les
+            données personnelles contre l’accès non autorisé, la perte ou
+            l’altération. Aucun système n’étant parfaitement sécurisé, une
+            sécurité absolue ne peut être garantie.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">8. Vos droits</h2>
+          <p className="mt-1">
+            Selon la réglementation applicable, vous disposez notamment d’un
+            droit d’accès, de rectification, de suppression, de limitation et
+            d’opposition concernant vos données. Pour exercer ces droits, vous
+            pouvez contacter EasyTex via les canaux indiqués sur le site.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="font-semibold text-gray-900">
+            9. Évolution de la politique
+          </h2>
+          <p className="mt-1">
+            La présente politique pourra être mise à jour pour tenir compte de
+            l’évolution du service EasyTex ou de la réglementation applicable.
+            La version à jour est celle publiée sur le Site à la date de
+            consultation.
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
@@ -840,7 +1265,7 @@ export default function App() {
 
         {/* Menu mobile déroulant */}
         {mobileNavOpen && (
-          <div className="border-t bg-white sm:hidden">
+          <div className="border-t bg.white bg-white sm:hidden">
             <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-2">
               {[
                 { key: "accueil", label: "Accueil" },
@@ -875,10 +1300,37 @@ export default function App() {
         <CatalogView onOpenLightbox={openLightbox} />
       )}
       {tab === "fournisseurs" && <SupplierSignupView />}
+      {tab === "faq" && <FaqView />}
+      {tab === "cgu" && <CguView />}
+      {tab === "privacy" && <PrivacyView />}
 
+      {/* FOOTER */}
       <footer className="mt-10 w-full border-t bg-white">
-        <div className="mx-auto max-w-6xl px-4 py-6 text-center text-sm text-gray-600">
-          © EasyTex 2025 – Tous droits réservés
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-6 text-center text-sm text-gray-600 sm:flex-row">
+          <div>© EasyTex 2025 – Tous droits réservés</div>
+          <div className="flex flex-wrap justify-center gap-4">
+            <button
+              type="button"
+              onClick={() => switchTo("faq")}
+              className="text-gray-600 hover:text-gray-900 underline-offset-2 hover:underline"
+            >
+              FAQ
+            </button>
+            <button
+              type="button"
+              onClick={() => switchTo("cgu")}
+              className="text-gray-600 hover:text-gray-900 underline-offset-2 hover:underline"
+            >
+              CGU
+            </button>
+            <button
+              type="button"
+              onClick={() => switchTo("privacy")}
+              className="text-gray-600 hover:text-gray-900 underline-offset-2 hover:underline"
+            >
+              Politique de confidentialité
+            </button>
+          </div>
         </div>
       </footer>
 
