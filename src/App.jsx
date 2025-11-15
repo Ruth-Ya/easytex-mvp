@@ -95,6 +95,7 @@ const DEMO_PRODUCTS = [
     material: "Polyester",
     weight: "Lourd",
     pattern: "Uni",
+    images: ["/p6-1.jpg", "/p6-2.jpg"],
   },
   {
     id: "p7",
@@ -107,6 +108,7 @@ const DEMO_PRODUCTS = [
     material: "Mélange",
     weight: "Lourd",
     pattern: "Jacquard",
+    images: ["/p7-1.jpg", "/p7-2.jpg"],
   },
   {
     id: "p8",
@@ -119,6 +121,7 @@ const DEMO_PRODUCTS = [
     material: "Coton",
     weight: "Moyen",
     pattern: "Uni",
+    images: ["/p8-1.jpg", "/p8-2.jpg"],
   },
   {
     id: "p9",
@@ -131,6 +134,7 @@ const DEMO_PRODUCTS = [
     material: "Coton",
     weight: "Moyen",
     pattern: "Uni",
+    images: ["/p9-1.jpg", "/p9-2.jpg"],
   },
 ];
 
