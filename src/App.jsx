@@ -60,7 +60,7 @@ const DEMO_PRODUCTS = [
   },
   {
     id: "p4",
-    name: "Pagne tissé (lot de 5)",
+    name: "Pagne tissé",
     category: "Tissus spécifiques et traditionnels",
     type: "Tissé",
     color: "Multicolore",
