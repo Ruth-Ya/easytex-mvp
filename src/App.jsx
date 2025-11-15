@@ -95,7 +95,6 @@ const DEMO_PRODUCTS = [
     material: "Polyester",
     weight: "Lourd",
     pattern: "Uni",
-    // Ajoute des images plus tard si tu veux
   },
   {
     id: "p7",
@@ -606,7 +605,9 @@ export default function App() {
   const closeLightbox = () => setLightboxOpen(false);
   const prevLightbox = () =>
     setLightboxIndex((i) =>
-      lightboxImages.length ? (i - 1 + lightboxImages.length) % lightboxImages.length : 0
+      lightboxImages.length
+        ? (i - 1 + lightboxImages.length) % lightboxImages.length
+        : 0
     );
   const nextLightbox = () =>
     setLightboxIndex((i) =>
@@ -652,7 +653,7 @@ export default function App() {
             ))}
           </nav>
 
-          {/* Zone droite : WA + menu hamburger (mobile) */}
+          {/* Zone droite : WA + menu hamburger */}
           <div className="flex items-center gap-2">
             {/* WhatsApp desktop (bleu) */}
             <a
@@ -660,6 +661,16 @@ export default function App() {
               target="_blank"
               rel="noreferrer"
               className="hidden items-center justify-center rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 sm:inline-flex"
+            >
+              WhatsApp
+            </a>
+
+            {/* WhatsApp mobile (dans le header, entre logo et hamburger) */}
+            <a
+              href={`https://wa.me/${WA_NUMBER}`}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center justify-center rounded-full bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 sm:hidden"
             >
               WhatsApp
             </a>
@@ -685,18 +696,6 @@ export default function App() {
               </svg>
             </button>
           </div>
-        </div>
-
-        {/* Bouton WhatsApp centré sur mobile */}
-        <div className="mx-auto max-w-6xl px-4 pb-2 sm:hidden">
-          <a
-            href={`https://wa.me/${WA_NUMBER}`}
-            target="_blank"
-            rel="noreferrer"
-            className="inline-flex w-full items-center justify-center rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
-          >
-            WhatsApp
-          </a>
         </div>
 
         {/* Menu mobile déroulant */}
