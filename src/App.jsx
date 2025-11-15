@@ -621,16 +621,17 @@ export default function App() {
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
           {/* Logo */}
           <button
-            onClick={() => switchTo("accueil")}
-            className="flex items-center rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
-          >
-            <img
-              src="/logo-easytex.png"
-              alt="EasyTex"
-              className="h-9 w-auto sm:h-10 md:h-11"
-              loading="eager"
-            />
-          </button>
+  onClick={() => switchTo("accueil")}
+  className="flex items-center rounded-md pr-1 sm:pr-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+>
+  <img
+    src="/logo-easytex.png"
+    alt="EasyTex"
+    className="h-10 w-auto sm:h-12 md:h-14"
+    loading="eager"
+  />
+</button>
+
 
           {/* NAV DESKTOP (centre) */}
           <nav className="hidden flex-1 justify-center gap-2 text-sm sm:flex">
