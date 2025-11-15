@@ -5,7 +5,6 @@ import React, { useState } from "react";
    CONFIG
 ----------------------------------------------------------- */
 
-// Ton numéro WhatsApp (sans le +)
 const WA_NUMBER = "221707546281";
 
 const formatPrice = (n) =>
@@ -16,7 +15,7 @@ const formatPrice = (n) =>
   }).format(n);
 
 /* -----------------------------------------------------------
-   DONNÉES DÉMO SIMPLE (SANS FILTRES)
+   DONNÉES DÉMO AVEC CATÉGORIES + FILTRES
 ----------------------------------------------------------- */
 
 const DEMO_PRODUCTS = [
@@ -28,6 +27,9 @@ const DEMO_PRODUCTS = [
     color: "Bleu roi",
     origin: "Sénégal",
     price: 8500,
+    material: "Coton",
+    weight: "Moyen",
+    pattern: "Uni",
   },
   {
     id: "p2",
@@ -37,42 +39,93 @@ const DEMO_PRODUCTS = [
     color: "Rouge / Jaune",
     origin: "Côte d’Ivoire",
     price: 19000,
+    material: "Coton",
+    weight: "Léger",
+    pattern: "Imprimé Wax",
   },
   {
     id: "p3",
+    name: "Popeline coton chemise",
+    category: "Tissus habillement",
+    type: "Popeline",
+    color: "Blanc",
+    origin: "Turquie",
+    price: 6500,
+    material: "Coton",
+    weight: "Léger",
+    pattern: "Uni",
+  },
+  {
+    id: "p4",
     name: "Pagne tissé (lot de 5)",
     category: "Tissus spécifiques et traditionnels",
     type: "Tissé",
     color: "Multicolore",
     origin: "Côte d’Ivoire",
     price: 24000,
+    material: "Coton",
+    weight: "Moyen",
+    pattern: "Rayé",
   },
   {
-    id: "p4",
+    id: "p5",
     name: "Indigo artisanal",
     category: "Tissus spécifiques et traditionnels",
     type: "Indigo",
     color: "Indigo profond",
     origin: "Mali",
     price: 17500,
+    material: "Coton",
+    weight: "Moyen",
+    pattern: "Uni",
   },
   {
-    id: "p5",
+    id: "p6",
     name: "Toile épaisse ameublement",
     category: "Tissus Ameublement et Décoration",
     type: "Toile",
     color: "Beige",
     origin: "Ghana",
     price: 22000,
+    material: "Polyester",
+    weight: "Lourd",
+    pattern: "Uni",
   },
   {
-    id: "p6",
-    name: "Éponge serviettes",
+    id: "p7",
+    name: "Velours jacquard canapé",
+    category: "Tissus Ameublement et Décoration",
+    type: "Velours",
+    color: "Vert bouteille",
+    origin: "Chine",
+    price: 28500,
+    material: "Mélange",
+    weight: "Lourd",
+    pattern: "Jacquard",
+  },
+  {
+    id: "p8",
+    name: "Éponge serviettes hôtel",
     category: "Tissus Maison et Linge",
     type: "Éponge",
     color: "Blanc",
     origin: "Sénégal",
     price: 6500,
+    material: "Coton",
+    weight: "Moyen",
+    pattern: "Uni",
+  },
+  {
+    id: "p9",
+    name: "Drap housse percale",
+    category: "Tissus Maison et Linge",
+    type: "Percale",
+    color: "Gris clair",
+    origin: "Portugal",
+    price: 11000,
+    material: "Coton",
+    weight: "Moyen",
+    pattern: "Uni",
   },
 ];
 
@@ -97,9 +150,9 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
 
           <p className="mt-4 text-gray-700 md:text-lg">
             EasyTex connecte les acheteurs de textile aux meilleurs
-            fournisseurs de la zone UEMOA, directement sur WhatsApp. Comparez
-            les tissus, demandez un devis en un clic et échangez avec des
-            fournisseurs vérifiés.
+            fournisseurs de la zone UEMOA, directement sur WhatsApp.
+            Comparez les tissus, demandez un devis en un clic et échangez
+            avec des fournisseurs vérifiés.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
@@ -187,7 +240,34 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
   );
 }
 
+/* -----------------------------------------------------------
+   CATALOGUE + FILTRES
+----------------------------------------------------------- */
+
 function CatalogView() {
+  const [material, setMaterial] = useState("Tous");
+  const [weight, setWeight] = useState("Tous");
+  const [pattern, setPattern] = useState("Tous");
+
+  const materials = [
+    "Tous",
+    "Coton",
+    "Polyester",
+    "Viscose",
+    "Lin",
+    "Soie",
+    "Mélange",
+  ];
+  const weights = ["Tous", "Léger", "Moyen", "Lourd"];
+  const patterns = ["Tous", "Uni", "Imprimé Wax", "Jacquard", "Rayé"];
+
+  const filteredProducts = DEMO_PRODUCTS.filter((p) => {
+    const mOk = material === "Tous" || p.material === material;
+    const wOk = weight === "Tous" || p.weight === weight;
+    const pOk = pattern === "Tous" || p.pattern === pattern;
+    return mOk && wOk && pOk;
+  });
+
   return (
     <div className="mx-auto max-w-6xl px-4 pb-16">
       <section id="catalogue">
@@ -195,56 +275,125 @@ function CatalogView() {
           Catalogue de tissus
         </h2>
         <p className="mb-4 text-sm text-gray-600">
-          Aperçu de quelques types de tissus disponibles sur EasyTex. Les
-          prix sont indicatifs et peuvent varier selon la quantité, la
-          finition et les délais.
+          Filtrez les tissus par matière, poids et motif pour trouver la
+          référence la plus adaptée à votre projet. Les prix sont indicatifs
+          et peuvent varier selon la quantité, la finition et les délais.
         </p>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {DEMO_PRODUCTS.map((p) => {
-            const waText = encodeURIComponent(
-              `Bonjour EasyTex,\n\nJe souhaite un devis pour :\n- ${p.name}\n- Catégorie : ${p.category}\n- Type : ${p.type}\n- Couleur : ${p.color}\n- Origine : ${p.origin}\n- Prix indicatif : ${formatPrice(
-                p.price
-              )}\n\nMerci de me préciser les minimums de commande, délais et conditions de livraison.`
-            );
-            const waLink = `https://wa.me/${WA_NUMBER}?text=${waText}`;
+        {/* FILTRES */}
+        <div className="mb-6 grid grid-cols-1 gap-3 rounded-2xl border bg-gray-50 p-4 md:grid-cols-3">
+          <div>
+            <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-700">
+              Matière
+            </label>
+            <select
+              className="w-full rounded-xl border bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-400"
+              value={material}
+              onChange={(e) => setMaterial(e.target.value)}
+            >
+              {materials.map((m) => (
+                <option key={m} value={m}>
+                  {m}
+                </option>
+              ))}
+            </select>
+          </div>
 
-            return (
-              <div
-                key={p.id}
-                className="flex h-full flex-col rounded-2xl border p-4"
-              >
-                <div className="text-sm font-medium text-blue-700">
-                  {p.category}
-                </div>
-                <div className="mt-1 text-base font-semibold text-gray-900">
-                  {p.name}
-                </div>
-                <div className="mt-1 text-sm text-gray-600">
-                  {p.type} • {p.color} • {p.origin}
-                </div>
-                <div className="mt-2 text-lg font-extrabold text-gray-900">
-                  {formatPrice(p.price)}
-                </div>
+          <div>
+            <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-700">
+              Poids
+            </label>
+            <select
+              className="w-full rounded-xl border bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-400"
+              value={weight}
+              onChange={(e) => setWeight(e.target.value)}
+            >
+              {weights.map((w) => (
+                <option key={w} value={w}>
+                  {w}
+                </option>
+              ))}
+            </select>
+          </div>
 
-                <div className="mt-4 flex-1" />
-
-                <a
-                  href={waLink}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="mt-3 inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
-                >
-                  Demander un devis sur WhatsApp
-                </a>
-              </div>
-            );
-          })}
+          <div>
+            <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-700">
+              Motif / aspect
+            </label>
+            <select
+              className="w-full rounded-xl border bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-400"
+              value={pattern}
+              onChange={(e) => setPattern(e.target.value)}
+            >
+              {patterns.map((p) => (
+                <option key={p} value={p}>
+                  {p}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
+
+        {/* CARTES PRODUITS */}
+        {filteredProducts.length === 0 ? (
+          <div className="rounded-2xl border bg-white p-6 text-sm text-gray-600">
+            Aucun tissu ne correspond à ces filtres pour l’instant. Essayez de
+            relâcher un critère (par exemple la matière ou le poids).
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredProducts.map((p) => {
+              const waText = encodeURIComponent(
+                `Bonjour EasyTex,\n\nJe souhaite un devis pour :\n- ${p.name}\n- Catégorie : ${p.category}\n- Matière : ${p.material}\n- Poids : ${p.weight}\n- Motif / aspect : ${p.pattern}\n- Couleur : ${p.color}\n- Origine : ${p.origin}\n- Prix indicatif : ${formatPrice(
+                  p.price
+                )}\n\nMerci de me préciser les minimums de commande, délais et conditions de livraison.`
+              );
+              const waLink = `https://wa.me/${WA_NUMBER}?text=${waText}`;
+
+              return (
+                <div
+                  key={p.id}
+                  className="flex h-full flex-col rounded-2xl border bg-white p-4"
+                >
+                  <div className="text-xs font-semibold uppercase tracking-wide text-blue-700">
+                    {p.category}
+                  </div>
+                  <div className="mt-1 text-base font-semibold text-gray-900">
+                    {p.name}
+                  </div>
+                  <div className="mt-1 text-xs text-gray-600">
+                    {p.material} • {p.weight} • {p.pattern}
+                  </div>
+                  <div className="mt-1 text-xs text-gray-600">
+                    {p.type} • {p.color} • {p.origin}
+                  </div>
+                  <div className="mt-2 text-lg font-extrabold text-gray-900">
+                    {formatPrice(p.price)}
+                  </div>
+
+                  <div className="mt-4 flex-1" />
+
+                  <a
+                    href={waLink}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-3 inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+                  >
+                    Demander un devis sur WhatsApp
+                  </a>
+                </div>
+              );
+            })}
+          </div>
+        )}
       </section>
     </div>
   );
 }
+
+/* -----------------------------------------------------------
+   FORMULAIRE FOURNISSEUR
+----------------------------------------------------------- */
 
 function SupplierSignupView() {
   const [name, setName] = useState("");
@@ -267,7 +416,7 @@ function SupplierSignupView() {
     <div className="mx-auto max-w-6xl px-4 pb-16">
       <section
         id="fournisseurs"
-        className="rounded-2xl border p-5 md:p-8 bg-white"
+        className="rounded-2xl border bg-white p-5 md:p-8"
       >
         <h2 className="text-lg font-semibold text-gray-900">
           Vous vendez du textile ? Rejoignez EasyTex
@@ -338,8 +487,7 @@ function SupplierSignupView() {
 }
 
 /* -----------------------------------------------------------
-   APP PRINCIPALE
-   Header RESPONSIVE + logo mis en avant
+   APP PRINCIPALE (HEADER RESPONSIVE + LOGO)
 ----------------------------------------------------------- */
 
 export default function App() {
@@ -368,7 +516,7 @@ export default function App() {
             />
           </button>
 
-          {/* Bouton WhatsApp à droite sur grand écran, en haut sur mobile */}
+          {/* Bouton WhatsApp à droite */}
           <div className="order-2 ml-auto flex items-center sm:order-3 sm:ml-0">
             <a
               href={`https://wa.me/${WA_NUMBER}`}
@@ -388,7 +536,7 @@ export default function App() {
             </a>
           </div>
 
-          {/* Navigation : prend toute la largeur en dessous sur mobile */}
+          {/* Navigation */}
           <nav className="order-3 flex w-full justify-center gap-2 text-sm sm:order-2 sm:w-auto">
             {[
               { key: "accueil", label: "Accueil" },
@@ -421,7 +569,6 @@ export default function App() {
       {tab === "catalogue" && <CatalogView />}
       {tab === "fournisseurs" && <SupplierSignupView />}
 
-      {/* FOOTER simplifié */}
       <footer className="mt-10 w-full border-t bg-white">
         <div className="mx-auto max-w-6xl px-4 py-6 text-center text-sm text-gray-600">
           © EasyTex 2025 – Tous droits réservés
