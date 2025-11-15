@@ -253,7 +253,7 @@ function Lightbox({ open, images, index, onClose, onPrev, onNext, onSelect }) {
 }
 
 /* -----------------------------------------------------------
-   SECTIONS
+   HOME
 ----------------------------------------------------------- */
 
 function HomeView({ onGoCatalogue, onOpenSupplier }) {
@@ -364,8 +364,7 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
 }
 
 /* -----------------------------------------------------------
-   CATALOGUE + FILTRES (CATÉGORIE + MATIÈRE + POIDS + MOTIF)
-   + IMAGES CLIQUABLES (LIGHTBOX)
+   CATALOGUE + FILTRES + IMAGES (LIGHTBOX)
 ----------------------------------------------------------- */
 
 function CatalogView({ onOpenLightbox }) {
@@ -666,7 +665,7 @@ function SupplierSignupView() {
 }
 
 /* -----------------------------------------------------------
-   APP PRINCIPALE (HEADER MOBILE + LIGHTBOX GLOBAL)
+   APP PRINCIPALE
 ----------------------------------------------------------- */
 
 export default function App() {
@@ -675,7 +674,7 @@ export default function App() {
 
   // Lightbox global
   const [lightboxOpen, setLightboxOpen] = useState(false);
-  the [lightboxImages, setLightboxImages] = useState([]);
+  const [lightboxImages, setLightboxImages] = useState([]);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
   const switchTo = (key) => {
