@@ -1,5 +1,5 @@
 // src/App.jsx
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 /* -----------------------------------------------------------
    CONFIG
@@ -15,7 +15,7 @@ const formatPrice = (n) =>
   }).format(n);
 
 /* -----------------------------------------------------------
-   DONNÉES DÉMO AVEC CATÉGORIES + (OPTION IMAGES)
+   DONNÉES DÉMO AVEC CATÉGORIES + IMAGES
 ----------------------------------------------------------- */
 
 const DEMO_PRODUCTS = [
@@ -139,60 +139,112 @@ const DEMO_PRODUCTS = [
 ];
 
 /* -----------------------------------------------------------
-   LIGHTBOX / SLIDER POUR LES PHOTOS
+   LIGHTBOX / SLIDER “VERSION PRO”
 ----------------------------------------------------------- */
 
-function Lightbox({ open, images, index, onClose, onPrev, onNext }) {
+function Lightbox({ open, images, index, onClose, onPrev, onNext, onSelect }) {
   if (!open || !images || images.length === 0) return null;
 
+  const currentIndex = index ?? 0;
+  const total = images.length;
+
+  // Bloquer le scroll + gestion clavier
+  useEffect(() => {
+    if (!open) return;
+
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKey = (e) => {
+      if (e.key === "Escape") onClose?.();
+      if (e.key === "ArrowLeft") onPrev?.();
+      if (e.key === "ArrowRight") onNext?.();
+    };
+
+    window.addEventListener("keydown", handleKey);
+    return () => {
+      document.body.style.overflow = originalOverflow;
+      window.removeEventListener("keydown", handleKey);
+    };
+  }, [open, onClose, onPrev, onNext]);
+
   return (
-    <div className="fixed inset-0 z-50 bg-black/80">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
       {/* clic en dehors pour fermer */}
       <div className="absolute inset-0" onClick={onClose} />
 
-      <div className="relative flex h-full flex-col items-center justify-center px-4">
+      {/* Contenu */}
+      <div className="relative z-10 flex max-h-[90vh] max-w-[92vw] flex-col items-center px-4">
         {/* Bouton fermer */}
         <button
           onClick={onClose}
-          className="absolute right-4 top-4 rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-white"
+          className="absolute right-0 top-[-3rem] rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-gray-700 shadow hover:bg-white"
         >
           ✕ Fermer
         </button>
 
-        {/* Image */}
-        <div className="relative">
+        <div className="relative flex items-center justify-center">
+          {/* Flèche gauche */}
+          {total > 1 && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onPrev?.();
+              }}
+              className="absolute left-[-2.5rem] hidden rounded-full bg-white/90 p-2 text-gray-700 shadow hover:bg-white sm:inline-flex"
+            >
+              <span className="text-lg">←</span>
+            </button>
+          )}
+
+          {/* Image */}
           <img
-            src={images[index]}
+            src={images[currentIndex]}
             alt=""
-            className="max-h-[70vh] max-w-[90vw] rounded-xl bg-white object-contain"
+            className="max-h-[70vh] max-w-[80vw] rounded-xl bg-white object-contain"
             onError={(e) => {
               e.currentTarget.onerror = null;
               e.currentTarget.src = "/logo-easytex.png";
             }}
           />
+
+          {/* Flèche droite */}
+          {total > 1 && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onNext?.();
+              }}
+              className="absolute right-[-2.5rem] hidden rounded-full bg-white/90 p-2 text-gray-700 shadow hover:bg-white sm:inline-flex"
+            >
+              <span className="text-lg">→</span>
+            </button>
+          )}
         </div>
 
-        {/* Contrôles */}
-        {images.length > 1 && (
-          <div className="mt-4 flex gap-4">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onPrev();
-              }}
-              className="rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-gray-700 shadow hover:bg-white"
-            >
-              ← Précédente
-            </button>
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onNext();
-              }}
-              className="rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-gray-700 shadow hover:bg-white"
-            >
-              Suivante →
-            </button>
+        {/* Bas : compteur + pastilles */}
+        {total > 1 && (
+          <div className="mt-4 flex flex-col items-center gap-2">
+            <div className="text-xs font-medium text-white/80">
+              Photo {currentIndex + 1} / {total}
+            </div>
+            <div className="flex gap-2">
+              {images.map((img, i) => (
+                <button
+                  key={img + i}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onSelect?.(i);
+                  }}
+                  className={`h-2.5 w-2.5 rounded-full border border-white/60 transition ${
+                    i === currentIndex
+                      ? "bg-white"
+                      : "bg-white/20 hover:bg-white/50"
+                  }`}
+                  aria-label={`Aller à l’image ${i + 1}`}
+                />
+              ))}
+            </div>
           </div>
         )}
       </div>
@@ -201,7 +253,7 @@ function Lightbox({ open, images, index, onClose, onPrev, onNext }) {
 }
 
 /* -----------------------------------------------------------
-   SECTIONS
+   HOME
 ----------------------------------------------------------- */
 
 function HomeView({ onGoCatalogue, onOpenSupplier }) {
@@ -221,9 +273,9 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
 
           <p className="mt-4 text-gray-700 md:text-lg">
             EasyTex connecte les acheteurs de textile aux meilleurs
-            fournisseurs de la zone UEMOA, directement sur WhatsApp.
-            Comparez les tissus, demandez un devis en un clic et échangez
-            avec des fournisseurs vérifiés.
+            fournisseurs de la zone UEMOA, directement sur WhatsApp. Comparez
+            les tissus, demandez un devis en un clic et échangez avec des
+            fournisseurs vérifiés.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
@@ -312,23 +364,22 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
 }
 
 /* -----------------------------------------------------------
-   CATALOGUE + FILTRES + IMAGES CLIQUABLES (LIGHTBOX)
+   CATALOGUE + FILTRES + IMAGES (LIGHTBOX)
 ----------------------------------------------------------- */
 
 function CatalogView({ onOpenLightbox }) {
-  const [category, setCategory] = useState("Toutes les catégories");
+  const [category, setCategory] = useState("Toutes");
   const [material, setMaterial] = useState("Tous");
   const [weight, setWeight] = useState("Tous");
   const [pattern, setPattern] = useState("Tous");
 
-  const categoryOptions = [
-    "Toutes les catégories",
+  const categories = [
+    "Toutes",
     "Tissus habillement",
     "Tissus Maison et Linge",
     "Tissus Ameublement et Décoration",
     "Tissus spécifiques et traditionnels",
   ];
-
   const materials = [
     "Tous",
     "Coton",
@@ -342,8 +393,7 @@ function CatalogView({ onOpenLightbox }) {
   const patterns = ["Tous", "Uni", "Imprimé Wax", "Jacquard", "Rayé"];
 
   const filteredProducts = DEMO_PRODUCTS.filter((p) => {
-    const cOk =
-      category === "Toutes les catégories" || p.category === category;
+    const cOk = category === "Toutes" || p.category === category;
     const mOk = material === "Tous" || p.material === material;
     const wOk = weight === "Tous" || p.weight === weight;
     const pOk = pattern === "Tous" || p.pattern === pattern;
@@ -363,26 +413,25 @@ function CatalogView({ onOpenLightbox }) {
           délais.
         </p>
 
-        {/* FILTRE PAR CATÉGORIE (PILLS) */}
-        <div className="mb-4 flex flex-wrap gap-2">
-          {categoryOptions.map((cat) => (
-            <button
-              key={cat}
-              type="button"
-              onClick={() => setCategory(cat)}
-              className={`rounded-full px-3 py-1 text-xs font-medium transition ${
-                category === cat
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-              }`}
+        {/* FILTRES */}
+        <div className="mb-6 grid grid-cols-1 gap-3 rounded-2xl border bg-gray-50 p-4 md:grid-cols-4">
+          <div>
+            <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-700">
+              Catégorie
+            </label>
+            <select
+              className="w-full rounded-xl border bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-400"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
             >
-              {cat}
-            </button>
-          ))}
-        </div>
+              {categories.map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+            </select>
+          </div>
 
-        {/* FILTRES MATIÈRE / POIDS / MOTIF */}
-        <div className="mb-6 grid grid-cols-1 gap-3 rounded-2xl border bg-gray-50 p-4 md:grid-cols-3">
           <div>
             <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-700">
               Matière
@@ -439,7 +488,7 @@ function CatalogView({ onOpenLightbox }) {
         {filteredProducts.length === 0 ? (
           <div className="rounded-2xl border bg-white p-6 text-sm text-gray-600">
             Aucun tissu ne correspond à ces filtres pour l’instant. Essayez de
-            relâcher un critère (par exemple la matière ou le poids).
+            relâcher un critère (par exemple la catégorie ou la matière).
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -459,23 +508,28 @@ function CatalogView({ onOpenLightbox }) {
                   key={p.id}
                   className="flex h-full flex-col rounded-2xl border bg-white p-4"
                 >
-                  {/* Image cliquable */}
+                  {/* Image cliquable avec overlay “Voir les photos” */}
                   {hasImages && (
                     <button
                       type="button"
                       onClick={() => onOpenLightbox(p.images, 0)}
-                      className="mb-3 block w-full overflow-hidden rounded-xl"
+                      className="group relative mb-3 block w-full overflow-hidden rounded-xl"
                       aria-label={`Voir les photos de ${p.name}`}
                     >
                       <img
                         src={firstImage}
                         alt={p.name}
-                        className="h-40 w-full object-cover"
+                        className="h-40 w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
                         onError={(e) => {
                           e.currentTarget.onerror = null;
                           e.currentTarget.src = "/logo-easytex.png";
                         }}
                       />
+                      <div className="pointer-events-none absolute inset-0 flex items-end justify-between bg-gradient-to-t from-black/50 via-black/0 to-black/0 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                        <span className="m-2 rounded-full bg-black/70 px-3 py-1 text-xs font-medium text-white">
+                          Voir les photos ({p.images.length})
+                        </span>
+                      </div>
                     </button>
                   )}
 
@@ -611,7 +665,7 @@ function SupplierSignupView() {
 }
 
 /* -----------------------------------------------------------
-   APP PRINCIPALE (HEADER MOBILE + LIGHTBOX)
+   APP PRINCIPALE
 ----------------------------------------------------------- */
 
 export default function App() {
@@ -699,7 +753,7 @@ export default function App() {
               WhatsApp
             </a>
 
-            {/* WhatsApp mobile (dans le header, entre logo et hamburger) */}
+            {/* WhatsApp mobile (entre logo et hamburger) */}
             <a
               href={`https://wa.me/${WA_NUMBER}`}
               target="_blank"
@@ -784,6 +838,7 @@ export default function App() {
         onClose={closeLightbox}
         onPrev={prevLightbox}
         onNext={nextLightbox}
+        onSelect={setLightboxIndex}
       />
     </div>
   );
