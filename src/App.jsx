@@ -15,7 +15,7 @@ const formatPrice = (n) =>
   }).format(n);
 
 /* -----------------------------------------------------------
-   DONNÉES DÉMO AVEC CATÉGORIES + FILTRES
+   DONNÉES DÉMO AVEC CATÉGORIES + (OPTION IMAGES)
 ----------------------------------------------------------- */
 
 const DEMO_PRODUCTS = [
@@ -30,6 +30,7 @@ const DEMO_PRODUCTS = [
     material: "Coton",
     weight: "Moyen",
     pattern: "Uni",
+    images: ["/p1-1.jpg", "/p1-2.jpg"],
   },
   {
     id: "p2",
@@ -42,6 +43,7 @@ const DEMO_PRODUCTS = [
     material: "Coton",
     weight: "Léger",
     pattern: "Imprimé Wax",
+    images: ["/p2-1.jpg", "/p2-2.jpg"],
   },
   {
     id: "p3",
@@ -54,6 +56,7 @@ const DEMO_PRODUCTS = [
     material: "Coton",
     weight: "Léger",
     pattern: "Uni",
+    images: ["/p3-1.jpg", "/p3-2.jpg"],
   },
   {
     id: "p4",
@@ -66,6 +69,7 @@ const DEMO_PRODUCTS = [
     material: "Coton",
     weight: "Moyen",
     pattern: "Rayé",
+    images: ["/p4-1.jpg", "/p4-2.jpg"],
   },
   {
     id: "p5",
@@ -78,6 +82,7 @@ const DEMO_PRODUCTS = [
     material: "Coton",
     weight: "Moyen",
     pattern: "Uni",
+    images: ["/p5-1.jpg", "/p5-2.jpg"],
   },
   {
     id: "p6",
@@ -90,6 +95,7 @@ const DEMO_PRODUCTS = [
     material: "Polyester",
     weight: "Lourd",
     pattern: "Uni",
+    // Ajoute des images plus tard si tu veux
   },
   {
     id: "p7",
@@ -128,6 +134,68 @@ const DEMO_PRODUCTS = [
     pattern: "Uni",
   },
 ];
+
+/* -----------------------------------------------------------
+   LIGHTBOX / SLIDER POUR LES PHOTOS
+----------------------------------------------------------- */
+
+function Lightbox({ open, images, index, onClose, onPrev, onNext }) {
+  if (!open || !images || images.length === 0) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 bg-black/80">
+      {/* clic en dehors pour fermer */}
+      <div className="absolute inset-0" onClick={onClose} />
+
+      <div className="relative flex h-full flex-col items-center justify-center px-4">
+        {/* Bouton fermer */}
+        <button
+          onClick={onClose}
+          className="absolute right-4 top-4 rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-white"
+        >
+          ✕ Fermer
+        </button>
+
+        {/* Image */}
+        <div className="relative">
+          <img
+            src={images[index]}
+            alt=""
+            className="max-h-[70vh] max-w-[90vw] rounded-xl bg-white object-contain"
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = "/logo-easytex.png";
+            }}
+          />
+        </div>
+
+        {/* Contrôles */}
+        {images.length > 1 && (
+          <div className="mt-4 flex gap-4">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onPrev();
+              }}
+              className="rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-gray-700 shadow hover:bg-white"
+            >
+              ← Précédente
+            </button>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onNext();
+              }}
+              className="rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-gray-700 shadow hover:bg-white"
+            >
+              Suivante →
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 /* -----------------------------------------------------------
    SECTIONS
@@ -241,10 +309,10 @@ function HomeView({ onGoCatalogue, onOpenSupplier }) {
 }
 
 /* -----------------------------------------------------------
-   CATALOGUE + FILTRES
+   CATALOGUE + FILTRES + IMAGES CLIQUABLES (LIGHTBOX)
 ----------------------------------------------------------- */
 
-function CatalogView() {
+function CatalogView({ onOpenLightbox }) {
   const [material, setMaterial] = useState("Tous");
   const [weight, setWeight] = useState("Tous");
   const [pattern, setPattern] = useState("Tous");
@@ -350,11 +418,34 @@ function CatalogView() {
               );
               const waLink = `https://wa.me/${WA_NUMBER}?text=${waText}`;
 
+              const hasImages = Array.isArray(p.images) && p.images.length > 0;
+              const firstImage = hasImages ? p.images[0] : null;
+
               return (
                 <div
                   key={p.id}
                   className="flex h-full flex-col rounded-2xl border bg-white p-4"
                 >
+                  {/* Image cliquable */}
+                  {hasImages && (
+                    <button
+                      type="button"
+                      onClick={() => onOpenLightbox(p.images, 0)}
+                      className="mb-3 block w-full overflow-hidden rounded-xl"
+                      aria-label={`Voir les photos de ${p.name}`}
+                    >
+                      <img
+                        src={firstImage}
+                        alt={p.name}
+                        className="h-40 w-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src = "/logo-easytex.png";
+                        }}
+                      />
+                    </button>
+                  )}
+
                   <div className="text-xs font-semibold uppercase tracking-wide text-blue-700">
                     {p.category}
                   </div>
@@ -487,23 +578,47 @@ function SupplierSignupView() {
 }
 
 /* -----------------------------------------------------------
-   APP PRINCIPALE (HEADER RESPONSIVE + LOGO)
+   APP PRINCIPALE (HEADER MOBILE + LIGHTBOX)
 ----------------------------------------------------------- */
 
 export default function App() {
   const [tab, setTab] = useState("accueil");
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+
+  // Lightbox global
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxImages, setLightboxImages] = useState([]);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   const switchTo = (key) => {
     setTab(key);
+    setMobileNavOpen(false);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  const openLightbox = (images, startIndex = 0) => {
+    if (!images || images.length === 0) return;
+    setLightboxImages(images);
+    setLightboxIndex(startIndex);
+    setLightboxOpen(true);
+  };
+
+  const closeLightbox = () => setLightboxOpen(false);
+  const prevLightbox = () =>
+    setLightboxIndex((i) =>
+      lightboxImages.length ? (i - 1 + lightboxImages.length) % lightboxImages.length : 0
+    );
+  const nextLightbox = () =>
+    setLightboxIndex((i) =>
+      lightboxImages.length ? (i + 1) % lightboxImages.length : 0
+    );
 
   return (
     <div className="min-h-screen bg-white">
       {/* HEADER */}
       <header className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-4 py-3">
-          {/* Logo seul, plus grand */}
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
+          {/* Logo */}
           <button
             onClick={() => switchTo("accueil")}
             className="flex items-center rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
@@ -516,28 +631,8 @@ export default function App() {
             />
           </button>
 
-          {/* Bouton WhatsApp à droite */}
-          <div className="order-2 ml-auto flex items-center sm:order-3 sm:ml-0">
-            <a
-              href={`https://wa.me/${WA_NUMBER}`}
-              target="_blank"
-              rel="noreferrer"
-              className="hidden sm:inline-flex items-center justify-center rounded-full bg-black px-4 py-2 text-sm font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
-            >
-              WhatsApp
-            </a>
-            <a
-              href={`https://wa.me/${WA_NUMBER}`}
-              target="_blank"
-              rel="noreferrer"
-              className="inline-flex sm:hidden items-center justify-center rounded-full bg-black px-3 py-2 text-xs font-medium text-white hover:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
-            >
-              WA
-            </a>
-          </div>
-
-          {/* Navigation */}
-          <nav className="order-3 flex w-full justify-center gap-2 text-sm sm:order-2 sm:w-auto">
+          {/* NAV DESKTOP (centre) */}
+          <nav className="hidden flex-1 justify-center gap-2 text-sm sm:flex">
             {[
               { key: "accueil", label: "Accueil" },
               { key: "catalogue", label: "Catalogue" },
@@ -546,7 +641,7 @@ export default function App() {
               <button
                 key={item.key}
                 onClick={() => switchTo(item.key)}
-                className={`flex-1 rounded-full px-4 py-2 text-sm font-medium sm:flex-none focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 ${
+                className={`rounded-full px-4 py-2 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 ${
                   tab === item.key
                     ? "bg-black text-white"
                     : "text-gray-700 hover:bg-gray-100"
@@ -556,7 +651,78 @@ export default function App() {
               </button>
             ))}
           </nav>
+
+          {/* Zone droite : WA + menu hamburger (mobile) */}
+          <div className="flex items-center gap-2">
+            {/* WhatsApp desktop (bleu) */}
+            <a
+              href={`https://wa.me/${WA_NUMBER}`}
+              target="_blank"
+              rel="noreferrer"
+              className="hidden items-center justify-center rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 sm:inline-flex"
+            >
+              WhatsApp
+            </a>
+
+            {/* Bouton hamburger mobile */}
+            <button
+              type="button"
+              onClick={() => setMobileNavOpen((v) => !v)}
+              className="inline-flex items-center justify-center rounded-md border px-2 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 sm:hidden"
+            >
+              <span className="sr-only">Ouvrir le menu</span>
+              <svg
+                className="h-5 w-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+              >
+                <path
+                  d="M4 6h16M4 12h16M4 18h16"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </button>
+          </div>
         </div>
+
+        {/* Bouton WhatsApp centré sur mobile */}
+        <div className="mx-auto max-w-6xl px-4 pb-2 sm:hidden">
+          <a
+            href={`https://wa.me/${WA_NUMBER}`}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex w-full items-center justify-center rounded-full bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+          >
+            WhatsApp
+          </a>
+        </div>
+
+        {/* Menu mobile déroulant */}
+        {mobileNavOpen && (
+          <div className="border-t bg-white sm:hidden">
+            <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-2">
+              {[
+                { key: "accueil", label: "Accueil" },
+                { key: "catalogue", label: "Catalogue" },
+                { key: "fournisseurs", label: "Devenir fournisseur" },
+              ].map((item) => (
+                <button
+                  key={item.key}
+                  onClick={() => switchTo(item.key)}
+                  className={`w-full rounded-full px-4 py-2 text-left text-sm font-medium ${
+                    tab === item.key
+                      ? "bg-black text-white"
+                      : "text-gray-700 hover:bg-gray-100"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </nav>
+          </div>
+        )}
       </header>
 
       {/* CONTENU */}
@@ -566,7 +732,9 @@ export default function App() {
           onOpenSupplier={() => switchTo("fournisseurs")}
         />
       )}
-      {tab === "catalogue" && <CatalogView />}
+      {tab === "catalogue" && (
+        <CatalogView onOpenLightbox={openLightbox} />
+      )}
       {tab === "fournisseurs" && <SupplierSignupView />}
 
       <footer className="mt-10 w-full border-t bg-white">
@@ -574,6 +742,16 @@ export default function App() {
           © EasyTex 2025 – Tous droits réservés
         </div>
       </footer>
+
+      {/* LIGHTBOX GLOBAL */}
+      <Lightbox
+        open={lightboxOpen}
+        images={lightboxImages}
+        index={lightboxIndex}
+        onClose={closeLightbox}
+        onPrev={prevLightbox}
+        onNext={nextLightbox}
+      />
     </div>
   );
 }
