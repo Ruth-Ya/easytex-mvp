@@ -1190,11 +1190,11 @@ export default function App() {
             className="flex items-center rounded-md pr-1 sm:pr-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
           >
             <img
-              src="/logo-easytex.png"
-              alt="EasyTex"
-              className="h-10 w-auto sm:h-12 md:h-14"
-              loading="eager"
-            />
+  src="/logo-easytex.png"
+  alt="EasyTex"
+  className="h-12 w-auto sm:h-14 md:h-16"
+  loading="eager"
+/>
           </button>
 
           {/* NAV DESKTOP (centre) */}
