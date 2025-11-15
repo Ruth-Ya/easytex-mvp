@@ -37,7 +37,7 @@ const DEMO_PRODUCTS = [
     name: "Wax premium 6 yards",
     category: "Tissus habillement",
     type: "Wax",
-    color: "Rouge / Jaune",
+    color: "Bleu / Vert",
     origin: "Côte d’Ivoire",
     price: 19000,
     material: "Coton",
