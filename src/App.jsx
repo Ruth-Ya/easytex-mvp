@@ -140,17 +140,29 @@ const DEMO_PRODUCTS = [
 
 /* -----------------------------------------------------------
    LIGHTBOX / SLIDER “VERSION PRO”
+   (modifié uniquement ici : swipe mobile + gestion scroll)
 ----------------------------------------------------------- */
 
-function Lightbox({ open, images, index, onClose, onPrev, onNext, onSelect }) {
-  if (!open || !images || images.length === 0) return null;
+function Lightbox({
+  open,
+  images,
+  index,
+  onClose,
+  onPrev,
+  onNext,
+  onSelect,
+}) {
+  // Hooks toujours appelés (règle des hooks OK)
+  const [touchStartX, setTouchStartX] = useState(null);
+  const [touchEndX, setTouchEndX] = useState(null);
 
+  const isOpen = open && images && images.length > 0;
   const currentIndex = index ?? 0;
-  const total = images.length;
+  const total = images ? images.length : 0;
 
-  // Bloquer le scroll + gestion clavier
+  // Bloquer / réactiver le scroll + clavier
   useEffect(() => {
-    if (!open) return;
+    if (!isOpen) return;
 
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -162,11 +174,46 @@ function Lightbox({ open, images, index, onClose, onPrev, onNext, onSelect }) {
     };
 
     window.addEventListener("keydown", handleKey);
+
     return () => {
       document.body.style.overflow = originalOverflow;
       window.removeEventListener("keydown", handleKey);
     };
-  }, [open, onClose, onPrev, onNext]);
+  }, [isOpen, onClose, onPrev, onNext]);
+
+  // Si non ouvert, on ne rend rien
+  if (!isOpen) return null;
+
+  // Gestion du swipe tactile (mobile)
+  const handleTouchStart = (e) => {
+    if (!e.touches || e.touches.length === 0) return;
+    setTouchStartX(e.touches[0].clientX);
+    setTouchEndX(null);
+  };
+
+  const handleTouchMove = (e) => {
+    if (!e.touches || e.touches.length === 0) return;
+    setTouchEndX(e.touches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX === null || touchEndX === null) return;
+    const deltaX = touchEndX - touchStartX;
+    const threshold = 40; // distance minimale pour valider le swipe
+
+    if (Math.abs(deltaX) > threshold) {
+      if (deltaX < 0) {
+        // swipe vers la gauche => image suivante
+        onNext?.();
+      } else {
+        // swipe vers la droite => image précédente
+        onPrev?.();
+      }
+    }
+
+    setTouchStartX(null);
+    setTouchEndX(null);
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
@@ -183,8 +230,13 @@ function Lightbox({ open, images, index, onClose, onPrev, onNext, onSelect }) {
           ✕ Fermer
         </button>
 
-        <div className="relative flex items-center justify-center">
-          {/* Flèche gauche */}
+        <div
+          className="relative flex items-center justify-center"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          {/* Flèche gauche (desktop) */}
           {total > 1 && (
             <button
               onClick={(e) => {
@@ -208,7 +260,7 @@ function Lightbox({ open, images, index, onClose, onPrev, onNext, onSelect }) {
             }}
           />
 
-          {/* Flèche droite */}
+          {/* Flèche droite (desktop) */}
           {total > 1 && (
             <button
               onClick={(e) => {
