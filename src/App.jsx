@@ -1192,7 +1192,7 @@ export default function App() {
             <img
   src="/logo-easytex.png"
   alt="EasyTex"
-  className="h-12 w-auto sm:h-14 md:h-16"
+  className="h-14 w-auto sm:h-16 md:h-20"
   loading="eager"
 />
           </button>
