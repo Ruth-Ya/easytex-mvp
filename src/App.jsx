@@ -95,7 +95,8 @@ const DEMO_PRODUCTS = [
     weight: "Moyen",
     pattern: "Uni",
     images: ["/p5-1.jpg", "/p5-2.jpg"],
-    featured: false,
+    // AJOUTÉ EN TOP DE LA SEMAINE
+    featured: true,
     supplierCity: "Bamako",
     supplierCountry: "Mali",
   },
@@ -111,7 +112,8 @@ const DEMO_PRODUCTS = [
     weight: "Lourd",
     pattern: "Uni",
     images: ["/p6-1.jpg", "/p6-2.jpg"],
-    featured: false,
+    // AJOUTÉ EN TOP DE LA SEMAINE
+    featured: true,
     supplierCity: "Accra",
     supplierCountry: "Ghana",
   },
@@ -358,38 +360,39 @@ function HomeView({
       "Une fois votre demande envoyée via WhatsApp, EasyTex et/ou les fournisseurs partenaires s’efforcent de vous répondre dans un délai indicatif de 24 à 48 heures ouvrées.",
   };
 
-  // TOP TISSUS : auto-scroll + flèches qui scrollent vraiment
+  /* ---------- CARROUSEL TOP TISSUS (auto + manuel) ---------- */
   const [topIndex, setTopIndex] = useState(0);
-  const topScrollRef = useRef(null);
+  const topCarouselRef = useRef(null);
 
-  // Quand topIndex change, on scroll vers la carte correspondante
-  useEffect(() => {
-    const container = topScrollRef.current;
-    if (!container) return;
-    const cards = container.querySelectorAll("[data-top-card]");
-    if (!cards.length) return;
-
-    const safeIndex = ((topIndex % cards.length) + cards.length) % cards.length;
-    const target = cards[safeIndex];
-    const first = cards[0];
-
-    if (target && first) {
-      const offset = target.offsetLeft - first.offsetLeft;
-      container.scrollTo({
-        left: offset,
-        behavior: "smooth",
-      });
-    }
-  }, [topIndex]);
-
-  // Auto-défilement du bloc "Top tissus" (mobile + desktop)
+  // Auto-défilement (mobile + desktop)
   useEffect(() => {
     if (featuredProducts.length <= 1) return;
     const interval = setInterval(() => {
-      setTopIndex((prev) => prev + 1);
+      setTopIndex((prev) => (prev + 1) % featuredProducts.length);
     }, 4500);
     return () => clearInterval(interval);
   }, [featuredProducts.length]);
+
+  // Scroll horizontal vers la carte courante
+  useEffect(() => {
+    const container = topCarouselRef.current;
+    if (!container) return;
+    const cards = container.querySelectorAll("[data-top-card]");
+    if (!cards.length) return;
+    const card = cards[topIndex];
+    if (!card) return;
+
+    const cardLeft = card.offsetLeft;
+    const cardWidth = card.offsetWidth;
+    const containerWidth = container.clientWidth;
+
+    const targetScrollLeft = cardLeft - (containerWidth - cardWidth) / 2;
+
+    container.scrollTo({
+      left: targetScrollLeft,
+      behavior: "smooth",
+    });
+  }, [topIndex]);
 
   return (
     <div className="mx-auto max-w-6xl px-4 pb-16">
@@ -409,14 +412,18 @@ function HomeView({
             </button>
           </div>
 
-          <div className="relative overflow-x-auto">
+          <div className="relative overflow-x-hidden">
             {/* Flèches desktop */}
             {featuredProducts.length > 1 && (
               <>
                 <button
                   type="button"
                   onClick={() =>
-                    setTopIndex((prev) => prev - 1)
+                    setTopIndex(
+                      (prev) =>
+                        (prev - 1 + featuredProducts.length) %
+                        featuredProducts.length
+                    )
                   }
                   className="absolute left-0 top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-white/90 p-2 text-gray-700 shadow hover:bg-white sm:inline-flex"
                 >
@@ -425,7 +432,10 @@ function HomeView({
                 <button
                   type="button"
                   onClick={() =>
-                    setTopIndex((prev) => prev + 1)
+                    setTopIndex(
+                      (prev) =>
+                        (prev + 1) % featuredProducts.length
+                    )
                   }
                   className="absolute right-0 top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-white/90 p-2 text-gray-700 shadow hover:bg-white sm:inline-flex"
                 >
@@ -435,75 +445,73 @@ function HomeView({
             )}
 
             <div
-              ref={topScrollRef}
-              className="overflow-x-auto"
+              ref={topCarouselRef}
+              className="flex gap-4 overflow-x-auto pb-2"
             >
-              <div className="flex gap-4 pb-2">
-                {featuredProducts.map((p) => {
-                  const waText = encodeURIComponent(
-                    `Bonjour EasyTex,\n\nJe souhaite un devis pour :\n- ${p.name}\n- Catégorie : ${p.category}\n- Matière : ${p.material}\n- Poids : ${p.weight}\n- Motif / aspect : ${p.pattern}\n- Couleur : ${p.color}\n- Origine : ${p.origin}\n- Fournisseur : ${p.supplierCity}, ${p.supplierCountry}\n- Prix indicatif : ${formatPrice(
-                      p.price
-                    )}\n\nMerci de me préciser les minimums de commande, délais et conditions de livraison.`
-                  );
-                  const waLink = `https://wa.me/${WA_NUMBER}?text=${waText}`;
-                  const firstImage =
-                    Array.isArray(p.images) && p.images.length > 0
-                      ? p.images[0]
-                      : null;
+              {featuredProducts.map((p) => {
+                const waText = encodeURIComponent(
+                  `Bonjour EasyTex,\n\nJe souhaite un devis pour :\n- ${p.name}\n- Catégorie : ${p.category}\n- Matière : ${p.material}\n- Poids : ${p.weight}\n- Motif / aspect : ${p.pattern}\n- Couleur : ${p.color}\n- Origine : ${p.origin}\n- Fournisseur : ${p.supplierCity}, ${p.supplierCountry}\n- Prix indicatif : ${formatPrice(
+                    p.price
+                  )}\n\nMerci de me préciser les minimums de commande, délais et conditions de livraison.`
+                );
+                const waLink = `https://wa.me/${WA_NUMBER}?text=${waText}`;
+                const firstImage =
+                  Array.isArray(p.images) && p.images.length > 0
+                    ? p.images[0]
+                    : null;
 
-                  return (
-                    <div
-                      key={p.id}
-                      data-top-card
-                      className="min-w-[220px] max-w-[260px] flex-1 rounded-2xl border bg-white p-3"
-                    >
-                      {firstImage && (
-                        <button
-                          type="button"
-                          onClick={() =>
-                            onOpenLightbox && onOpenLightbox(p.images, 0)
-                          }
-                          className="mb-2 block w-full overflow-hidden rounded-xl"
-                          aria-label={`Voir les photos de ${p.name}`}
-                        >
-                          <img
-                            src={firstImage}
-                            alt={p.name}
-                            className="h-32 w-full object-cover"
-                            onError={(e) => {
-                              e.currentTarget.onerror = null;
-                              e.currentTarget.src = "/logo-easytex.png";
-                            }}
-                          />
-                        </button>
-                      )}
-                      <div className="text-[10px] font-semibold uppercase tracking-wide text-blue-700">
-                        {p.category}
-                      </div>
-                      <div className="mt-1 text-sm font-semibold text-gray-900">
-                        {p.name}
-                      </div>
-                      <div className="mt-1 text-xs text-gray-600">
-                        {p.material} • {p.weight}
-                      </div>
-                      <div className="mt-1 text-xs text-gray-600">
-                        {p.supplierCity}, {p.supplierCountry}
-                      </div>
-                      <div className="mt-1 text-base font-extrabold text-gray-900">
-                        {formatPrice(p.price)}
-                      </div>
-                      <a
-                        href={waLink}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700"
+                return (
+                  <div
+                    key={p.id}
+                    data-top-card
+                    className="min-w-[220px] max-w-[260px] flex-1 rounded-2xl border bg-white p-3"
+                  >
+                    {firstImage && (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          onOpenLightbox && onOpenLightbox(p.images, 0)
+                        }
+                        className="mb-2 block w-full overflow-hidden rounded-xl"
+                        aria-label={`Voir les photos de ${p.name}`}
                       >
-                        Demander un devis
-                      </a>
+                        <img
+                          src={firstImage}
+                          alt={p.name}
+                          className="h-32 w-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.onerror = null;
+                            e.currentTarget.src = "/logo-easytex.png";
+                          }}
+                        />
+                      </button>
+                    )}
+                    <div className="text-[10px] font-semibold uppercase tracking-wide text-blue-700">
+                      {p.category}
                     </div>
-                  );
-                })}
-              </div>
+                    <div className="mt-1 text-sm font-semibold text-gray-900">
+                      {p.name}
+                    </div>
+                    <div className="mt-1 text-xs text-gray-600">
+                      {p.material} • {p.weight}
+                    </div>
+                    <div className="mt-1 text-xs text-gray-600">
+                      {p.supplierCity}, {p.supplierCountry}
+                    </div>
+                    <div className="mt-1 text-base font-extrabold text-gray-900">
+                      {formatPrice(p.price)}
+                    </div>
+                    <a
+                      href={waLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700"
+                    >
+                      Demander un devis
+                    </a>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
@@ -679,14 +687,14 @@ function HomeView({
 
       {/* CATÉGORIES DE TISSUS */}
       <section className="mt-10">
-        <div className="mb-4 flex items-center justify_between">
+        <div className="mb-4 flex items-baseline justify-between gap-2">
           <h2 className="text-xl font-semibold text-gray-900">
             Catégories de tissus
           </h2>
           <button
             type="button"
             onClick={onGoCatalogue}
-            className="text-xs font-semibold text-blue-700 hover:underline"
+            className="ml-2 text-xs font-semibold text-blue-700 hover:underline sm:ml-4"
           >
             Accéder au catalogue
           </button>
@@ -717,8 +725,7 @@ function HomeView({
           <button
             type="button"
             onClick={() =>
-              onSelectCategory &&
-              onSelectCategory("Tissus Maison et Linge")
+              onSelectCategory && onSelectCategory("Tissus Maison et Linge")
             }
             className="flex flex-col items-start rounded-2xl border bg-white p-4 text-left hover:border-blue-500 hover:shadow-sm"
           >
@@ -741,7 +748,7 @@ function HomeView({
               onSelectCategory &&
               onSelectCategory("Tissus Ameublement et Décoration")
             }
-            className="flex flex-col items-start rounded-2xl border bg_white p-4 text-left hover:border-blue-500 hover:shadow-sm"
+            className="flex flex-col items-start rounded-2xl border bg-white p-4 text-left hover:border-blue-500 hover:shadow-sm"
           >
             <div className="flex items-center gap-2">
               <span className="text-2xl">🛋️</span>
@@ -761,7 +768,7 @@ function HomeView({
               onSelectCategory &&
               onSelectCategory("Tissus spécifiques et traditionnels")
             }
-            className="flex flex-col items-start rounded-2xl border bg_white p-4 text-left hover:border-blue-500 hover:shadow-sm"
+            className="flex flex-col items-start rounded-2xl border bg-white p-4 text-left hover:border-blue-500 hover:shadow-sm"
           >
             <div className="flex items-center gap-2">
               <span className="text-2xl">🌍</span>
@@ -839,8 +846,8 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
         </h2>
         <p className="mb-4 text-sm text-gray-600">
           Filtrez les tissus par catégorie, matière, poids, motif ou effectuez
-          une recherche par nom, matière ou origine pour trouver la référence la
-          plus adaptée à votre projet. Les prix sont indicatifs et peuvent
+          une recherche par nom, matière ou origine pour trouver la référence
+          la plus adaptée à votre projet. Les prix sont indicatifs et peuvent
           varier selon la quantité, la finition et les délais.
         </p>
 
@@ -916,7 +923,7 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
               Poids
             </label>
             <select
-              className="w-full rounded-xl border bg_white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full rounded-xl border bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-400"
               value={weight}
               onChange={(e) => setWeight(e.target.value)}
             >
@@ -933,7 +940,7 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
               Motif / aspect
             </label>
             <select
-              className="w-full rounded-xl border bg_white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full rounded-xl border bg-white px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-400"
               value={pattern}
               onChange={(e) => setPattern(e.target.value)}
             >
@@ -969,7 +976,7 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
               return (
                 <div
                   key={p.id}
-                  className="flex h-full flex-col rounded-2xl border bg_white p-4"
+                  className="flex h-full flex-col rounded-2xl border bg-white p-4"
                 >
                   {hasImages && (
                     <button
@@ -1020,7 +1027,7 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
                     href={waLink}
                     target="_blank"
                     rel="noreferrer"
-                    className="mt-3 inline-flex items-center justify_center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+                    className="mt-3 inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
                   >
                     Demander un devis sur WhatsApp
                   </a>
@@ -1059,14 +1066,14 @@ function SupplierSignupView() {
     <div className="mx-auto max-w-6xl px-4 pb-16">
       <section
         id="fournisseurs"
-        className="rounded-2xl border bg_white p-5 md:p-8"
+        className="rounded-2xl border bg-white p-5 md:p-8"
       >
         <h2 className="text-lg font-semibold text-gray-900">
           Vous vendez du textile ? Rejoignez EasyTex
         </h2>
         <p className="mt-1 text-sm text-gray-700">
-          Créez une vitrine simple, recevez des demandes qualifiées et développez
-          votre clientèle dans l’espace UEMOA.
+          Créez une vitrine simple, recevez des demandes qualifiées et
+          développez votre clientèle dans l’espace UEMOA.
         </p>
 
         <form onSubmit={submit} className="mt-5 grid gap-4 md:grid-cols-2">
@@ -1118,7 +1125,7 @@ function SupplierSignupView() {
           <div className="md:col-span-2 flex justify-start">
             <button
               type="submit"
-              className="inline-flex items-center justify_center rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+              className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
             >
               Envoyer ma demande
             </button>
@@ -1203,8 +1210,8 @@ function CguView() {
           <p className="mt-1">
             EasyTex met en relation des professionnels et particuliers en
             recherche de textile avec des fournisseurs. La plateforme ne vend
-            pas directement de produits et n’est pas partie aux contrats conclus
-            entre acheteurs et fournisseurs.
+            pas directement de produits et n’est pas partie aux contrats
+            conclus entre acheteurs et fournisseurs.
           </p>
         </div>
         <div>
@@ -1323,6 +1330,17 @@ export default function App() {
   const historyRef = useRef([]);
   const [historyLength, setHistoryLength] = useState(0);
 
+  const pushHistory = () => {
+    const currentScroll =
+      typeof window !== "undefined" ? window.scrollY || 0 : 0;
+    historyRef.current.push({
+      tab,
+      catalogCategory,
+      scrollY: currentScroll,
+    });
+    setHistoryLength(historyRef.current.length);
+  };
+
   const switchTo = (key, options = {}) => {
     const { category, push = true } = options;
 
@@ -1400,7 +1418,7 @@ export default function App() {
     <div className="min-h-screen bg-white">
       {/* HEADER */}
       <header className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify_between gap-3 px-4 py-3">
+        <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
           {/* Logo */}
           <button
             onClick={() => switchTo("accueil")}
@@ -1436,13 +1454,13 @@ export default function App() {
           </nav>
 
           {/* Zone droite : WA + menu hamburger */}
-          <div className="flex items-center gap-2">
+          <div className="ml-2 flex items-center gap-2 sm:ml-4">
             {/* WhatsApp desktop */}
             <a
               href={`https://wa.me/${WA_NUMBER}`}
               target="_blank"
               rel="noreferrer"
-              className="hidden items-center justify_center rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 sm:inline-flex"
+              className="hidden items-center justify-center rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 sm:inline-flex"
             >
               WhatsApp
             </a>
@@ -1452,7 +1470,7 @@ export default function App() {
               href={`https://wa.me/${WA_NUMBER}`}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center justify_center rounded-full bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 sm:hidden"
+              className="inline-flex items-center justify-center rounded-full bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 sm:hidden"
             >
               WhatsApp
             </a>
@@ -1461,7 +1479,7 @@ export default function App() {
             <button
               type="button"
               onClick={() => setMobileNavOpen((v) => !v)}
-              className="inline-flex items-center justify_center rounded-md border px-2 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 sm:hidden"
+              className="inline-flex items-center justify-center rounded-md border px-2 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 sm:hidden"
             >
               <span className="sr-only">Ouvrir le menu</span>
               <svg
@@ -1515,7 +1533,7 @@ export default function App() {
           <button
             type="button"
             onClick={goBack}
-            className="inline-flex items-center gap-1 rounded-full bg-blue-600 px-3 py-1 text-xs font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+            className="inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-medium text-gray-700 hover:bg-gray-100"
           >
             <span>←</span>
             <span>Retour</span>
@@ -1529,7 +1547,9 @@ export default function App() {
           onGoCatalogue={() => switchTo("catalogue")}
           onOpenSupplier={() => switchTo("fournisseurs")}
           onOpenLightbox={openLightbox}
-          onSelectCategory={(cat) => switchTo("catalogue", { category: cat })}
+          onSelectCategory={(cat) =>
+            switchTo("catalogue", { category: cat })
+          }
         />
       )}
       {tab === "catalogue" && (
@@ -1547,14 +1567,14 @@ export default function App() {
       <footer className="mt-10 w-full border-t bg-white">
         {/* Bandeau newsletter */}
         <div className="border-b bg-blue-50">
-          <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-4 py-6 text-center sm:flex-row sm:items-center sm:justify_between sm:text-left">
+          <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-4 py-6 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left">
             <div>
               <div className="text-base font-semibold text-gray-900">
                 Restez informés des nouveautés textile
               </div>
               <div className="text-sm text-gray-700">
-                Recevez notre sélection de tissus et offres EasyTex (MVP en cours
-                de déploiement).
+                Recevez notre sélection de tissus et offres EasyTex (MVP en
+                cours de déploiement).
               </div>
             </div>
             <form
@@ -1579,9 +1599,9 @@ export default function App() {
         </div>
 
         {/* Bas de page */}
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify_between gap-2 px-4 py-6 text-center text-sm text-gray-600 sm:flex-row">
+        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-6 text-center text-sm text-gray-600 sm:flex-row">
           <div>© EasyTex 2025 – Tous droits réservés</div>
-          <div className="flex flex-wrap justify_center gap-4">
+          <div className="flex flex-wrap justify-center gap-4">
             <button
               type="button"
               onClick={() => switchTo("faq")}
@@ -1620,7 +1640,7 @@ export default function App() {
         href={`https://wa.me/${WA_NUMBER}`}
         target="_blank"
         rel="noreferrer"
-        className="fixed bottom-4 right-4 z-30 flex h-12 w-12 items-center justify_center rounded-full bg-green-500 text-white shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
+        className="fixed bottom-4 right-4 z-30 flex h-12 w-12 items-center justify-center rounded-full bg-green-500 text-white shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
       >
         <span className="sr-only">Contacter EasyTex sur WhatsApp</span>
         <span className="text-xl">W</span>
