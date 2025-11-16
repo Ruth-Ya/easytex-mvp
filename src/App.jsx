@@ -6,6 +6,17 @@ import React, { useState, useEffect, useRef } from "react";
 ----------------------------------------------------------- */
 
 const WA_NUMBER = "221707546281";
+const GA_MEASUREMENT_ID = "G-3N99WM3PW2";
+
+/**
+ * Helper simple pour envoyer des events GA4
+ * (GA4 est chargé via gtag dans index.html)
+ */
+const trackEvent = (name, params = {}) => {
+  if (typeof window === "undefined") return;
+  if (!window.gtag) return;
+  window.gtag("event", name, params);
+};
 
 const formatPrice = (n) =>
   new Intl.NumberFormat("fr-FR", {
@@ -405,7 +416,12 @@ function HomeView({
             </h2>
             <button
               type="button"
-              onClick={onGoCatalogue}
+              onClick={() => {
+                trackEvent("click_catalogue", {
+                  source: "top_tissus_voir_tout",
+                });
+                onGoCatalogue();
+              }}
               className="text-xs font-semibold text-blue-700 hover:underline"
             >
               Voir tout le catalogue
@@ -468,9 +484,14 @@ function HomeView({
                     {firstImage && (
                       <button
                         type="button"
-                        onClick={() =>
-                          onOpenLightbox && onOpenLightbox(p.images, 0)
-                        }
+                        onClick={() => {
+                          trackEvent("click_produit_image", {
+                            product_id: p.id,
+                            product_name: p.name,
+                            location: "top_tissus",
+                          });
+                          onOpenLightbox && onOpenLightbox(p.images, 0);
+                        }}
                         className="mb-2 block w-full overflow-hidden rounded-xl"
                         aria-label={`Voir les photos de ${p.name}`}
                       >
@@ -504,6 +525,13 @@ function HomeView({
                       href={waLink}
                       target="_blank"
                       rel="noreferrer"
+                      onClick={() =>
+                        trackEvent("click_devis", {
+                          product_id: p.id,
+                          product_name: p.name,
+                          location: "top_tissus",
+                        })
+                      }
                       className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700"
                     >
                       Demander un devis
@@ -534,14 +562,24 @@ function HomeView({
 
           <div className="mt-6 flex flex-wrap gap-3">
             <button
-              onClick={onGoCatalogue}
+              onClick={() => {
+                trackEvent("click_catalogue", {
+                  source: "hero_explorer_catalogue",
+                });
+                onGoCatalogue();
+              }}
               className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
             >
               Explorer le catalogue
             </button>
 
             <button
-              onClick={onOpenSupplier}
+              onClick={() => {
+                trackEvent("click_devenir_fournisseur", {
+                  source: "hero_button",
+                });
+                onOpenSupplier();
+              }}
               className="inline-flex items-center justify-center rounded-xl px-5 py-3 font-semibold text-blue-700 ring-1 ring-blue-600 hover:bg-blue-50 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
             >
               Devenir fournisseur
@@ -692,7 +730,12 @@ function HomeView({
           </h2>
           <button
             type="button"
-            onClick={onGoCatalogue}
+            onClick={() => {
+              trackEvent("click_catalogue", {
+                source: "categories_acceder_catalogue",
+              });
+              onGoCatalogue();
+            }}
             className="ml-2 text-xs font-semibold text-blue-700 hover:underline sm:ml-4"
           >
             Accéder au catalogue
@@ -703,9 +746,13 @@ function HomeView({
           {/* Tissus habillement */}
           <button
             type="button"
-            onClick={() =>
-              onSelectCategory && onSelectCategory("Tissus habillement")
-            }
+            onClick={() => {
+              trackEvent("click_category", {
+                category: "Tissus habillement",
+              });
+              onSelectCategory &&
+                onSelectCategory("Tissus habillement");
+            }}
             className="flex flex-col items-start rounded-2xl border bg-white p-4 text-left hover:border-blue-500 hover:shadow-sm"
           >
             <div className="flex items-center gap-2">
@@ -723,9 +770,13 @@ function HomeView({
           {/* Maison & linge */}
           <button
             type="button"
-            onClick={() =>
-              onSelectCategory && onSelectCategory("Tissus Maison et Linge")
-            }
+            onClick={() => {
+              trackEvent("click_category", {
+                category: "Tissus Maison et Linge",
+              });
+              onSelectCategory &&
+                onSelectCategory("Tissus Maison et Linge");
+            }}
             className="flex flex-col items-start rounded-2xl border bg-white p-4 text-left hover:border-blue-500 hover:shadow-sm"
           >
             <div className="flex items-center gap-2">
@@ -743,10 +794,13 @@ function HomeView({
           {/* Ameublement & déco */}
           <button
             type="button"
-            onClick={() =>
+            onClick={() => {
+              trackEvent("click_category", {
+                category: "Tissus Ameublement et Décoration",
+              });
               onSelectCategory &&
-              onSelectCategory("Tissus Ameublement et Décoration")
-            }
+                onSelectCategory("Tissus Ameublement et Décoration");
+            }}
             className="flex flex-col items-start rounded-2xl border bg-white p-4 text-left hover:border-blue-500 hover:shadow-sm"
           >
             <div className="flex items-center gap-2">
@@ -763,10 +817,13 @@ function HomeView({
           {/* Tissus traditionnels */}
           <button
             type="button"
-            onClick={() =>
+            onClick={() => {
+              trackEvent("click_category", {
+                category: "Tissus spécifiques et traditionnels",
+              });
               onSelectCategory &&
-              onSelectCategory("Tissus spécifiques et traditionnels")
-            }
+                onSelectCategory("Tissus spécifiques et traditionnels");
+            }}
             className="flex flex-col items-start rounded-2xl border bg-white p-4 text-left hover:border-blue-500 hover:shadow-sm"
           >
             <div className="flex items-center gap-2">
@@ -980,7 +1037,14 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
                   {hasImages && (
                     <button
                       type="button"
-                      onClick={() => onOpenLightbox(p.images, 0)}
+                      onClick={() => {
+                        trackEvent("click_produit_image", {
+                          product_id: p.id,
+                          product_name: p.name,
+                          location: "catalogue",
+                        });
+                        onOpenLightbox(p.images, 0);
+                      }}
                       className="group relative mb-3 block w-full overflow-hidden rounded-xl"
                       aria-label={`Voir les photos de ${p.name}`}
                     >
@@ -1026,6 +1090,13 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
                     href={waLink}
                     target="_blank"
                     rel="noreferrer"
+                    onClick={() =>
+                      trackEvent("click_devis", {
+                        product_id: p.id,
+                        product_name: p.name,
+                        location: "catalogue",
+                      })
+                    }
                     className="mt-3 inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
                   >
                     Demander un devis sur WhatsApp
@@ -1052,6 +1123,12 @@ function SupplierSignupView() {
 
   const submit = (e) => {
     e.preventDefault();
+    trackEvent("supplier_form_submit", {
+      name_filled: !!name,
+      city_filled: !!city,
+      country_filled: !!country,
+      whatsapp_filled: !!whatsapp,
+    });
     alert(
       `Merci !\n\nNom: ${name}\nVille: ${city}\nPays: ${country}\nWhatsApp: ${whatsapp}\n\nL’équipe EasyTex vous recontactera.`
     );
@@ -1312,7 +1389,7 @@ function PrivacyView() {
 }
 
 /* -----------------------------------------------------------
-   APP PRINCIPALE (avec historique + bouton Retour)
+   APP PRINCIPALE (avec historique + bouton Retour + tracking)
 ----------------------------------------------------------- */
 
 export default function App() {
@@ -1328,6 +1405,33 @@ export default function App() {
 
   const historyRef = useRef([]);
   const [historyLength, setHistoryLength] = useState(0);
+
+  // Tracking scroll 70% (une seule fois)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    let fired = false;
+
+    const onScroll = () => {
+      if (fired) return;
+      const scrollTop =
+        window.scrollY || document.documentElement.scrollTop || 0;
+      const docHeight =
+        document.documentElement.scrollHeight -
+        document.documentElement.clientHeight;
+
+      if (docHeight <= 0) return;
+      const ratio = scrollTop / docHeight;
+
+      if (ratio >= 0.7) {
+        fired = true;
+        trackEvent("scroll_70", {});
+        window.removeEventListener("scroll", onScroll);
+      }
+    };
+
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const pushHistory = () => {
     const currentScroll =
@@ -1365,6 +1469,11 @@ export default function App() {
         window.scrollTo({ top: 0, behavior: "auto" });
       }
 
+      // Event navigation interne
+      trackEvent("click_nav", {
+        target_tab: key,
+      });
+
       return key;
     });
   };
@@ -1382,6 +1491,10 @@ export default function App() {
         window.scrollTo({ top: last.scrollY || 0, behavior: "auto" });
       }, 0);
     }
+
+    trackEvent("click_back", {
+      to_tab: last.tab,
+    });
   };
 
   const openLightbox = (images, startIndex = 0) => {
@@ -1405,6 +1518,10 @@ export default function App() {
 
   const handleNewsletterSubmit = (e) => {
     e.preventDefault();
+    trackEvent("newsletter_submit", {
+      has_email: !!newsletterEmail,
+      location: "footer",
+    });
     alert(
       newsletterEmail
         ? `Merci ! Votre adresse (${newsletterEmail}) a bien été enregistrée localement.\n\nLa fonctionnalité newsletter sera activée prochainement.`
@@ -1459,6 +1576,11 @@ export default function App() {
               href={`https://wa.me/${WA_NUMBER}`}
               target="_blank"
               rel="noreferrer"
+              onClick={() =>
+                trackEvent("click_whatsapp", {
+                  location: "header_desktop",
+                })
+              }
               className="hidden items-center justify-center rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 sm:inline-flex"
             >
               WhatsApp
@@ -1469,6 +1591,11 @@ export default function App() {
               href={`https://wa.me/${WA_NUMBER}`}
               target="_blank"
               rel="noreferrer"
+              onClick={() =>
+                trackEvent("click_whatsapp", {
+                  location: "header_mobile",
+                })
+              }
               className="inline-flex items-center justify-center rounded-full bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 sm:hidden"
             >
               WhatsApp
@@ -1477,7 +1604,13 @@ export default function App() {
             {/* Bouton hamburger mobile */}
             <button
               type="button"
-              onClick={() => setMobileNavOpen((v) => !v)}
+              onClick={() => {
+                const next = !mobileNavOpen;
+                setMobileNavOpen(next);
+                trackEvent("toggle_mobile_menu", {
+                  open: next,
+                });
+              }}
               className="inline-flex items-center justify-center rounded-md border px-2 py-2 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 sm:hidden"
             >
               <span className="sr-only">Ouvrir le menu</span>
@@ -1626,6 +1759,11 @@ export default function App() {
               href={`https://wa.me/${WA_NUMBER}`}
               target="_blank"
               rel="noreferrer"
+              onClick={() =>
+                trackEvent("click_whatsapp", {
+                  location: "footer_contact",
+                })
+              }
               className="text-gray-600 hover:text-gray-900 underline-offset-2 hover:underline"
             >
               Contact WhatsApp
@@ -1639,6 +1777,11 @@ export default function App() {
         href={`https://wa.me/${WA_NUMBER}`}
         target="_blank"
         rel="noreferrer"
+        onClick={() =>
+          trackEvent("click_whatsapp", {
+            location: "floating_button",
+          })
+        }
         className="fixed bottom-4 right-4 z-30 flex h-12 w-12 items-center justify-center rounded-full bg-green-500 text-white shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
       >
         <span className="sr-only">Contacter EasyTex sur WhatsApp</span>
