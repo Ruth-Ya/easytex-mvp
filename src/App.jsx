@@ -87,7 +87,7 @@ const DEMO_PRODUCTS = [
     weight: "Moyen",
     pattern: "Uni",
     images: ["/p5-1.jpg", "/p5-2.jpg"],
-    featured: false,
+    featured: true, // ajouté dans les top tissus
   },
   {
     id: "p6",
@@ -101,7 +101,7 @@ const DEMO_PRODUCTS = [
     weight: "Lourd",
     pattern: "Uni",
     images: ["/p6-1.jpg", "/p6-2.jpg"],
-    featured: false,
+    featured: true, // ajouté dans les top tissus
   },
   {
     id: "p7",
@@ -307,7 +307,8 @@ function HomeView({
 }) {
   const [heroIndex, setHeroIndex] = useState(0);
   const [featuredIndex, setFeaturedIndex] = useState(0);
-  const [activeStat, setActiveStat] = useState(null);
+  const [openStat, setOpenStat] = useState(null);
+
   const featuredContainerRef = useRef(null);
 
   const slides = [
@@ -333,7 +334,7 @@ function HomeView({
 
   const featuredProducts = DEMO_PRODUCTS.filter((p) => p.featured);
 
-  // Auto-défilement "Top tissus de la semaine"
+  // Auto-défilement des top tissus – uniquement mobile et quand on est en haut
   useEffect(() => {
     if (!featuredProducts.length) return;
 
@@ -341,15 +342,20 @@ function HomeView({
       setFeaturedIndex((prev) => {
         const next = (prev + 1) % featuredProducts.length;
 
-        if (featuredContainerRef.current) {
-          const container = featuredContainerRef.current;
-          const card = container.children[next];
-          if (card && card.scrollIntoView) {
-            card.scrollIntoView({
-              behavior: "smooth",
-              inline: "center",
-              block: "nearest",
-            });
+        if (typeof window !== "undefined") {
+          const isMobile = window.innerWidth < 768;
+          const isNearTop = window.scrollY < 400;
+
+          if (isMobile && isNearTop && featuredContainerRef.current) {
+            const container = featuredContainerRef.current;
+            const card = container.children[next];
+            if (card && card.scrollIntoView) {
+              card.scrollIntoView({
+                behavior: "smooth",
+                inline: "center",
+                block: "nearest",
+              });
+            }
           }
         }
 
@@ -359,35 +365,6 @@ function HomeView({
 
     return () => clearInterval(interval);
   }, [featuredProducts.length]);
-
-  // Contenus détaillés pour les stats
-  const stats = [
-    {
-      key: "tissus",
-      value: "100",
-      label: "Tissus disponibles",
-      detail:
-        "EasyTex démarre avec une sélection de tissus représentatifs : bazin, wax, popeline, pagne tissé, indigo, velours, etc. L’objectif est de construire progressivement un catalogue structuré, plutôt que de lister des milliers d’articles difficiles à comparer.",
-    },
-    {
-      key: "uemoa",
-      value: "UEMOA",
-      label: "Zone desservie",
-      detail:
-        "Les fournisseurs référencés sur EasyTex sont basés au Sénégal et dans différents pays de la zone UEMOA. Selon vos besoins, nous pouvons proposer des solutions de livraison avec des partenaires logistiques régionaux.",
-    },
-    {
-      key: "delai",
-      value: "24–48h",
-      label: "Délai de réponse",
-      detail:
-        "Lorsque vous demandez un devis, les fournisseurs sont encouragés à répondre sous 24 à 48h avec un prix indicatif, les minimums de commande et les délais d’acheminement. EasyTex suit ces délais pour améliorer la qualité du service.",
-    },
-  ];
-
-  const activeStatObj = activeStat
-    ? stats.find((s) => s.key === activeStat)
-    : null;
 
   return (
     <div className="mx-auto max-w-6xl px-4 pb-16">
@@ -412,7 +389,7 @@ function HomeView({
               ref={featuredContainerRef}
               className="flex gap-4 pb-2"
             >
-              {featuredProducts.map((p) => {
+              {featuredProducts.map((p, idx) => {
                 const waText = encodeURIComponent(
                   `Bonjour EasyTex,\n\nJe souhaite un devis pour :\n- ${p.name}\n- Catégorie : ${p.category}\n- Matière : ${p.material}\n- Poids : ${p.weight}\n- Motif / aspect : ${p.pattern}\n- Couleur : ${p.color}\n- Origine : ${p.origin}\n- Prix indicatif : ${formatPrice(
                     p.price
@@ -424,10 +401,17 @@ function HomeView({
                     ? p.images[0]
                     : null;
 
+                const isActive = idx === featuredIndex;
+
                 return (
                   <div
                     key={p.id}
-                    className="min-w-[220px] max-w-[260px] flex-1 rounded-2xl border bg-white p-3"
+                    className={
+                      "min-w-[220px] max-w-[260px] flex-1 rounded-2xl border bg-white p-3 transition-transform duration-300 " +
+                      (isActive
+                        ? "border-blue-500 shadow-md scale-[1.02]"
+                        : "border-gray-200")
+                    }
                   >
                     {firstImage && (
                       <button
@@ -531,33 +515,84 @@ function HomeView({
         </div>
       </div>
 
-      {/* STATS CLiquables */}
+      {/* STATS CLIQUABLES */}
       <section className="mt-6">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {stats.map((stat) => (
-            <button
-              key={stat.key}
-              type="button"
-              onClick={() => setActiveStat(stat.key)}
-              className={`rounded-2xl border p-4 text-left transition ${
-                activeStat === stat.key
-                  ? "border-blue-500 shadow-sm"
-                  : "border-gray-200"
-              }`}
-            >
-              <div className="text-3xl font-extrabold text-gray-900">
-                {stat.value}
-              </div>
-              <div className="text-gray-600">{stat.label}</div>
-            </button>
-          ))}
+          <button
+            type="button"
+            onClick={() =>
+              setOpenStat(openStat === "tissus" ? null : "tissus")
+            }
+            className={
+              "rounded-2xl border p-4 text-left transition " +
+              (openStat === "tissus"
+                ? "border-blue-500 shadow-sm"
+                : "border-gray-200")
+            }
+          >
+            <div className="text-3xl font-extrabold text-gray-900">100</div>
+            <div className="text-gray-600">Tissus disponibles</div>
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              setOpenStat(openStat === "zone" ? null : "zone")
+            }
+            className={
+              "rounded-2xl border p-4 text-left transition " +
+              (openStat === "zone"
+                ? "border-blue-500 shadow-sm"
+                : "border-gray-200")
+            }
+          >
+            <div className="text-3xl font-extrabold text-gray-900">UEMOA</div>
+            <div className="text-gray-600">Zone desservie</div>
+          </button>
+          <button
+            type="button"
+            onClick={() =>
+              setOpenStat(openStat === "delai" ? null : "delai")
+            }
+            className={
+              "rounded-2xl border p-4 text-left transition " +
+              (openStat === "delai"
+                ? "border-blue-500 shadow-sm"
+                : "border-gray-200")
+            }
+          >
+            <div className="text-3xl font-extrabold text-gray-900">
+              24–48h
+            </div>
+            <div className="text-gray-600">Délai de réponse</div>
+          </button>
         </div>
 
-        {activeStatObj && (
-          <div className="mt-3 rounded-2xl border bg-gray-50 p-4 text-sm text-gray-700">
-            {activeStatObj.detail}
-          </div>
-        )}
+        <div className="mt-4 space-y-3 text-sm text-gray-700">
+          {openStat === "tissus" && (
+            <p>
+              EasyTex démarre avec une sélection d’une centaine de références
+              représentatives (bazin, wax, indigo, popeline, linge de maison,
+              ameublement…). L’objectif est d’enrichir progressivement le
+              catalogue avec de nouveaux fournisseurs et gammes de produits.
+            </p>
+          )}
+          {openStat === "zone" && (
+            <p>
+              La plateforme cible en priorité les pays de l’UEMOA. Les
+              fournisseurs peuvent être basés au Sénégal, en Côte d’Ivoire,
+              au Mali, au Bénin, etc. Les livraisons sont organisées
+              directement entre acheteurs et fournisseurs, avec le soutien de
+              partenaires logistiques lorsque nécessaire.
+            </p>
+          )}
+          {openStat === "delai" && (
+            <p>
+              Le délai de réponse indicatif pour une demande de devis est de
+              24 à 48 heures ouvrées. Il peut varier selon la complexité de la
+              demande et la disponibilité du fournisseur.
+            </p>
+          )}
+        </div>
       </section>
 
       {/* COMMENT ÇA MARCHE */}
@@ -595,7 +630,7 @@ function HomeView({
 
       {/* CATÉGORIES DE TISSUS */}
       <section className="mt-10">
-        <div className="mb-4 flex items中心 justify-between">
+        <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-semibold text-gray-900">
             Catégories de tissus
           </h2>
