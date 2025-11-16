@@ -299,7 +299,12 @@ function Lightbox({
    HOME
 ----------------------------------------------------------- */
 
-function HomeView({ onGoCatalogue, onOpenSupplier, onOpenLightbox }) {
+function HomeView({
+  onGoCatalogue,
+  onOpenSupplier,
+  onOpenLightbox,
+  onSelectCategory,
+}) {
   const [heroIndex, setHeroIndex] = useState(0);
 
   const slides = [
@@ -327,7 +332,7 @@ function HomeView({ onGoCatalogue, onOpenSupplier, onOpenLightbox }) {
 
   return (
     <div className="mx-auto max-w-6xl px-4 pb-16">
-      {/* TOP TISSUS DE LA SEMAINE : maintenant en premier, juste sous le header */}
+      {/* TOP TISSUS DE LA SEMAINE */}
       {featuredProducts.length > 0 && (
         <section className="mt-6">
           <div className="mb-3 flex items-center justify-between">
@@ -410,7 +415,7 @@ function HomeView({ onGoCatalogue, onOpenSupplier, onOpenLightbox }) {
         </section>
       )}
 
-      {/* HERO SLIDER (Sourcing textile…) : maintenant après les top tissus */}
+      {/* HERO SLIDER */}
       <div className="mt-6 relative overflow-hidden rounded-3xl border bg-blue-50 p-6 md:p-16">
         <div className="max-w-3xl">
           <span className="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-sm ring-1 ring-gray-200">
@@ -513,7 +518,7 @@ function HomeView({ onGoCatalogue, onOpenSupplier, onOpenLightbox }) {
         </div>
       </section>
 
-      {/* CATÉGORIES DE TISSUS (GRILLE) */}
+      {/* CATÉGORIES DE TISSUS */}
       <section className="mt-10">
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-xl font-semibold text-gray-900">
@@ -529,9 +534,13 @@ function HomeView({ onGoCatalogue, onOpenSupplier, onOpenLightbox }) {
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
+          {/* Tissus habillement */}
           <button
             type="button"
-            onClick={onGoCatalogue}
+            onClick={() =>
+              onSelectCategory &&
+              onSelectCategory("Tissus habillement")
+            }
             className="flex flex-col items-start rounded-2xl border bg-white p-4 text-left hover:border-blue-500 hover:shadow-sm"
           >
             <div className="flex items-center gap-2">
@@ -546,9 +555,13 @@ function HomeView({ onGoCatalogue, onOpenSupplier, onOpenLightbox }) {
             </p>
           </button>
 
+          {/* Maison & linge */}
           <button
             type="button"
-            onClick={onGoCatalogue}
+            onClick={() =>
+              onSelectCategory &&
+              onSelectCategory("Tissus Maison et Linge")
+            }
             className="flex flex-col items-start rounded-2xl border bg-white p-4 text-left hover:border-blue-500 hover:shadow-sm"
           >
             <div className="flex items-center gap-2">
@@ -563,9 +576,13 @@ function HomeView({ onGoCatalogue, onOpenSupplier, onOpenLightbox }) {
             </p>
           </button>
 
+          {/* Ameublement & déco */}
           <button
             type="button"
-            onClick={onGoCatalogue}
+            onClick={() =>
+              onSelectCategory &&
+              onSelectCategory("Tissus Ameublement et Décoration")
+            }
             className="flex flex-col items-start rounded-2xl border bg-white p-4 text-left hover:border-blue-500 hover:shadow-sm"
           >
             <div className="flex items-center gap-2">
@@ -580,9 +597,13 @@ function HomeView({ onGoCatalogue, onOpenSupplier, onOpenLightbox }) {
             </p>
           </button>
 
+          {/* Tissus traditionnels */}
           <button
             type="button"
-            onClick={onGoCatalogue}
+            onClick={() =>
+              onSelectCategory &&
+              onSelectCategory("Tissus spécifiques et traditionnels")
+            }
             className="flex flex-col items-start rounded-2xl border bg-white p-4 text-left hover:border-blue-500 hover:shadow-sm"
           >
             <div className="flex items-center gap-2">
@@ -606,12 +627,17 @@ function HomeView({ onGoCatalogue, onOpenSupplier, onOpenLightbox }) {
    CATALOGUE + FILTRES + IMAGES (LIGHTBOX)
 ----------------------------------------------------------- */
 
-function CatalogView({ onOpenLightbox }) {
-  const [category, setCategory] = useState("Toutes");
+function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
+  const [category, setCategory] = useState(initialCategory);
   const [material, setMaterial] = useState("Tous");
   const [weight, setWeight] = useState("Tous");
   const [pattern, setPattern] = useState("Tous");
   const [search, setSearch] = useState("");
+
+  // synchroniser si initialCategory change (via clic sur carte)
+  useEffect(() => {
+    setCategory(initialCategory);
+  }, [initialCategory]);
 
   const categories = [
     "Toutes",
@@ -945,7 +971,7 @@ function SupplierSignupView() {
 }
 
 /* -----------------------------------------------------------
-   FAQ / CGU / POLITIQUE (inchangés)
+   FAQ / CGU / POLITIQUE
 ----------------------------------------------------------- */
 
 function FaqView() {
@@ -954,8 +980,49 @@ function FaqView() {
       <h1 className="mb-4 text-2xl font-semibold text-gray-900">
         FAQ – EasyTex
       </h1>
-      {/* ... contenu identique à la version précédente ... */}
-      {/* (je n'ai rien modifié dans FAQ / CGU / Politique) */}
+      <div className="space-y-4 text-sm text-gray-700">
+        <div>
+          <h2 className="font-semibold">
+            EasyTex est-il un site de vente en ligne ?
+          </h2>
+          <p className="mt-1">
+            EasyTex est une plateforme de mise en relation. Nous aidons les
+            acheteurs à trouver des fournisseurs de textile adaptés à leurs
+            besoins, puis les échanges se font directement entre vous et le
+            fournisseur (WhatsApp, téléphone, etc.).
+          </p>
+        </div>
+        <div>
+          <h2 className="font-semibold">
+            Comment sont définis les prix indiqués ?
+          </h2>
+          <p className="mt-1">
+            Les prix affichés sont indicatifs. Ils peuvent varier en fonction de
+            la quantité, des options de finition, des délais et des conditions
+            de livraison. Le prix final est confirmé par le fournisseur lors du
+            devis.
+          </p>
+        </div>
+        <div>
+          <h2 className="font-semibold">
+            EasyTex intervient-il dans le paiement ou la livraison ?
+          </h2>
+          <p className="mt-1">
+            Non. EasyTex ne gère ni le paiement ni la logistique. Ces aspects
+            sont à convenir directement avec le fournisseur choisi.
+          </p>
+        </div>
+        <div>
+          <h2 className="font-semibold">
+            Comment devenir fournisseur sur EasyTex ?
+          </h2>
+          <p className="mt-1">
+            Remplissez le formulaire dans la section « Devenir fournisseur ». Un
+            membre de l’équipe EasyTex vous contactera pour valider votre
+            profil.
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
@@ -966,7 +1033,55 @@ function CguView() {
       <h1 className="mb-4 text-2xl font-semibold text-gray-900">
         Conditions Générales d’Utilisation – EasyTex
       </h1>
-      {/* ... contenu identique à la version précédente ... */}
+      <div className="space-y-4 text-sm text-gray-700">
+        <p>
+          Les présentes Conditions Générales d’Utilisation (CGU) encadrent
+          l’accès à la plateforme EasyTex et son utilisation par les
+          utilisateurs (acheteurs et fournisseurs).
+        </p>
+        <div>
+          <h2 className="font-semibold">1. Objet de la plateforme</h2>
+          <p className="mt-1">
+            EasyTex met en relation des professionnels et particuliers en
+            recherche de textile avec des fournisseurs. La plateforme ne vend
+            pas directement de produits et n’est pas partie aux contrats
+            conclus entre acheteurs et fournisseurs.
+          </p>
+        </div>
+        <div>
+          <h2 className="font-semibold">2. Utilisation du service</h2>
+          <p className="mt-1">
+            L’utilisateur s’engage à fournir des informations exactes, à
+            respecter les lois en vigueur et à ne pas utiliser EasyTex à des
+            fins frauduleuses ou illicites.
+          </p>
+        </div>
+        <div>
+          <h2 className="font-semibold">3. Responsabilités</h2>
+          <p className="mt-1">
+            EasyTex ne peut être tenu responsable de la qualité des produits,
+            des délais, des paiements ou de tout litige commercial entre
+            acheteurs et fournisseurs. La responsabilité d’EasyTex se limite au
+            bon fonctionnement raisonnable de la plateforme.
+          </p>
+        </div>
+        <div>
+          <h2 className="font-semibold">4. Données personnelles</h2>
+          <p className="mt-1">
+            Les données collectées dans le cadre de l’utilisation de la
+            plateforme sont traitées conformément à la Politique de
+            confidentialité d’EasyTex.
+          </p>
+        </div>
+        <div>
+          <h2 className="font-semibold">5. Modification des CGU</h2>
+          <p className="mt-1">
+            EasyTex se réserve le droit de modifier les présentes CGU. La
+            version en vigueur est celle publiée sur le site au moment de votre
+            navigation.
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
@@ -977,7 +1092,56 @@ function PrivacyView() {
       <h1 className="mb-4 text-2xl font-semibold text-gray-900">
         Politique de confidentialité – EasyTex
       </h1>
-      {/* ... contenu identique à la version précédente ... */}
+      <div className="space-y-4 text-sm text-gray-700">
+        <p>
+          Cette Politique de confidentialité explique comment EasyTex collecte,
+          utilise et protège vos données personnelles lorsque vous utilisez la
+          plateforme.
+        </p>
+        <div>
+          <h2 className="font-semibold">1. Données collectées</h2>
+          <p className="mt-1">
+            Nous pouvons collecter : votre nom, vos coordonnées (e-mail,
+            téléphone), votre numéro WhatsApp, ainsi que les informations
+            nécessaires au traitement de vos demandes de devis ou de votre
+            inscription comme fournisseur.
+          </p>
+        </div>
+        <div>
+          <h2 className="font-semibold">2. Finalités</h2>
+          <p className="mt-1">
+            Ces données sont utilisées pour : répondre à vos demandes, vous
+            mettre en relation avec des fournisseurs, améliorer le service et,
+            le cas échéant, vous envoyer des informations sur EasyTex (si vous y
+            avez consenti).
+          </p>
+        </div>
+        <div>
+          <h2 className="font-semibold">3. Partage des données</h2>
+          <p className="mt-1">
+            Certaines informations peuvent être partagées avec des fournisseurs
+            partenaires lorsque c’est nécessaire pour traiter votre demande.
+            EasyTex ne vend pas vos données personnelles.
+          </p>
+        </div>
+        <div>
+          <h2 className="font-semibold">4. Sécurité & conservation</h2>
+          <p className="mt-1">
+            Nous mettons en œuvre des mesures raisonnables de sécurité pour
+            protéger vos données et les conservons pendant une durée limitée,
+            proportionnée aux finalités poursuivies.
+          </p>
+        </div>
+        <div>
+          <h2 className="font-semibold">5. Vos droits</h2>
+          <p className="mt-1">
+            Vous disposez d’un droit d’accès, de rectification et, le cas
+            échéant, de suppression de vos données personnelles, dans les
+            limites prévues par la réglementation applicable. Pour exercer vos
+            droits, contactez-nous via le formulaire ou WhatsApp.
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
@@ -995,10 +1159,16 @@ export default function App() {
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
   const [newsletterEmail, setNewsletterEmail] = useState("");
+  const [catalogCategory, setCatalogCategory] = useState("Toutes");
 
-  const switchTo = (key) => {
+  const switchTo = (key, options = {}) => {
     setTab(key);
     setMobileNavOpen(false);
+
+    if (key === "catalogue" && options.category) {
+      setCatalogCategory(options.category);
+    }
+
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -1036,6 +1206,7 @@ export default function App() {
       {/* HEADER */}
       <header className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3">
+          {/* Logo */}
           <button
             onClick={() => switchTo("accueil")}
             className="flex items-center rounded-md pr-1 sm:pr-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
@@ -1048,6 +1219,7 @@ export default function App() {
             />
           </button>
 
+          {/* NAV DESKTOP */}
           <nav className="hidden flex-1 justify-center gap-2 text-sm sm:flex">
             {[
               { key: "accueil", label: "Accueil" },
@@ -1068,7 +1240,9 @@ export default function App() {
             ))}
           </nav>
 
+          {/* Zone droite : WA + menu hamburger */}
           <div className="flex items-center gap-2">
+            {/* WhatsApp desktop */}
             <a
               href={`https://wa.me/${WA_NUMBER}`}
               target="_blank"
@@ -1078,6 +1252,7 @@ export default function App() {
               WhatsApp
             </a>
 
+            {/* WhatsApp mobile */}
             <a
               href={`https://wa.me/${WA_NUMBER}`}
               target="_blank"
@@ -1087,6 +1262,7 @@ export default function App() {
               WhatsApp
             </a>
 
+            {/* Bouton hamburger mobile */}
             <button
               type="button"
               onClick={() => setMobileNavOpen((v) => !v)}
@@ -1109,6 +1285,7 @@ export default function App() {
           </div>
         </div>
 
+        {/* Menu mobile déroulant */}
         {mobileNavOpen && (
           <div className="border-t bg-white sm:hidden">
             <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-2">
@@ -1140,10 +1317,14 @@ export default function App() {
           onGoCatalogue={() => switchTo("catalogue")}
           onOpenSupplier={() => switchTo("fournisseurs")}
           onOpenLightbox={openLightbox}
+          onSelectCategory={(cat) => switchTo("catalogue", { category: cat })}
         />
       )}
       {tab === "catalogue" && (
-        <CatalogView onOpenLightbox={openLightbox} />
+        <CatalogView
+          onOpenLightbox={openLightbox}
+          initialCategory={catalogCategory}
+        />
       )}
       {tab === "fournisseurs" && <SupplierSignupView />}
       {tab === "faq" && <FaqView />}
@@ -1152,6 +1333,7 @@ export default function App() {
 
       {/* FOOTER */}
       <footer className="mt-10 w-full border-t bg-white">
+        {/* Bandeau newsletter */}
         <div className="border-b bg-blue-50">
           <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-4 py-6 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left">
             <div>
@@ -1184,6 +1366,7 @@ export default function App() {
           </div>
         </div>
 
+        {/* Bas de page */}
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-6 text-center text-sm text-gray-600 sm:flex-row">
           <div>© EasyTex 2025 – Tous droits réservés</div>
           <div className="flex flex-wrap justify-center gap-4">
