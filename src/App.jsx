@@ -1,5 +1,5 @@
 // src/App.jsx
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 /* -----------------------------------------------------------
    CONFIG
@@ -306,6 +306,9 @@ function HomeView({
   onSelectCategory,
 }) {
   const [heroIndex, setHeroIndex] = useState(0);
+  const [featuredIndex, setFeaturedIndex] = useState(0);
+  const [activeStat, setActiveStat] = useState(null);
+  const featuredContainerRef = useRef(null);
 
   const slides = [
     {
@@ -330,6 +333,62 @@ function HomeView({
 
   const featuredProducts = DEMO_PRODUCTS.filter((p) => p.featured);
 
+  // Auto-défilement "Top tissus de la semaine"
+  useEffect(() => {
+    if (!featuredProducts.length) return;
+
+    const interval = setInterval(() => {
+      setFeaturedIndex((prev) => {
+        const next = (prev + 1) % featuredProducts.length;
+
+        if (featuredContainerRef.current) {
+          const container = featuredContainerRef.current;
+          const card = container.children[next];
+          if (card && card.scrollIntoView) {
+            card.scrollIntoView({
+              behavior: "smooth",
+              inline: "center",
+              block: "nearest",
+            });
+          }
+        }
+
+        return next;
+      });
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [featuredProducts.length]);
+
+  // Contenus détaillés pour les stats
+  const stats = [
+    {
+      key: "tissus",
+      value: "100",
+      label: "Tissus disponibles",
+      detail:
+        "EasyTex démarre avec une sélection de tissus représentatifs : bazin, wax, popeline, pagne tissé, indigo, velours, etc. L’objectif est de construire progressivement un catalogue structuré, plutôt que de lister des milliers d’articles difficiles à comparer.",
+    },
+    {
+      key: "uemoa",
+      value: "UEMOA",
+      label: "Zone desservie",
+      detail:
+        "Les fournisseurs référencés sur EasyTex sont basés au Sénégal et dans différents pays de la zone UEMOA. Selon vos besoins, nous pouvons proposer des solutions de livraison avec des partenaires logistiques régionaux.",
+    },
+    {
+      key: "delai",
+      value: "24–48h",
+      label: "Délai de réponse",
+      detail:
+        "Lorsque vous demandez un devis, les fournisseurs sont encouragés à répondre sous 24 à 48h avec un prix indicatif, les minimums de commande et les délais d’acheminement. EasyTex suit ces délais pour améliorer la qualité du service.",
+    },
+  ];
+
+  const activeStatObj = activeStat
+    ? stats.find((s) => s.key === activeStat)
+    : null;
+
   return (
     <div className="mx-auto max-w-6xl px-4 pb-16">
       {/* TOP TISSUS DE LA SEMAINE */}
@@ -349,7 +408,10 @@ function HomeView({
           </div>
 
           <div className="overflow-x-auto">
-            <div className="flex gap-4 pb-2">
+            <div
+              ref={featuredContainerRef}
+              className="flex gap-4 pb-2"
+            >
               {featuredProducts.map((p) => {
                 const waText = encodeURIComponent(
                   `Bonjour EasyTex,\n\nJe souhaite un devis pour :\n- ${p.name}\n- Catégorie : ${p.category}\n- Matière : ${p.material}\n- Poids : ${p.weight}\n- Motif / aspect : ${p.pattern}\n- Couleur : ${p.color}\n- Origine : ${p.origin}\n- Prix indicatif : ${formatPrice(
@@ -469,20 +531,33 @@ function HomeView({
         </div>
       </div>
 
-      {/* STATS */}
-      <section className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <div className="rounded-2xl border p-4">
-          <div className="text-3xl font-extrabold text-gray-900">100</div>
-          <div className="text-gray-600">Tissus disponibles</div>
+      {/* STATS CLiquables */}
+      <section className="mt-6">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {stats.map((stat) => (
+            <button
+              key={stat.key}
+              type="button"
+              onClick={() => setActiveStat(stat.key)}
+              className={`rounded-2xl border p-4 text-left transition ${
+                activeStat === stat.key
+                  ? "border-blue-500 shadow-sm"
+                  : "border-gray-200"
+              }`}
+            >
+              <div className="text-3xl font-extrabold text-gray-900">
+                {stat.value}
+              </div>
+              <div className="text-gray-600">{stat.label}</div>
+            </button>
+          ))}
         </div>
-        <div className="rounded-2xl border p-4">
-          <div className="text-3xl font-extrabold text-gray-900">UEMOA</div>
-          <div className="text-gray-600">Zone desservie</div>
-        </div>
-        <div className="rounded-2xl border p-4">
-          <div className="text-3xl font-extrabold text-gray-900">24–48h</div>
-          <div className="text-gray-600">Délai de réponse</div>
-        </div>
+
+        {activeStatObj && (
+          <div className="mt-3 rounded-2xl border bg-gray-50 p-4 text-sm text-gray-700">
+            {activeStatObj.detail}
+          </div>
+        )}
       </section>
 
       {/* COMMENT ÇA MARCHE */}
@@ -520,7 +595,7 @@ function HomeView({
 
       {/* CATÉGORIES DE TISSUS */}
       <section className="mt-10">
-        <div className="mb-4 flex items-center justify-between">
+        <div className="mb-4 flex items中心 justify-between">
           <h2 className="text-xl font-semibold text-gray-900">
             Catégories de tissus
           </h2>
