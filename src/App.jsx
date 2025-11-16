@@ -32,6 +32,8 @@ const DEMO_PRODUCTS = [
     pattern: "Uni",
     images: ["/p1-1.jpg", "/p1-2.jpg"],
     featured: true,
+    supplierCity: "Dakar",
+    supplierCountry: "Sénégal",
   },
   {
     id: "p2",
@@ -46,6 +48,8 @@ const DEMO_PRODUCTS = [
     pattern: "Imprimé Wax",
     images: ["/p2-1.jpg", "/p2-2.jpg"],
     featured: true,
+    supplierCity: "Abidjan",
+    supplierCountry: "Côte d’Ivoire",
   },
   {
     id: "p3",
@@ -60,6 +64,8 @@ const DEMO_PRODUCTS = [
     pattern: "Uni",
     images: ["/p3-1.jpg", "/p3-2.jpg"],
     featured: true,
+    supplierCity: "Dakar",
+    supplierCountry: "Sénégal",
   },
   {
     id: "p4",
@@ -74,6 +80,8 @@ const DEMO_PRODUCTS = [
     pattern: "Rayé",
     images: ["/p4-1.jpg", "/p4-2.jpg"],
     featured: true,
+    supplierCity: "Bouaké",
+    supplierCountry: "Côte d’Ivoire",
   },
   {
     id: "p5",
@@ -87,7 +95,9 @@ const DEMO_PRODUCTS = [
     weight: "Moyen",
     pattern: "Uni",
     images: ["/p5-1.jpg", "/p5-2.jpg"],
-    featured: true, // ajouté dans les top tissus
+    featured: false,
+    supplierCity: "Bamako",
+    supplierCountry: "Mali",
   },
   {
     id: "p6",
@@ -101,7 +111,9 @@ const DEMO_PRODUCTS = [
     weight: "Lourd",
     pattern: "Uni",
     images: ["/p6-1.jpg", "/p6-2.jpg"],
-    featured: true, // ajouté dans les top tissus
+    featured: false,
+    supplierCity: "Accra",
+    supplierCountry: "Ghana",
   },
   {
     id: "p7",
@@ -116,6 +128,8 @@ const DEMO_PRODUCTS = [
     pattern: "Jacquard",
     images: ["/p7-1.jpg", "/p7-2.jpg"],
     featured: false,
+    supplierCity: "Dakar",
+    supplierCountry: "Sénégal",
   },
   {
     id: "p8",
@@ -130,6 +144,8 @@ const DEMO_PRODUCTS = [
     pattern: "Uni",
     images: ["/p8-1.jpg", "/p8-2.jpg"],
     featured: false,
+    supplierCity: "Thiès",
+    supplierCountry: "Sénégal",
   },
   {
     id: "p9",
@@ -144,6 +160,8 @@ const DEMO_PRODUCTS = [
     pattern: "Uni",
     images: ["/p9-1.jpg", "/p9-2.jpg"],
     featured: false,
+    supplierCity: "Lisbonne",
+    supplierCountry: "Portugal",
   },
 ];
 
@@ -217,7 +235,7 @@ function Lightbox({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
       <div className="absolute inset-0" onClick={onClose} />
-      <div className="relative z-10 flex max-h-[90vh] max-w-[92vw] flex-col items-center px-4">
+      <div className="relative z-10 flex max-h=[90vh] max-w-[92vw] flex-col items-center px-4">
         <button
           onClick={onClose}
           className="absolute right-0 top-[-3rem] rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-gray-700 shadow hover:bg-white"
@@ -306,10 +324,7 @@ function HomeView({
   onSelectCategory,
 }) {
   const [heroIndex, setHeroIndex] = useState(0);
-  const [featuredIndex, setFeaturedIndex] = useState(0);
-  const [openStat, setOpenStat] = useState(null);
-
-  const featuredContainerRef = useRef(null);
+  const [openStat, setOpenStat] = useState("tissus");
 
   const slides = [
     {
@@ -334,35 +349,23 @@ function HomeView({
 
   const featuredProducts = DEMO_PRODUCTS.filter((p) => p.featured);
 
-  // Auto-défilement des top tissus – uniquement mobile et quand on est en haut
+  const statDescriptions = {
+    tissus:
+      "EasyTex référence progressivement une base de tissus variés : habillement, maison, ameublement et tissus traditionnels. L’objectif est de couvrir les besoins des ateliers, créateurs, hôtels, écoles, événements, etc.",
+    zone:
+      "La plateforme cible en priorité les pays de l’UEMOA. Les fournisseurs peuvent être basés dans différents pays de la zone, et EasyTex vise à faciliter les mises en relation et les solutions logistiques.",
+    delai:
+      "Une fois votre demande envoyée via WhatsApp, EasyTex et/ou les fournisseurs partenaires s’efforcent de vous répondre dans un délai indicatif de 24 à 48 heures ouvrées.",
+  };
+
+  // auto-slide Top tissus sur mobile uniquement
+  const [topIndex, setTopIndex] = useState(0);
   useEffect(() => {
-    if (!featuredProducts.length) return;
-
+    const isMobile = window.innerWidth < 640;
+    if (!isMobile || featuredProducts.length === 0) return;
     const interval = setInterval(() => {
-      setFeaturedIndex((prev) => {
-        const next = (prev + 1) % featuredProducts.length;
-
-        if (typeof window !== "undefined") {
-          const isMobile = window.innerWidth < 768;
-          const isNearTop = window.scrollY < 400;
-
-          if (isMobile && isNearTop && featuredContainerRef.current) {
-            const container = featuredContainerRef.current;
-            const card = container.children[next];
-            if (card && card.scrollIntoView) {
-              card.scrollIntoView({
-                behavior: "smooth",
-                inline: "center",
-                block: "nearest",
-              });
-            }
-          }
-        }
-
-        return next;
-      });
-    }, 5000);
-
+      setTopIndex((prev) => (prev + 1) % featuredProducts.length);
+    }, 4500);
     return () => clearInterval(interval);
   }, [featuredProducts.length]);
 
@@ -384,14 +387,42 @@ function HomeView({
             </button>
           </div>
 
-          <div className="overflow-x-auto">
-            <div
-              ref={featuredContainerRef}
-              className="flex gap-4 pb-2"
-            >
+          <div className="relative overflow-x-auto">
+            {/* Flèches desktop */}
+            {featuredProducts.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setTopIndex(
+                      (prev) =>
+                        (prev - 1 + featuredProducts.length) %
+                        featuredProducts.length
+                    )
+                  }
+                  className="absolute left-0 top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-white/90 p-2 text-gray-700 shadow hover:bg-white sm:inline-flex"
+                >
+                  ←
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setTopIndex(
+                      (prev) =>
+                        (prev + 1) % featuredProducts.length
+                    )
+                  }
+                  className="absolute right-0 top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-white/90 p-2 text-gray-700 shadow hover:bg-white sm:inline-flex"
+                >
+                  →
+                </button>
+              </>
+            )}
+
+            <div className="flex gap-4 pb-2">
               {featuredProducts.map((p, idx) => {
                 const waText = encodeURIComponent(
-                  `Bonjour EasyTex,\n\nJe souhaite un devis pour :\n- ${p.name}\n- Catégorie : ${p.category}\n- Matière : ${p.material}\n- Poids : ${p.weight}\n- Motif / aspect : ${p.pattern}\n- Couleur : ${p.color}\n- Origine : ${p.origin}\n- Prix indicatif : ${formatPrice(
+                  `Bonjour EasyTex,\n\nJe souhaite un devis pour :\n- ${p.name}\n- Catégorie : ${p.category}\n- Matière : ${p.material}\n- Poids : ${p.weight}\n- Motif / aspect : ${p.pattern}\n- Couleur : ${p.color}\n- Origine : ${p.origin}\n- Fournisseur : ${p.supplierCity}, ${p.supplierCountry}\n- Prix indicatif : ${formatPrice(
                     p.price
                   )}\n\nMerci de me préciser les minimums de commande, délais et conditions de livraison.`
                 );
@@ -401,17 +432,12 @@ function HomeView({
                     ? p.images[0]
                     : null;
 
-                const isActive = idx === featuredIndex;
-
+                // On peut éventuellement mettre en avant la carte correspondant à topIndex,
+                // mais on garde ici un style uniforme.
                 return (
                   <div
                     key={p.id}
-                    className={
-                      "min-w-[220px] max-w-[260px] flex-1 rounded-2xl border bg-white p-3 transition-transform duration-300 " +
-                      (isActive
-                        ? "border-blue-500 shadow-md scale-[1.02]"
-                        : "border-gray-200")
-                    }
+                    className="min-w-[220px] max-w-[260px] flex-1 rounded-2xl border bg-white p-3"
                   >
                     {firstImage && (
                       <button
@@ -441,6 +467,9 @@ function HomeView({
                     </div>
                     <div className="mt-1 text-xs text-gray-600">
                       {p.material} • {p.weight}
+                    </div>
+                    <div className="mt-1 text-xs text-gray-600">
+                      {p.supplierCity}, {p.supplierCountry}
                     </div>
                     <div className="mt-1 text-base font-extrabold text-gray-900">
                       {formatPrice(p.price)}
@@ -515,83 +544,84 @@ function HomeView({
         </div>
       </div>
 
-      {/* STATS CLIQUABLES */}
+      {/* STATS */}
       <section className="mt-6">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <button
-            type="button"
-            onClick={() =>
-              setOpenStat(openStat === "tissus" ? null : "tissus")
-            }
-            className={
-              "rounded-2xl border p-4 text-left transition " +
-              (openStat === "tissus"
-                ? "border-blue-500 shadow-sm"
-                : "border-gray-200")
-            }
-          >
-            <div className="text-3xl font-extrabold text-gray-900">100</div>
-            <div className="text-gray-600">Tissus disponibles</div>
-          </button>
-          <button
-            type="button"
-            onClick={() =>
-              setOpenStat(openStat === "zone" ? null : "zone")
-            }
-            className={
-              "rounded-2xl border p-4 text-left transition " +
-              (openStat === "zone"
-                ? "border-blue-500 shadow-sm"
-                : "border-gray-200")
-            }
-          >
-            <div className="text-3xl font-extrabold text-gray-900">UEMOA</div>
-            <div className="text-gray-600">Zone desservie</div>
-          </button>
-          <button
-            type="button"
-            onClick={() =>
-              setOpenStat(openStat === "delai" ? null : "delai")
-            }
-            className={
-              "rounded-2xl border p-4 text-left transition " +
-              (openStat === "delai"
-                ? "border-blue-500 shadow-sm"
-                : "border-gray-200")
-            }
-          >
-            <div className="text-3xl font-extrabold text-gray-900">
-              24–48h
-            </div>
-            <div className="text-gray-600">Délai de réponse</div>
-          </button>
+          {/* TISSUS */}
+          <div className="flex flex-col">
+            <button
+              type="button"
+              onClick={() =>
+                setOpenStat((prev) => (prev === "tissus" ? "" : "tissus"))
+              }
+              className={`rounded-2xl border p-4 text-left transition ${
+                openStat === "tissus"
+                  ? "border-blue-500 bg-blue-50"
+                  : "hover:border-blue-300"
+              }`}
+            >
+              <div className="text-3xl font-extrabold text-gray-900">100</div>
+              <div className="text-gray-600">Tissus disponibles</div>
+            </button>
+            {openStat === "tissus" && (
+              <p className="mt-2 text-xs text-gray-700 sm:hidden">
+                {statDescriptions.tissus}
+              </p>
+            )}
+          </div>
+
+          {/* UEMOA */}
+          <div className="flex flex-col">
+            <button
+              type="button"
+              onClick={() =>
+                setOpenStat((prev) => (prev === "zone" ? "" : "zone"))
+              }
+              className={`rounded-2xl border p-4 text-left transition ${
+                openStat === "zone"
+                  ? "border-blue-500 bg-blue-50"
+                  : "hover:border-blue-300"
+              }`}
+            >
+              <div className="text-3xl font-extrabold text-gray-900">UEMOA</div>
+              <div className="text-gray-600">Zone desservie</div>
+            </button>
+            {openStat === "zone" && (
+              <p className="mt-2 text-xs text-gray-700 sm:hidden">
+                {statDescriptions.zone}
+              </p>
+            )}
+          </div>
+
+          {/* DÉLAI */}
+          <div className="flex flex-col">
+            <button
+              type="button"
+              onClick={() =>
+                setOpenStat((prev) => (prev === "delai" ? "" : "delai"))
+              }
+              className={`rounded-2xl border p-4 text-left transition ${
+                openStat === "delai"
+                  ? "border-blue-500 bg-blue-50"
+                  : "hover:border-blue-300"
+              }`}
+            >
+              <div className="text-3xl font-extrabold text-gray-900">
+                24–48h
+              </div>
+              <div className="text-gray-600">Délai de réponse</div>
+            </button>
+            {openStat === "delai" && (
+              <p className="mt-2 text-xs text-gray-700 sm:hidden">
+                {statDescriptions.delai}
+              </p>
+            )}
+          </div>
         </div>
 
-        <div className="mt-4 space-y-3 text-sm text-gray-700">
-          {openStat === "tissus" && (
-            <p>
-              EasyTex démarre avec une sélection d’une centaine de références
-              représentatives (bazin, wax, indigo, popeline, linge de maison,
-              ameublement…). L’objectif est d’enrichir progressivement le
-              catalogue avec de nouveaux fournisseurs et gammes de produits.
-            </p>
-          )}
-          {openStat === "zone" && (
-            <p>
-              La plateforme cible en priorité les pays de l’UEMOA. Les
-              fournisseurs peuvent être basés au Sénégal, en Côte d’Ivoire,
-              au Mali, au Bénin, etc. Les livraisons sont organisées
-              directement entre acheteurs et fournisseurs, avec le soutien de
-              partenaires logistiques lorsque nécessaire.
-            </p>
-          )}
-          {openStat === "delai" && (
-            <p>
-              Le délai de réponse indicatif pour une demande de devis est de
-              24 à 48 heures ouvrées. Il peut varier selon la complexité de la
-              demande et la disponibilité du fournisseur.
-            </p>
-          )}
+        {/* Texte explicatif desktop */}
+        <div className="mt-4 hidden text-sm text-gray-700 sm:block">
+          {openStat && <p>{statDescriptions[openStat]}</p>}
         </div>
       </section>
 
@@ -744,7 +774,6 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
   const [pattern, setPattern] = useState("Tous");
   const [search, setSearch] = useState("");
 
-  // synchroniser si initialCategory change (via clic sur carte)
   useEffect(() => {
     setCategory(initialCategory);
   }, [initialCategory]);
@@ -911,7 +940,7 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {filteredProducts.map((p) => {
               const waText = encodeURIComponent(
-                `Bonjour EasyTex,\n\nJe souhaite un devis pour :\n- ${p.name}\n- Catégorie : ${p.category}\n- Matière : ${p.material}\n- Poids : ${p.weight}\n- Motif / aspect : ${p.pattern}\n- Couleur : ${p.color}\n- Origine : ${p.origin}\n- Prix indicatif : ${formatPrice(
+                `Bonjour EasyTex,\n\nJe souhaite un devis pour :\n- ${p.name}\n- Catégorie : ${p.category}\n- Matière : ${p.material}\n- Poids : ${p.weight}\n- Motif / aspect : ${p.pattern}\n- Couleur : ${p.color}\n- Origine : ${p.origin}\n- Fournisseur : ${p.supplierCity}, ${p.supplierCountry}\n- Prix indicatif : ${formatPrice(
                   p.price
                 )}\n\nMerci de me préciser les minimums de commande, délais et conditions de livraison.`
               );
@@ -959,7 +988,10 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
                     {p.material} • {p.weight} • {p.pattern}
                   </div>
                   <div className="mt-1 text-xs text-gray-600">
-                    {p.type} • {p.color} • {p.origin}
+                    {p.type} • {p.color} • Origine : {p.origin}
+                  </div>
+                  <div className="mt-1 text-xs text-gray-600">
+                    Fournisseur : {p.supplierCity}, {p.supplierCountry}
                   </div>
                   <div className="mt-2 text-lg font-extrabold text-gray-900">
                     {formatPrice(p.price)}
@@ -1257,7 +1289,7 @@ function PrivacyView() {
 }
 
 /* -----------------------------------------------------------
-   APP PRINCIPALE
+   APP PRINCIPALE (avec historique + bouton Retour)
 ----------------------------------------------------------- */
 
 export default function App() {
@@ -1271,15 +1303,62 @@ export default function App() {
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [catalogCategory, setCatalogCategory] = useState("Toutes");
 
+  const historyRef = useRef([]);
+  const [historyLength, setHistoryLength] = useState(0);
+
+  const pushHistory = () => {
+    const currentScroll =
+      typeof window !== "undefined" ? window.scrollY || 0 : 0;
+    historyRef.current.push({
+      tab,
+      catalogCategory,
+      scrollY: currentScroll,
+    });
+    setHistoryLength(historyRef.current.length);
+  };
+
   const switchTo = (key, options = {}) => {
-    setTab(key);
-    setMobileNavOpen(false);
+    const { category, push = true } = options;
 
-    if (key === "catalogue" && options.category) {
-      setCatalogCategory(options.category);
+    setTab((currentTab) => {
+      if (currentTab === key) return currentTab;
+
+      if (push) {
+        const currentScroll =
+          typeof window !== "undefined" ? window.scrollY || 0 : 0;
+        historyRef.current.push({
+          tab: currentTab,
+          catalogCategory,
+          scrollY: currentScroll,
+        });
+        setHistoryLength(historyRef.current.length);
+      }
+
+      if (key === "catalogue" && category) {
+        setCatalogCategory(category);
+      }
+
+      if (typeof window !== "undefined") {
+        window.scrollTo({ top: 0, behavior: "auto" });
+      }
+
+      return key;
+    });
+  };
+
+  const goBack = () => {
+    const last = historyRef.current.pop();
+    if (!last) return;
+    setHistoryLength(historyRef.current.length);
+
+    setCatalogCategory(last.catalogCategory || "Toutes");
+    setTab(last.tab);
+
+    if (typeof window !== "undefined") {
+      setTimeout(() => {
+        window.scrollTo({ top: last.scrollY || 0, behavior: "auto" });
+      }, 0);
     }
-
-    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const openLightbox = (images, startIndex = 0) => {
@@ -1406,7 +1485,10 @@ export default function App() {
               ].map((item) => (
                 <button
                   key={item.key}
-                  onClick={() => switchTo(item.key)}
+                  onClick={() => {
+                    setMobileNavOpen(false);
+                    switchTo(item.key);
+                  }}
                   className={`w-full rounded-full px-4 py-2 text-left text-sm font-medium ${
                     tab === item.key
                       ? "bg-black text-white"
@@ -1421,13 +1503,29 @@ export default function App() {
         )}
       </header>
 
+      {/* BOUTON RETOUR */}
+      {historyLength > 0 && (
+        <div className="mx-auto max-w-6xl px-4 pt-3">
+          <button
+            type="button"
+            onClick={goBack}
+            className="inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-medium text-gray-700 hover:bg-gray-100"
+          >
+            <span>←</span>
+            <span>Retour</span>
+          </button>
+        </div>
+      )}
+
       {/* CONTENU */}
       {tab === "accueil" && (
         <HomeView
           onGoCatalogue={() => switchTo("catalogue")}
           onOpenSupplier={() => switchTo("fournisseurs")}
           onOpenLightbox={openLightbox}
-          onSelectCategory={(cat) => switchTo("catalogue", { category: cat })}
+          onSelectCategory={(cat) =>
+            switchTo("catalogue", { category: cat })
+          }
         />
       )}
       {tab === "catalogue" && (
