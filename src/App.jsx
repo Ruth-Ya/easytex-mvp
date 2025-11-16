@@ -433,8 +433,7 @@ function HomeView({
                   type="button"
                   onClick={() =>
                     setTopIndex(
-                      (prev) =>
-                        (prev + 1) % featuredProducts.length
+                      (prev) => (prev + 1) % featuredProducts.length
                     )
                   }
                   className="absolute right-0 top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-white/90 p-2 text-gray-700 shadow hover:bg-white sm:inline-flex"
@@ -1533,7 +1532,7 @@ export default function App() {
           <button
             type="button"
             onClick={goBack}
-            className="inline-flex items-center gap-1 rounded-full border px-3 py-1 text-xs font-medium text-gray-700 hover:bg-gray-100"
+            className="inline-flex items-center gap-1 rounded-full bg-blue-600 px-3 py-1 text-xs font-medium text-white hover:bg-blue-700"
           >
             <span>←</span>
             <span>Retour</span>
