@@ -6,7 +6,7 @@ import React, { useState, useEffect, useRef } from "react";
 ----------------------------------------------------------- */
 
 const WA_NUMBER = "221707546281";
-const GA_MEASUREMENT_ID = "G-3N99WM3PW2";
+const GA_MEASUREMENT_ID = "G-3N99WM3PW2"; // (pas utilisé directement ici, mais gardé)
 
 /**
  * Helper simple pour envoyer des events GA4
@@ -106,7 +106,6 @@ const DEMO_PRODUCTS = [
     weight: "Moyen",
     pattern: "Uni",
     images: ["/p5-1.jpg", "/p5-2.jpg"],
-    // AJOUTÉ EN TOP DE LA SEMAINE
     featured: true,
     supplierCity: "Bamako",
     supplierCountry: "Mali",
@@ -123,7 +122,6 @@ const DEMO_PRODUCTS = [
     weight: "Lourd",
     pattern: "Uni",
     images: ["/p6-1.jpg", "/p6-2.jpg"],
-    // AJOUTÉ EN TOP DE LA SEMAINE
     featured: true,
     supplierCity: "Accra",
     supplierCountry: "Ghana",
@@ -263,15 +261,27 @@ function Lightbox({
           onTouchEnd={handleTouchEnd}
         >
           {total > 1 && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onPrev?.();
-              }}
-              className="absolute left-[-2.5rem] hidden rounded-full bg-white/90 p-2 text-gray-700 shadow hover:bg-white sm:inline-flex"
-            >
-              <span className="text-lg">←</span>
-            </button>
+            <>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onPrev?.();
+                }}
+                className="absolute left-[-2.5rem] hidden rounded-full bg-white/90 p-2 text-gray-700 shadow hover:bg-white sm:inline-flex"
+              >
+                <span className="text-lg">←</span>
+              </button>
+
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onNext?.();
+                }}
+                className="absolute right-[-2.5rem] hidden rounded-full bg-white/90 p-2 text-gray-700 shadow hover:bg-white sm:inline-flex"
+              >
+                <span className="text-lg">→</span>
+              </button>
+            </>
           )}
 
           <img
@@ -283,18 +293,6 @@ function Lightbox({
               e.currentTarget.src = "/logo-easytex.png";
             }}
           />
-
-          {total > 1 && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onNext?.();
-              }}
-              className="absolute right-[-2.5rem] hidden rounded-full bg-white/90 p-2 text-gray-700 shadow hover:bg-white sm:inline-flex"
-            >
-              <span className="text-lg">→</span>
-            </button>
-          )}
         </div>
 
         {total > 1 && (
@@ -371,11 +369,9 @@ function HomeView({
       "Une fois votre demande envoyée via WhatsApp, EasyTex et/ou les fournisseurs partenaires s’efforcent de vous répondre dans un délai indicatif de 24 à 48 heures ouvrées.",
   };
 
-  /* ---------- CARROUSEL TOP TISSUS (auto + manuel) ---------- */
   const [topIndex, setTopIndex] = useState(0);
   const topCarouselRef = useRef(null);
 
-  // Auto-défilement (mobile + desktop)
   useEffect(() => {
     if (featuredProducts.length <= 1) return;
     const interval = setInterval(() => {
@@ -384,7 +380,6 @@ function HomeView({
     return () => clearInterval(interval);
   }, [featuredProducts.length]);
 
-  // Scroll horizontal vers la carte courante
   useEffect(() => {
     const container = topCarouselRef.current;
     if (!container) return;
@@ -429,7 +424,6 @@ function HomeView({
           </div>
 
           <div className="relative overflow-x-hidden">
-            {/* Flèches desktop */}
             {featuredProducts.length > 1 && (
               <>
                 <button
@@ -586,7 +580,6 @@ function HomeView({
             </button>
           </div>
 
-          {/* Dots slider + texte explicatif */}
           <div className="mt-6">
             <div className="flex gap-2">
               {slides.map((_, i) => (
@@ -611,7 +604,6 @@ function HomeView({
       {/* STATS */}
       <section className="mt-6">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-          {/* TISSUS */}
           <div className="flex flex-col">
             <button
               type="button"
@@ -634,7 +626,6 @@ function HomeView({
             )}
           </div>
 
-          {/* UEMOA */}
           <div className="flex flex-col">
             <button
               type="button"
@@ -657,7 +648,6 @@ function HomeView({
             )}
           </div>
 
-          {/* DÉLAI */}
           <div className="flex flex-col">
             <button
               type="button"
@@ -683,7 +673,6 @@ function HomeView({
           </div>
         </div>
 
-        {/* Texte explicatif desktop */}
         <div className="mt-4 hidden text-sm text-gray-700 sm:block">
           {openStat && <p>{statDescriptions[openStat]}</p>}
         </div>
@@ -724,7 +713,7 @@ function HomeView({
 
       {/* CATÉGORIES DE TISSUS */}
       <section className="mt-10">
-        <div className="mb-4 flex items-baseline justify-between gap-2">
+        <div className="mb-4 flex items-baseline justify_between gap-2">
           <h2 className="text-xl font-semibold text-gray-900">
             Catégories de tissus
           </h2>
@@ -743,7 +732,6 @@ function HomeView({
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-          {/* Tissus habillement */}
           <button
             type="button"
             onClick={() => {
@@ -767,7 +755,6 @@ function HomeView({
             </p>
           </button>
 
-          {/* Maison & linge */}
           <button
             type="button"
             onClick={() => {
@@ -777,7 +764,7 @@ function HomeView({
               onSelectCategory &&
                 onSelectCategory("Tissus Maison et Linge");
             }}
-            className="flex flex-col items-start rounded-2xl border bg-white p-4 text-left hover:border-blue-500 hover:shadow-sm"
+            className="flex flex-col items-start rounded-2xl border bg_white p-4 text-left hover:border-blue-500 hover:shadow-sm"
           >
             <div className="flex items-center gap-2">
               <span className="text-2xl">🛏️</span>
@@ -791,7 +778,6 @@ function HomeView({
             </p>
           </button>
 
-          {/* Ameublement & déco */}
           <button
             type="button"
             onClick={() => {
@@ -814,7 +800,6 @@ function HomeView({
             </p>
           </button>
 
-          {/* Tissus traditionnels */}
           <button
             type="button"
             onClick={() => {
@@ -907,7 +892,6 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
           varier selon la quantité, la finition et les délais.
         </p>
 
-        {/* RECHERCHE */}
         <div className="mb-4">
           <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-700">
             Rechercher un tissu
@@ -938,7 +922,6 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
           </div>
         </div>
 
-        {/* FILTRES */}
         <div className="mb-6 grid grid-cols-1 gap-3 rounded-2xl border bg-gray-50 p-4 md:grid-cols-4">
           <div>
             <label className="mb-1 block text-xs font-semibold uppercase tracking-wide text-gray-700">
@@ -1009,7 +992,6 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
           </div>
         </div>
 
-        {/* CARTES PRODUITS */}
         {filteredProducts.length === 0 ? (
           <div className="rounded-2xl border bg-white p-6 text-sm text-gray-600">
             Aucun tissu ne correspond à ces filtres pour l’instant. Essayez de
@@ -1112,7 +1094,7 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
 }
 
 /* -----------------------------------------------------------
-   FORMULAIRE FOURNISSEUR
+   FORMULAIRE FOURNISSEUR (Web3Forms)
 ----------------------------------------------------------- */
 
 function SupplierSignupView() {
@@ -1121,21 +1103,63 @@ function SupplierSignupView() {
   const [country, setCountry] = useState("");
   const [whatsapp, setWhatsapp] = useState("");
 
-  const submit = (e) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [statusMessage, setStatusMessage] = useState("");
+
+  const submit = async (e) => {
     e.preventDefault();
+
     trackEvent("supplier_form_submit", {
       name_filled: !!name,
       city_filled: !!city,
       country_filled: !!country,
       whatsapp_filled: !!whatsapp,
     });
-    alert(
-      `Merci !\n\nNom: ${name}\nVille: ${city}\nPays: ${country}\nWhatsApp: ${whatsapp}\n\nL’équipe EasyTex vous recontactera.`
-    );
-    setName("");
-    setCity("");
-    setCountry("");
-    setWhatsapp("");
+
+    setIsSubmitting(true);
+    setStatusMessage("");
+
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: "41654f90-15fc-4f00-9741-80a0917e0f77",
+          subject: "Nouvelle demande fournisseur EasyTex",
+          from_name: "EasyTex Website",
+          form_name: "Supplier Signup",
+          entreprise: name,
+          ville: city,
+          pays: country,
+          whatsapp: whatsapp,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        setStatusMessage(
+          "Merci ! Votre demande a bien été envoyée. L’équipe EasyTex vous recontactera sur WhatsApp."
+        );
+        setName("");
+        setCity("");
+        setCountry("");
+        setWhatsapp("");
+      } else {
+        setStatusMessage(
+          "Une erreur est survenue lors de l’envoi du formulaire. Merci de réessayer dans quelques instants."
+        );
+      }
+    } catch (err) {
+      setStatusMessage(
+        "Erreur réseau : impossible d’envoyer le formulaire pour le moment. Vérifiez votre connexion et réessayez."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -1198,12 +1222,19 @@ function SupplierSignupView() {
             />
           </div>
 
+          {statusMessage && (
+            <p className="md:col-span-2 text-sm text-gray-700">
+              {statusMessage}
+            </p>
+          )}
+
           <div className="md:col-span-2 flex justify-start">
             <button
               type="submit"
-              className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+              disabled={isSubmitting}
+              className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              Envoyer ma demande
+              {isSubmitting ? "Envoi en cours..." : "Envoyer ma demande"}
             </button>
           </div>
         </form>
@@ -1235,7 +1266,7 @@ function FaqView() {
           </p>
         </div>
         <div>
-          <h2 className="font-semibold">
+          <h2 className="font_semibold">
             Comment sont définis les prix indiqués ?
           </h2>
           <p className="mt-1">
@@ -1389,7 +1420,7 @@ function PrivacyView() {
 }
 
 /* -----------------------------------------------------------
-   APP PRINCIPALE (avec historique + bouton Retour + tracking)
+   APP PRINCIPALE
 ----------------------------------------------------------- */
 
 export default function App() {
@@ -1406,7 +1437,6 @@ export default function App() {
   const historyRef = useRef([]);
   const [historyLength, setHistoryLength] = useState(0);
 
-  // Tracking scroll 70% (une seule fois)
   useEffect(() => {
     if (typeof window === "undefined") return;
     let fired = false;
@@ -1469,7 +1499,6 @@ export default function App() {
         window.scrollTo({ top: 0, behavior: "auto" });
       }
 
-      // Event navigation interne
       trackEvent("click_nav", {
         target_tab: key,
       });
@@ -1516,18 +1545,50 @@ export default function App() {
       lightboxImages.length ? (i + 1) % lightboxImages.length : 0
     );
 
-  const handleNewsletterSubmit = (e) => {
+  const handleNewsletterSubmit = async (e) => {
     e.preventDefault();
+
     trackEvent("newsletter_submit", {
       has_email: !!newsletterEmail,
       location: "footer",
     });
-    alert(
-      newsletterEmail
-        ? `Merci ! Votre adresse (${newsletterEmail}) a bien été enregistrée localement.\n\nLa fonctionnalité newsletter sera activée prochainement.`
-        : "Merci ! La fonctionnalité newsletter sera activée prochainement."
-    );
-    setNewsletterEmail("");
+
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify({
+          access_key: "41654f90-15fc-4f00-9741-80a0917e0f77",
+          subject: "Nouvelle inscription newsletter EasyTex",
+          from_name: "EasyTex Website",
+          form_name: "Newsletter",
+          email: newsletterEmail || "non renseigné",
+        }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        alert(
+          newsletterEmail
+            ? `Merci ! Votre adresse (${newsletterEmail}) a bien été enregistrée.`
+            : "Merci ! Votre inscription a bien été enregistrée."
+        );
+      } else {
+        alert(
+          "Une erreur est survenue lors de l’inscription à la newsletter. Merci de réessayer."
+        );
+      }
+    } catch (err) {
+      alert(
+        "Erreur réseau : impossible d’envoyer le formulaire pour le moment. Vérifiez votre connexion et réessayez."
+      );
+    } finally {
+      setNewsletterEmail("");
+    }
   };
 
   return (
@@ -1535,7 +1596,6 @@ export default function App() {
       {/* HEADER */}
       <header className="sticky top-0 z-40 border-b bg-white/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
-          {/* Logo */}
           <button
             onClick={() => switchTo("accueil")}
             className="flex items-center rounded-md pr-1 sm:pr-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
@@ -1548,7 +1608,6 @@ export default function App() {
             />
           </button>
 
-          {/* NAV DESKTOP */}
           <nav className="hidden flex-1 justify-center gap-2 text-sm sm:flex">
             {[
               { key: "accueil", label: "Accueil" },
@@ -1569,9 +1628,7 @@ export default function App() {
             ))}
           </nav>
 
-          {/* Zone droite : WA + menu hamburger */}
           <div className="ml-2 flex items-center gap-2 sm:ml-4">
-            {/* WhatsApp desktop */}
             <a
               href={`https://wa.me/${WA_NUMBER}`}
               target="_blank"
@@ -1586,7 +1643,6 @@ export default function App() {
               WhatsApp
             </a>
 
-            {/* WhatsApp mobile */}
             <a
               href={`https://wa.me/${WA_NUMBER}`}
               target="_blank"
@@ -1596,12 +1652,11 @@ export default function App() {
                   location: "header_mobile",
                 })
               }
-              className="inline-flex items-center justify-center rounded-full bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 sm:hidden"
+              className="inline-flex items-center justify-center rounded_full bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 sm:hidden"
             >
               WhatsApp
             </a>
 
-            {/* Bouton hamburger mobile */}
             <button
               type="button"
               onClick={() => {
@@ -1630,7 +1685,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* Menu mobile déroulant */}
         {mobileNavOpen && (
           <div className="border-t bg-white sm:hidden">
             <nav className="mx-auto flex max-w-6xl flex-col gap-1 px-4 py-2">
@@ -1659,7 +1713,6 @@ export default function App() {
         )}
       </header>
 
-      {/* BOUTON RETOUR */}
       {historyLength > 0 && (
         <div className="mx-auto max-w-6xl px-4 pt-3">
           <button
@@ -1673,7 +1726,6 @@ export default function App() {
         </div>
       )}
 
-      {/* CONTENU */}
       {tab === "accueil" && (
         <HomeView
           onGoCatalogue={() => switchTo("catalogue")}
@@ -1695,9 +1747,7 @@ export default function App() {
       {tab === "cgu" && <CguView />}
       {tab === "privacy" && <PrivacyView />}
 
-      {/* FOOTER */}
       <footer className="mt-10 w-full border-t bg-white">
-        {/* Bandeau newsletter */}
         <div className="border-b bg-blue-50">
           <div className="mx-auto flex max-w-6xl flex-col items-center gap-3 px-4 py-6 text-center sm:flex-row sm:items-center sm:justify-between sm:text-left">
             <div>
@@ -1730,7 +1780,6 @@ export default function App() {
           </div>
         </div>
 
-        {/* Bas de page */}
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-6 text-center text-sm text-gray-600 sm:flex-row">
           <div>© EasyTex 2025 – Tous droits réservés</div>
           <div className="flex flex-wrap justify-center gap-4">
@@ -1772,7 +1821,6 @@ export default function App() {
         </div>
       </footer>
 
-      {/* BOUTON WHATSAPP FLOTTANT */}
       <a
         href={`https://wa.me/${WA_NUMBER}`}
         target="_blank"
@@ -1788,7 +1836,6 @@ export default function App() {
         <span className="text-xl">W</span>
       </a>
 
-      {/* LIGHTBOX GLOBAL */}
       <Lightbox
         open={lightboxOpen}
         images={lightboxImages}
