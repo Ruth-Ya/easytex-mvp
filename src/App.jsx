@@ -514,12 +514,23 @@ function HomeView({
                       <button
                         type="button"
                         onClick={() => {
+                          if (
+                            typeof window !== "undefined" &&
+                            window.fbq
+                          ) {
+                            window.fbq("trackCustom", "ProductView", {
+                              product_id: p.id,
+                              product_name: p.name,
+                              location: "top_tissus",
+                            });
+                          }
                           trackEvent("click_produit_image", {
                             product_id: p.id,
                             product_name: p.name,
                             location: "top_tissus",
                           });
-                          onOpenLightbox && onOpenLightbox(p.images, 0, p);
+                          onOpenLightbox &&
+                            onOpenLightbox(p.images, 0, p);
                         }}
                         className="mb-2 block w-full overflow-hidden rounded-xl"
                         aria-label={`Voir les photos de ${p.name}`}
@@ -540,12 +551,23 @@ function HomeView({
                     <button
                       type="button"
                       onClick={() => {
+                        if (
+                          typeof window !== "undefined" &&
+                          window.fbq
+                        ) {
+                          window.fbq("trackCustom", "ProductView", {
+                            product_id: p.id,
+                            product_name: p.name,
+                            location: "top_tissus",
+                          });
+                        }
                         trackEvent("click_produit_image", {
                           product_id: p.id,
                           product_name: p.name,
                           location: "top_tissus",
                         });
-                        onOpenLightbox && onOpenLightbox(p.images, 0, p);
+                        onOpenLightbox &&
+                          onOpenLightbox(p.images, 0, p);
                       }}
                       className="w-full text-left"
                     >
@@ -570,13 +592,28 @@ function HomeView({
                       href={waLink}
                       target="_blank"
                       rel="noreferrer"
-                      onClick={() =>
+                      onClick={() => {
+                        if (
+                          typeof window !== "undefined" &&
+                          window.fbq
+                        ) {
+                          window.fbq("trackCustom", "WhatsAppClick", {
+                            product_id: p.id,
+                            product_name: p.name,
+                            location: "top_tissus",
+                          });
+                          window.fbq("trackCustom", "RequestQuote", {
+                            product_id: p.id,
+                            product_name: p.name,
+                            location: "top_tissus",
+                          });
+                        }
                         trackEvent("click_devis", {
                           product_id: p.id,
                           product_name: p.name,
                           location: "top_tissus",
-                        })
-                      }
+                        });
+                      }}
                       className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700"
                     >
                       Demander un devis
@@ -1073,6 +1110,16 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
                     <button
                       type="button"
                       onClick={() => {
+                        if (
+                          typeof window !== "undefined" &&
+                          window.fbq
+                        ) {
+                          window.fbq("trackCustom", "ProductView", {
+                            product_id: p.id,
+                            product_name: p.name,
+                            location: "catalogue",
+                          });
+                        }
                         trackEvent("click_produit_image", {
                           product_id: p.id,
                           product_name: p.name,
@@ -1092,7 +1139,7 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
                           e.currentTarget.src = "/logo-easytex.png";
                         }}
                       />
-                      <div className="pointer-events-none absolute inset-0 flex items-end justify-between bg-gradient-to-t from-black/50 via-black/0 to-black/0 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                      <div className="pointer-events-none absolute inset-0 flex items-end justify_between bg-gradient-to-t from-black/50 via-black/0 to-black/0 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
                         <span className="m-2 rounded-full bg-black/70 px-3 py-1 text-xs font-medium text-white">
                           Voir les photos ({p.images.length})
                         </span>
@@ -1104,6 +1151,16 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
                   <button
                     type="button"
                     onClick={() => {
+                      if (
+                        typeof window !== "undefined" &&
+                        window.fbq
+                      ) {
+                        window.fbq("trackCustom", "ProductView", {
+                          product_id: p.id,
+                          product_name: p.name,
+                          location: "catalogue",
+                        });
+                      }
                       trackEvent("click_produit_image", {
                         product_id: p.id,
                         product_name: p.name,
@@ -1139,13 +1196,28 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
                     href={waLink}
                     target="_blank"
                     rel="noreferrer"
-                    onClick={() =>
+                    onClick={() => {
+                      if (
+                        typeof window !== "undefined" &&
+                        window.fbq
+                      ) {
+                        window.fbq("trackCustom", "WhatsAppClick", {
+                          product_id: p.id,
+                          product_name: p.name,
+                          location: "catalogue",
+                        });
+                        window.fbq("trackCustom", "RequestQuote", {
+                          product_id: p.id,
+                          product_name: p.name,
+                          location: "catalogue",
+                        });
+                      }
                       trackEvent("click_devis", {
                         product_id: p.id,
                         product_name: p.name,
                         location: "catalogue",
-                      })
-                    }
+                      });
+                    }}
                     className="mt-3 inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
                   >
                     Demander un devis sur WhatsApp
@@ -1182,6 +1254,26 @@ function SupplierSignupView() {
       country_filled: !!country,
       whatsapp_filled: !!whatsapp,
     });
+
+    // META PIXEL – Conversion fournisseur
+    if (typeof window !== "undefined" && window.fbq) {
+      window.fbq("trackCustom", "SupplierSignup", {
+        name_filled: !!name,
+        city_filled: !!city,
+        country_filled: !!country,
+        whatsapp_filled: !!whatsapp,
+      });
+    }
+
+    // GA4 – Événement dédié fournisseurs
+    if (typeof window !== "undefined" && window.gtag) {
+      window.gtag("event", "supplier_signup", {
+        name_filled: !!name,
+        city_filled: !!city,
+        country_filled: !!country,
+        whatsapp_filled: !!whatsapp,
+      });
+    }
 
     setIsSubmitting(true);
     setStatusMessage("");
@@ -1708,11 +1800,16 @@ export default function App() {
               href={`https://wa.me/${WA_NUMBER}`}
               target="_blank"
               rel="noreferrer"
-              onClick={() =>
+              onClick={() => {
+                if (typeof window !== "undefined" && window.fbq) {
+                  window.fbq("trackCustom", "WhatsAppClick", {
+                    location: "header_desktop",
+                  });
+                }
                 trackEvent("click_whatsapp", {
                   location: "header_desktop",
-                })
-              }
+                });
+              }}
               className="hidden items-center justify-center rounded-full bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 sm:inline-flex"
             >
               WhatsApp
@@ -1722,11 +1819,16 @@ export default function App() {
               href={`https://wa.me/${WA_NUMBER}`}
               target="_blank"
               rel="noreferrer"
-              onClick={() =>
+              onClick={() => {
+                if (typeof window !== "undefined" && window.fbq) {
+                  window.fbq("trackCustom", "WhatsAppClick", {
+                    location: "header_mobile",
+                  });
+                }
                 trackEvent("click_whatsapp", {
                   location: "header_mobile",
-                })
-              }
+                });
+              }}
               className="inline-flex items-center justify-center rounded_full bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 sm:hidden"
             >
               WhatsApp
@@ -1883,11 +1985,16 @@ export default function App() {
               href={`https://wa.me/${WA_NUMBER}`}
               target="_blank"
               rel="noreferrer"
-              onClick={() =>
+              onClick={() => {
+                if (typeof window !== "undefined" && window.fbq) {
+                  window.fbq("trackCustom", "WhatsAppClick", {
+                    location: "footer_contact",
+                  });
+                }
                 trackEvent("click_whatsapp", {
                   location: "footer_contact",
-                })
-              }
+                });
+              }}
               className="text-gray-600 hover:text-gray-900 underline-offset-2 hover:underline"
             >
               Contact WhatsApp
@@ -1900,11 +2007,16 @@ export default function App() {
         href={`https://wa.me/${WA_NUMBER}`}
         target="_blank"
         rel="noreferrer"
-        onClick={() =>
+        onClick={() => {
+          if (typeof window !== "undefined" && window.fbq) {
+            window.fbq("trackCustom", "WhatsAppClick", {
+              location: "floating_button",
+            });
+          }
           trackEvent("click_whatsapp", {
             location: "floating_button",
-          })
-        }
+          });
+        }}
         className="fixed bottom-4 right-4 z-30 flex h-12 w-12 items-center justify-center rounded-full bg-green-500 text-white shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
       >
         <span className="sr-only">Contacter EasyTex sur WhatsApp</span>
