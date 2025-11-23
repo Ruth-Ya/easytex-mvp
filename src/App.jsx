@@ -335,7 +335,9 @@ function HomeView({
   onSelectCategory,
 }) {
   const [heroIndex, setHeroIndex] = useState(0);
-  const [openStat, setOpenStat] = useState("tissus");
+
+  // ⚠️ Changement ici : pas de description ouverte par défaut
+  const [openStat, setOpenStat] = useState("");
 
   const slides = [
     {
@@ -475,6 +477,7 @@ function HomeView({
                     data-top-card
                     className="min-w-[220px] max-w-[260px] flex-1 rounded-2xl border bg-white p-3"
                   >
+                    {/* Image cliquable */}
                     {firstImage && (
                       <button
                         type="button"
@@ -500,21 +503,37 @@ function HomeView({
                         />
                       </button>
                     )}
-                    <div className="text-[10px] font-semibold uppercase tracking-wide text-blue-700">
-                      {p.category}
-                    </div>
-                    <div className="mt-1 text-sm font-semibold text-gray-900">
-                      {p.name}
-                    </div>
-                    <div className="mt-1 text-xs text-gray-600">
-                      {p.material} • {p.weight}
-                    </div>
-                    <div className="mt-1 text-xs text-gray-600">
-                      {p.supplierCity}, {p.supplierCountry}
-                    </div>
-                    <div className="mt-1 text-base font-extrabold text-gray-900">
-                      {formatPrice(p.price)}
-                    </div>
+
+                    {/* ⚠️ NOUVEAU : zone texte cliquable aussi (ouvre la lightbox) */}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        trackEvent("click_produit_image", {
+                          product_id: p.id,
+                          product_name: p.name,
+                          location: "top_tissus",
+                        });
+                        onOpenLightbox && onOpenLightbox(p.images, 0);
+                      }}
+                      className="w-full text-left"
+                    >
+                      <div className="text-[10px] font-semibold uppercase tracking-wide text-blue-700">
+                        {p.category}
+                      </div>
+                      <div className="mt-1 text-sm font-semibold text-gray-900">
+                        {p.name}
+                      </div>
+                      <div className="mt-1 text-xs text-gray-600">
+                        {p.material} • {p.weight}
+                      </div>
+                      <div className="mt-1 text-xs text-gray-600">
+                        {p.supplierCity}, {p.supplierCountry}
+                      </div>
+                      <div className="mt-1 text-base font-extrabold text-gray-900">
+                        {formatPrice(p.price)}
+                      </div>
+                    </button>
+
                     <a
                       href={waLink}
                       target="_blank"
@@ -673,6 +692,7 @@ function HomeView({
           </div>
         </div>
 
+        {/* Desktop : description seulement si un bloc est sélectionné */}
         <div className="mt-4 hidden text-sm text-gray-700 sm:block">
           {openStat && <p>{statDescriptions[openStat]}</p>}
         </div>
@@ -1016,6 +1036,7 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
                   key={p.id}
                   className="flex h-full flex-col rounded-2xl border bg-white p-4"
                 >
+                  {/* Image cliquable */}
                   {hasImages && (
                     <button
                       type="button"
@@ -1047,24 +1068,38 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
                     </button>
                   )}
 
-                  <div className="text-xs font-semibold uppercase tracking-wide text-blue-700">
-                    {p.category}
-                  </div>
-                  <div className="mt-1 text-base font-semibold text-gray-900">
-                    {p.name}
-                  </div>
-                  <div className="mt-1 text-xs text-gray-600">
-                    {p.material} • {p.weight} • {p.pattern}
-                  </div>
-                  <div className="mt-1 text-xs text-gray-600">
-                    {p.type} • {p.color} • Origine : {p.origin}
-                  </div>
-                  <div className="mt-1 text-xs text-gray-600">
-                    Fournisseur : {p.supplierCity}, {p.supplierCountry}
-                  </div>
-                  <div className="mt-2 text-lg font-extrabold text-gray-900">
-                    {formatPrice(p.price)}
-                  </div>
+                  {/* ⚠️ NOUVEAU : zone texte cliquable pour ouvrir la lightbox */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      trackEvent("click_produit_image", {
+                        product_id: p.id,
+                        product_name: p.name,
+                        location: "catalogue",
+                      });
+                      onOpenLightbox(p.images, 0);
+                    }}
+                    className="w-full text-left"
+                  >
+                    <div className="text-xs font-semibold uppercase tracking-wide text-blue-700">
+                      {p.category}
+                    </div>
+                    <div className="mt-1 text-base font-semibold text-gray-900">
+                      {p.name}
+                    </div>
+                    <div className="mt-1 text-xs text-gray-600">
+                      {p.material} • {p.weight} • {p.pattern}
+                    </div>
+                    <div className="mt-1 text-xs text-gray-600">
+                      {p.type} • {p.color} • Origine : {p.origin}
+                    </div>
+                    <div className="mt-1 text-xs text-gray-600">
+                      Fournisseur : {p.supplierCity}, {p.supplierCountry}
+                    </div>
+                    <div className="mt-2 text-lg font-extrabold text-gray-900">
+                      {formatPrice(p.price)}
+                    </div>
+                  </button>
 
                   <div className="mt-4 flex-1" />
 
