@@ -188,6 +188,7 @@ function Lightbox({
   onPrev,
   onNext,
   onSelect,
+  product, // ⚠️ NOUVEAU : infos produit
 }) {
   const [touchStartX, setTouchStartX] = useState(null);
   const [touchEndX, setTouchEndX] = useState(null);
@@ -319,6 +320,30 @@ function Lightbox({
             </div>
           </div>
         )}
+
+        {/* ⚠️ NOUVEAU : description complète du tissu sous la photo */}
+        {product && (
+          <div className="mt-4 w-full max-w-[80vw] rounded-xl bg-white/95 p-4 text-sm text-gray-800">
+            <div className="text-xs font-semibold uppercase tracking-wide text-blue-700">
+              {product.category}
+            </div>
+            <div className="mt-1 text-base font-semibold text-gray-900">
+              {product.name}
+            </div>
+            <div className="mt-1 text-xs text-gray-700">
+              {product.material} • {product.weight} • {product.pattern}
+            </div>
+            <div className="mt-1 text-xs text-gray-700">
+              {product.type} • {product.color} • Origine : {product.origin}
+            </div>
+            <div className="mt-1 text-xs text-gray-700">
+              Fournisseur : {product.supplierCity}, {product.supplierCountry}
+            </div>
+            <div className="mt-2 text-base font-bold text-gray-900">
+              {formatPrice(product.price)}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -335,9 +360,7 @@ function HomeView({
   onSelectCategory,
 }) {
   const [heroIndex, setHeroIndex] = useState(0);
-
-  // ⚠️ Changement ici : pas de description ouverte par défaut
-  const [openStat, setOpenStat] = useState("");
+  const [openStat, setOpenStat] = useState(""); // aucun texte ouvert par défaut
 
   const slides = [
     {
@@ -487,7 +510,7 @@ function HomeView({
                             product_name: p.name,
                             location: "top_tissus",
                           });
-                          onOpenLightbox && onOpenLightbox(p.images, 0);
+                          onOpenLightbox && onOpenLightbox(p.images, 0, p);
                         }}
                         className="mb-2 block w-full overflow-hidden rounded-xl"
                         aria-label={`Voir les photos de ${p.name}`}
@@ -504,7 +527,7 @@ function HomeView({
                       </button>
                     )}
 
-                    {/* ⚠️ NOUVEAU : zone texte cliquable aussi (ouvre la lightbox) */}
+                    {/* Zone texte cliquable : ouvre image + description */}
                     <button
                       type="button"
                       onClick={() => {
@@ -513,7 +536,7 @@ function HomeView({
                           product_name: p.name,
                           location: "top_tissus",
                         });
-                        onOpenLightbox && onOpenLightbox(p.images, 0);
+                        onOpenLightbox && onOpenLightbox(p.images, 0, p);
                       }}
                       className="w-full text-left"
                     >
@@ -1013,7 +1036,7 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
         </div>
 
         {filteredProducts.length === 0 ? (
-          <div className="rounded-2xl border bg-white p-6 text-sm text-gray-600">
+          <div className="rounded-2xl border bg-white p-6 text-sm text_gray-600">
             Aucun tissu ne correspond à ces filtres pour l’instant. Essayez de
             relâcher un critère (par exemple la catégorie, la matière ou la
             recherche).
@@ -1046,7 +1069,7 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
                           product_name: p.name,
                           location: "catalogue",
                         });
-                        onOpenLightbox(p.images, 0);
+                        onOpenLightbox(p.images, 0, p);
                       }}
                       className="group relative mb-3 block w-full overflow-hidden rounded-xl"
                       aria-label={`Voir les photos de ${p.name}`}
@@ -1068,7 +1091,7 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
                     </button>
                   )}
 
-                  {/* ⚠️ NOUVEAU : zone texte cliquable pour ouvrir la lightbox */}
+                  {/* Zone texte cliquable : ouvre image + description */}
                   <button
                     type="button"
                     onClick={() => {
@@ -1077,7 +1100,7 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
                         product_name: p.name,
                         location: "catalogue",
                       });
-                      onOpenLightbox(p.images, 0);
+                      onOpenLightbox(p.images, 0, p);
                     }}
                     className="w-full text-left"
                   >
@@ -1465,6 +1488,7 @@ export default function App() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxImages, setLightboxImages] = useState([]);
   const [lightboxIndex, setLightboxIndex] = useState(0);
+  const [lightboxProduct, setLightboxProduct] = useState(null); // ⚠️ NOUVEAU
 
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [catalogCategory, setCatalogCategory] = useState("Toutes");
@@ -1561,14 +1585,19 @@ export default function App() {
     });
   };
 
-  const openLightbox = (images, startIndex = 0) => {
+  const openLightbox = (images, startIndex = 0, product = null) => {
     if (!images || images.length === 0) return;
     setLightboxImages(images);
     setLightboxIndex(startIndex);
+    setLightboxProduct(product);
     setLightboxOpen(true);
   };
 
-  const closeLightbox = () => setLightboxOpen(false);
+  const closeLightbox = () => {
+    setLightboxOpen(false);
+    setLightboxProduct(null);
+  };
+
   const prevLightbox = () =>
     setLightboxIndex((i) =>
       lightboxImages.length
@@ -1879,6 +1908,7 @@ export default function App() {
         onPrev={prevLightbox}
         onNext={nextLightbox}
         onSelect={setLightboxIndex}
+        product={lightboxProduct} // ⚠️ NOUVEAU : on passe le produit à la lightbox
       />
     </div>
   );
