@@ -188,7 +188,7 @@ function Lightbox({
   onPrev,
   onNext,
   onSelect,
-  product, // ⚠️ NOUVEAU : infos produit
+  product, // infos produit
 }) {
   const [touchStartX, setTouchStartX] = useState(null);
   const [touchEndX, setTouchEndX] = useState(null);
@@ -245,16 +245,25 @@ function Lightbox({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80">
-      <div className="absolute inset-0" onClick={onClose} />
-      <div className="relative z-10 flex max-h-[90vh] max-w-[92vw] flex-col items-center px-4">
-        <button
-          onClick={onClose}
-          className="absolute right-0 top-[-3rem] rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-gray-700 shadow hover:bg-white"
-        >
-          ✕ Fermer
-        </button>
+    <div
+      className="fixed inset-0 z-50 flex justify-center overflow-y-auto bg-black/80"
+      onClick={onClose}
+    >
+      <div
+        className="my-8 flex w-full max-w-5xl flex-col items-center px-4"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Bouton fermer bien visible, non coupé */}
+        <div className="mb-4 flex w-full justify-end">
+          <button
+            onClick={onClose}
+            className="rounded-full bg-white/90 px-4 py-2 text-sm font-medium text-gray-700 shadow hover:bg-white"
+          >
+            ✕ Fermer
+          </button>
+        </div>
 
+        {/* Image + navigation */}
         <div
           className="relative flex items-center justify-center"
           onTouchStart={handleTouchStart}
@@ -288,7 +297,7 @@ function Lightbox({
           <img
             src={images[currentIndex]}
             alt=""
-            className="max-h-[70vh] max-w-[80vw] rounded-xl bg-white object-contain"
+            className="max-h-[60vh] max-w-[80vw] rounded-xl bg-white object-contain"
             onError={(e) => {
               e.currentTarget.onerror = null;
               e.currentTarget.src = "/logo-easytex.png";
@@ -321,9 +330,9 @@ function Lightbox({
           </div>
         )}
 
-        {/* ⚠️ NOUVEAU : description complète du tissu sous la photo */}
+        {/* Description produit sous la photo, avec scroll si besoin */}
         {product && (
-          <div className="mt-4 w-full max-w-[80vw] rounded-xl bg-white/95 p-4 text-sm text-gray-800">
+          <div className="mt-4 w-full max-w-2xl rounded-xl bg-white/95 p-4 text-sm text-gray-800">
             <div className="text-xs font-semibold uppercase tracking-wide text-blue-700">
               {product.category}
             </div>
@@ -1199,13 +1208,15 @@ function SupplierSignupView() {
       const data = await res.json();
 
       if (data.success) {
-        setStatusMessage(
+        // Popup de confirmation au lieu du message sous le formulaire
+        alert(
           "Merci ! Votre demande a bien été envoyée. L’équipe EasyTex vous recontactera sur WhatsApp."
         );
         setName("");
         setCity("");
         setCountry("");
         setWhatsapp("");
+        setStatusMessage("");
       } else {
         setStatusMessage(
           "Une erreur est survenue lors de l’envoi du formulaire. Merci de réessayer dans quelques instants."
@@ -1488,7 +1499,7 @@ export default function App() {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxImages, setLightboxImages] = useState([]);
   const [lightboxIndex, setLightboxIndex] = useState(0);
-  const [lightboxProduct, setLightboxProduct] = useState(null); // ⚠️ NOUVEAU
+  const [lightboxProduct, setLightboxProduct] = useState(null);
 
   const [newsletterEmail, setNewsletterEmail] = useState("");
   const [catalogCategory, setCatalogCategory] = useState("Toutes");
@@ -1908,7 +1919,7 @@ export default function App() {
         onPrev={prevLightbox}
         onNext={nextLightbox}
         onSelect={setLightboxIndex}
-        product={lightboxProduct} // ⚠️ NOUVEAU : on passe le produit à la lightbox
+        product={lightboxProduct}
       />
     </div>
   );
