@@ -373,10 +373,10 @@ function HomeView({
 
   const slides = [
     {
-      badge: "EasyTex • Concierge textile et tiers de confiance",
-      title: "Sourcing textile, simple, rapide, sûr et centralisé.",
+      badge: "EasyTex • Votre expert textile et tiers de confiance",
+      title: "Sourcing textile : simple, rapide et sécurisé.",
       description:
-        "EasyTex est votre concierge textile au Sénégal et en Afrique de l’Ouest : nous sourçons les meilleurs tissus, centralisons vos commandes et sécurisons les paiements entre vous et les fournisseurs, via Mobile Money. Commander vos tissus en toute confiance.",
+        "EasyTex est votre expert textile au Sénégal et en Afrique de l’Ouest : nous sourçons les meilleurs tissus, centralisons vos commandes et sécurisons les paiements entre vous et les fournisseurs, via Mobile Money. Commander vos tissus en toute confiance.",
     },
     {
       badge: "Tissus habillement",
@@ -386,9 +386,9 @@ function HomeView({
     },
     {
       badge: "Professionnels & ateliers",
-      title: "Gagnez du temps sur vos achats textile.",
+      title: "Gagnez du temps sur vos achats de textile.",
       description:
-        "Envoyez vos commandes sur WhatsApp, payez en Mobile Money et laissez EasyTex coordonner avec les fournisseurs.",
+        "Envoyez vos commandes sur WhatsApp, payez par Mobile Money et laissez EasyTex coordonner avec les fournisseurs.",
     },
   ];
 
@@ -495,7 +495,7 @@ function HomeView({
                 const waText = encodeURIComponent(
                   `Bonjour EasyTex,\n\nJe souhaite passer une commande via EasyTex pour :\n- ${p.name}\n- Catégorie : ${p.category}\n- Matière : ${p.material}\n- Poids : ${p.weight}\n- Motif / aspect : ${p.pattern}\n- Couleur : ${p.color}\n- Origine : ${p.origin}\n- Fournisseur : ${p.supplierCity}, ${p.supplierCountry}\n- Prix indicatif : ${formatPrice(
                     p.price
-                  )}\n\nZone de livraison souhaitée :\nMode de paiement (Mobile Money : Wave / Orange Money / Yass) :\n\nMerci de me proposer la meilleure combinaison prix / qualité / proximité fournisseur.`
+                  )}\n\nZone de livraison souhaitée :\nMode de paiement (Mobile Money : Wave / Orange Money / Yas) :\n\nMerci de me proposer la meilleure combinaison prix / qualité / proximité fournisseur.`
                 );
                 const waLink = `https://wa.me/${WA_NUMBER}?text=${waText}`;
                 const firstImage =
@@ -629,9 +629,11 @@ function HomeView({
       {/* HERO SLIDER */}
       <div className="mt-6 relative overflow-hidden rounded-3xl border bg-blue-50 p-6 md:p-16">
         <div className="max-w-3xl">
-          <span className="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 text-sm ring-1 ring-gray-200">
+          <span className="inline-flex items-center gap-2 rounded-full bg-white/70 px-3 py-1 ring-1 ring-gray-200">
             <span className="inline-block h-2 w-2 rounded-full bg-blue-600" />
-            {slides[heroIndex].badge}
+            <span className="text-xs leading-snug sm:text-sm sm:leading-snug">
+              {slides[heroIndex].badge}
+            </span>
           </span>
 
           <h1 className="mt-4 text-4xl font-extrabold tracking-tight text-gray-900 md:text-6xl">
@@ -797,7 +799,7 @@ function HomeView({
               3) Payez en toute confiance
             </div>
             <p className="mt-1 text-sm text-gray-600">
-              Vous payez via Mobile Money (Wave, Orange Money, Yass). EasyTex
+              Vous payez via Mobile Money (Wave, Orange Money, Yas). EasyTex
               sécurise le paiement et ne le libère au fournisseur qu’après
               confirmation de la bonne réception.
             </p>
@@ -918,21 +920,6 @@ function HomeView({
           </button>
         </div>
       </section>
-
-      {/* PROGRAMME EASYPOINTS (TEASER) */}
-      <section className="mt-10">
-        <h2 className="mb-2 text-xl font-semibold text-gray-900">
-          EasyPoints – programme de fidélité B2B
-        </h2>
-        <p className="text-sm text-gray-700">
-          EasyTex met en place EasyPoints, un programme de fidélité pour
-          récompenser les clients qui passent régulièrement commande via
-          Mobile Money. À chaque commande validée, vous cumulez des points qui
-          pourront être utilisés pour obtenir des avantages (remises, offres
-          spéciales, accompagnement prioritaire, etc.). Le suivi de vos points
-          se fera directement par l’équipe EasyTex via WhatsApp.
-        </p>
-      </section>
     </div>
   );
 }
@@ -998,7 +985,7 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
           Filtrez les tissus par catégorie, matière, poids, motif ou effectuez
           une recherche par nom, matière ou origine pour trouver la référence
           la plus adaptée à votre projet. Une fois vos tissus choisis, vous
-          passez commande via EasyTex sur WhatsApp : le paiement se fait en
+          passez commande via EasyTex sur WhatsApp : le paiement se fait en priorité par
           Mobile Money sur un compte sécurisé, et EasyTex libère les fonds au
           fournisseur après validation de la livraison. Les prix sont
           indicatifs et peuvent varier selon la quantité, la finition et les
@@ -1117,7 +1104,7 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
               const waText = encodeURIComponent(
                 `Bonjour EasyTex,\n\nJe souhaite passer une commande via EasyTex pour :\n- ${p.name}\n- Catégorie : ${p.category}\n- Matière : ${p.material}\n- Poids : ${p.weight}\n- Motif / aspect : ${p.pattern}\n- Couleur : ${p.color}\n- Origine : ${p.origin}\n- Fournisseur : ${p.supplierCity}, ${p.supplierCountry}\n- Prix indicatif : ${formatPrice(
                   p.price
-                )}\n\nZone de livraison souhaitée :\nMode de paiement (Mobile Money : Wave / Orange Money / Yass) :\n\nMerci de me proposer la meilleure combinaison prix / qualité / proximité fournisseur.`
+                )}\n\nZone de livraison souhaitée :\nMode de paiement (Mobile Money : Wave / Orange Money / Yas) :\n\nMerci de me proposer la meilleure combinaison prix / qualité / proximité fournisseur.`
               );
               const waLink = `https://wa.me/${WA_NUMBER}?text=${waText}`;
 
@@ -1426,6 +1413,85 @@ function SupplierSignupView() {
 }
 
 /* -----------------------------------------------------------
+   EASYPOINTS – PAGE DÉDIÉE
+----------------------------------------------------------- */
+
+function EasyPointsView() {
+  return (
+    <div className="mx-auto max-w-6xl px-4 pb-16 pt-6">
+      <section className="rounded-2xl border bg-white p-5 md:p-8">
+        <h1 className="text-xl font-semibold text-gray-900">
+          EasyPoints – programme de fidélité B2B
+        </h1>
+        <p className="mt-2 text-sm text-gray-700">
+          EasyPoints est le programme de fidélité d’EasyTex pour les
+          professionnels (ateliers, créateurs, hôtels, écoles, revendeurs…)
+          qui passent régulièrement commande via Mobile Money. À chaque
+          commande validée, vous cumulez des points qui se transforment en
+          avantages concrets.
+        </p>
+
+        <div className="mt-5 grid gap-4 text-sm text-gray-700 md:grid-cols-2">
+          <div className="rounded-2xl bg-blue-50 p-4">
+            <h2 className="text-sm font-semibold text-gray-900">
+              Comment ça marche ?
+            </h2>
+            <ul className="mt-2 list-disc space-y-1 pl-5">
+              <li>Vous passez vos commandes textile via EasyTex (WhatsApp).</li>
+              <li>
+                Vous payez en Mobile Money sur le compte sécurisé EasyTex
+                (Wave, Orange Money, …).
+              </li>
+              <li>
+                À chaque commande validée, un nombre de points EasyPoints est
+                enregistré sur votre profil.
+              </li>
+              <li>
+                L’équipe EasyTex suit vos points et vous partage votre solde
+                régulièrement via WhatsApp.
+              </li>
+            </ul>
+          </div>
+
+          <div className="rounded-2xl bg-gray-50 p-4">
+            <h2 className="text-sm font-semibold text-gray-900">
+              Quels avantages ?
+            </h2>
+            <ul className="mt-2 list-disc space-y-1 pl-5">
+              <li>Remises ou avoirs sur de prochaines commandes.</li>
+              <li>Offres spéciales sur certains tissus ou collections.</li>
+              <li>Traitement prioritaire de vos demandes et devis.</li>
+              <li>
+                Accompagnement renforcé pour vos gros besoins (événements,
+                collections capsules, rentrée scolaire, etc.).
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="mt-5 rounded-2xl border border-dashed border-blue-200 bg-blue-50/60 p-4 text-xs text-gray-700">
+          <p>
+            <span className="font-semibold text-gray-900">
+              Exemple indicatif de barème :
+            </span>{" "}
+            10 000 FCFA payés = 1 EasyPoint. À partir d’un certain seuil
+            (par exemple 500 ou 1 000 points), vous débloquez des avantages
+            particuliers définis avec l’équipe EasyTex. Le barème précis peut
+            évoluer pendant la phase pilote.
+          </p>
+          <p className="mt-2">
+            Le suivi de vos EasyPoints se fait directement avec l’équipe
+            EasyTex via WhatsApp. Pour toute question ou pour connaître votre
+            solde, envoyez simplement un message en précisant{" "}
+            <span className="font-semibold">« EasyPoints »</span>.
+          </p>
+        </div>
+      </section>
+    </div>
+  );
+}
+
+/* -----------------------------------------------------------
    FAQ / CGU / POLITIQUE
 ----------------------------------------------------------- */
 
@@ -1446,7 +1512,7 @@ function FaqView() {
             catalogue de tissus, puis vous passez commande via EasyTex
             (WhatsApp). EasyTex centralise vos demandes, coordonne avec les
             fournisseurs partenaires et sécurise les paiements en séquestre
-            jusqu’à confirmation de la bonne réception.
+            jusqu’à confirmation de la bonne réception de votre commande.
           </p>
         </div>
         <div>
@@ -1466,10 +1532,10 @@ function FaqView() {
           </h2>
           <p className="mt-1">
             EasyTex peut intervenir comme tiers de confiance pour le paiement.
-            Vos règlements se font via Mobile Money (Wave, Orange Money, Yass…)
+            Vos règlements se font via Mobile Money (Wave, Orange Money, …)
             sur un compte sécurisé EasyTex. Les fonds ne sont libérés au
-            fournisseur qu’après validation de la bonne réception. La livraison
-            reste organisée par le fournisseur ou un transporteur partenaire, en
+            fournisseur qu’après validation de la bonne réception de votre commande. La livraison
+            peut être organisée par EasyTex, le fournisseur ou un transporteur partenaire, en
             accord avec vous.
           </p>
         </div>
@@ -1829,6 +1895,7 @@ export default function App() {
               { key: "accueil", label: "Accueil" },
               { key: "catalogue", label: "Catalogue" },
               { key: "fournisseurs", label: "Devenir fournisseur" },
+              { key: "easypoints", label: "EasyPoints" },
             ].map((item) => (
               <button
                 key={item.key}
@@ -1918,6 +1985,7 @@ export default function App() {
                 { key: "accueil", label: "Accueil" },
                 { key: "catalogue", label: "Catalogue" },
                 { key: "fournisseurs", label: "Devenir fournisseur" },
+                { key: "easypoints", label: "EasyPoints" },
               ].map((item) => (
                 <button
                   key={item.key}
@@ -1969,6 +2037,7 @@ export default function App() {
         />
       )}
       {tab === "fournisseurs" && <SupplierSignupView />}
+      {tab === "easypoints" && <EasyPointsView />}
       {tab === "faq" && <FaqView />}
       {tab === "cgu" && <CguView />}
       {tab === "privacy" && <PrivacyView />}
