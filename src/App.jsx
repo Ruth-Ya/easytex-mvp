@@ -369,26 +369,26 @@ function HomeView({
   onSelectCategory,
 }) {
   const [heroIndex, setHeroIndex] = useState(0);
-  const [openStat, setOpenStat] = useState(""); // aucun texte ouvert par défaut
+  const [openStat, setOpenStat] = useState("");
 
   const slides = [
     {
-      badge: "EasyTex",
-      title: "Sourcing textile, simple et rapide.",
+      badge: "EasyTex • Concierge textile et tiers de confiance",
+      title: "Sourcing textile, simple, rapide, sûr et centralisé.",
       description:
-        "EasyTex connecte les acheteurs de textile aux meilleurs fournisseurs de la zone UEMOA, directement sur WhatsApp.",
+        "EasyTex est votre concierge textile au Sénégal et en Afrique de l’Ouest : nous sourçons les meilleurs tissus, centralisons vos commandes et sécurisons les paiements entre vous et les fournisseurs, via Mobile Money. Commander vos tissus en toute confiance.",
     },
     {
       badge: "Tissus habillement",
       title: "Bazin, Wax, Popeline… en un seul endroit.",
       description:
-        "Comparez les qualités, origines et prix indicatifs avant de contacter les fournisseurs.",
+        "Comparez les qualités, origines et prix indicatifs avant de passer commande via EasyTex.",
     },
     {
       badge: "Professionnels & ateliers",
       title: "Gagnez du temps sur vos achats textile.",
       description:
-        "Recevez des devis rapides, discutez sur WhatsApp et optimisez vos approvisionnements.",
+        "Envoyez vos commandes sur WhatsApp, payez en Mobile Money et laissez EasyTex coordonner avec les fournisseurs.",
     },
   ];
 
@@ -400,7 +400,7 @@ function HomeView({
     zone:
       "La plateforme cible en priorité les pays de l’UEMOA. Les fournisseurs peuvent être basés dans différents pays de la zone, et EasyTex vise à faciliter les mises en relation et les solutions logistiques.",
     delai:
-      "Une fois votre demande envoyée via WhatsApp, EasyTex et/ou les fournisseurs partenaires s’efforcent de vous répondre dans un délai indicatif de 24 à 48 heures ouvrées.",
+      "Une fois votre commande envoyée via WhatsApp, EasyTex et les fournisseurs partenaires s’efforcent de vous répondre dans un délai indicatif de 24 à 48 heures ouvrées.",
   };
 
   const [topIndex, setTopIndex] = useState(0);
@@ -493,9 +493,9 @@ function HomeView({
             >
               {featuredProducts.map((p) => {
                 const waText = encodeURIComponent(
-                  `Bonjour EasyTex,\n\nJe souhaite un devis pour :\n- ${p.name}\n- Catégorie : ${p.category}\n- Matière : ${p.material}\n- Poids : ${p.weight}\n- Motif / aspect : ${p.pattern}\n- Couleur : ${p.color}\n- Origine : ${p.origin}\n- Fournisseur : ${p.supplierCity}, ${p.supplierCountry}\n- Prix indicatif : ${formatPrice(
+                  `Bonjour EasyTex,\n\nJe souhaite passer une commande via EasyTex pour :\n- ${p.name}\n- Catégorie : ${p.category}\n- Matière : ${p.material}\n- Poids : ${p.weight}\n- Motif / aspect : ${p.pattern}\n- Couleur : ${p.color}\n- Origine : ${p.origin}\n- Fournisseur : ${p.supplierCity}, ${p.supplierCountry}\n- Prix indicatif : ${formatPrice(
                     p.price
-                  )}\n\nMerci de me préciser les minimums de commande, délais et conditions de livraison.`
+                  )}\n\nZone de livraison souhaitée :\nMode de paiement (Mobile Money : Wave / Orange Money / Yass) :\n\nMerci de me proposer la meilleure combinaison prix / qualité / proximité fournisseur.`
                 );
                 const waLink = `https://wa.me/${WA_NUMBER}?text=${waText}`;
                 const firstImage =
@@ -616,7 +616,7 @@ function HomeView({
                       }}
                       className="mt-3 inline-flex w-full items-center justify-center rounded-xl bg-blue-600 px-3 py-2 text-xs font-semibold text-white hover:bg-blue-700"
                     >
-                      Demander un devis
+                      Passer commande via EasyTex
                     </a>
                   </div>
                 );
@@ -774,7 +774,9 @@ function HomeView({
         </h2>
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           <div className="rounded-2xl border p-4">
-            <div className="font-semibold text-gray-900">1) Explorez</div>
+            <div className="font-semibold text-gray-900">
+              1) Explorez le catalogue
+            </div>
             <p className="mt-1 text-sm text-gray-600">
               Parcourez les tissus par catégorie : habillement, maison,
               ameublement, tissus traditionnels…
@@ -782,19 +784,22 @@ function HomeView({
           </div>
           <div className="rounded-2xl border p-4">
             <div className="font-semibold text-gray-900">
-              2) Demandez un devis
+              2) Passez commande via EasyTex
             </div>
             <p className="mt-1 text-sm text-gray-600">
-              En un clic, envoyez une demande de devis détaillée sur WhatsApp.
+              Sélectionnez vos tissus et envoyez votre commande sur WhatsApp.
+              EasyTex devient votre point de contact unique avec les
+              fournisseurs partenaires.
             </p>
           </div>
           <div className="rounded-2xl border p-4">
             <div className="font-semibold text-gray-900">
-              3) Recevez & finalisez
+              3) Payez en toute confiance
             </div>
             <p className="mt-1 text-sm text-gray-600">
-              Comparez les offres, négociez directement avec les fournisseurs
-              et confirmez votre commande.
+              Vous payez via Mobile Money (Wave, Orange Money, Yass). EasyTex
+              sécurise le paiement et ne le libère au fournisseur qu’après
+              confirmation de la bonne réception.
             </p>
           </div>
         </div>
@@ -913,6 +918,21 @@ function HomeView({
           </button>
         </div>
       </section>
+
+      {/* PROGRAMME EASYPOINTS (TEASER) */}
+      <section className="mt-10">
+        <h2 className="mb-2 text-xl font-semibold text-gray-900">
+          EasyPoints – programme de fidélité B2B
+        </h2>
+        <p className="text-sm text-gray-700">
+          EasyTex met en place EasyPoints, un programme de fidélité pour
+          récompenser les clients qui passent régulièrement commande via
+          Mobile Money. À chaque commande validée, vous cumulez des points qui
+          pourront être utilisés pour obtenir des avantages (remises, offres
+          spéciales, accompagnement prioritaire, etc.). Le suivi de vos points
+          se fera directement par l’équipe EasyTex via WhatsApp.
+        </p>
+      </section>
     </div>
   );
 }
@@ -977,8 +997,12 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
         <p className="mb-4 text-sm text-gray-600">
           Filtrez les tissus par catégorie, matière, poids, motif ou effectuez
           une recherche par nom, matière ou origine pour trouver la référence
-          la plus adaptée à votre projet. Les prix sont indicatifs et peuvent
-          varier selon la quantité, la finition et les délais.
+          la plus adaptée à votre projet. Une fois vos tissus choisis, vous
+          passez commande via EasyTex sur WhatsApp : le paiement se fait en
+          Mobile Money sur un compte sécurisé, et EasyTex libère les fonds au
+          fournisseur après validation de la livraison. Les prix sont
+          indicatifs et peuvent varier selon la quantité, la finition et les
+          délais.
         </p>
 
         <div className="mb-4">
@@ -1091,9 +1115,9 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {filteredProducts.map((p) => {
               const waText = encodeURIComponent(
-                `Bonjour EasyTex,\n\nJe souhaite un devis pour :\n- ${p.name}\n- Catégorie : ${p.category}\n- Matière : ${p.material}\n- Poids : ${p.weight}\n- Motif / aspect : ${p.pattern}\n- Couleur : ${p.color}\n- Origine : ${p.origin}\n- Fournisseur : ${p.supplierCity}, ${p.supplierCountry}\n- Prix indicatif : ${formatPrice(
+                `Bonjour EasyTex,\n\nJe souhaite passer une commande via EasyTex pour :\n- ${p.name}\n- Catégorie : ${p.category}\n- Matière : ${p.material}\n- Poids : ${p.weight}\n- Motif / aspect : ${p.pattern}\n- Couleur : ${p.color}\n- Origine : ${p.origin}\n- Fournisseur : ${p.supplierCity}, ${p.supplierCountry}\n- Prix indicatif : ${formatPrice(
                   p.price
-                )}\n\nMerci de me préciser les minimums de commande, délais et conditions de livraison.`
+                )}\n\nZone de livraison souhaitée :\nMode de paiement (Mobile Money : Wave / Orange Money / Yass) :\n\nMerci de me proposer la meilleure combinaison prix / qualité / proximité fournisseur.`
               );
               const waLink = `https://wa.me/${WA_NUMBER}?text=${waText}`;
 
@@ -1220,7 +1244,7 @@ function CatalogView({ onOpenLightbox, initialCategory = "Toutes" }) {
                     }}
                     className="mt-3 inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
                   >
-                    Demander un devis sur WhatsApp
+                    Commander ce tissu via EasyTex
                   </a>
                 </div>
               );
@@ -1255,7 +1279,6 @@ function SupplierSignupView() {
       whatsapp_filled: !!whatsapp,
     });
 
-    // META PIXEL – Conversion fournisseur
     if (typeof window !== "undefined" && window.fbq) {
       window.fbq("trackCustom", "SupplierSignup", {
         name_filled: !!name,
@@ -1265,7 +1288,6 @@ function SupplierSignupView() {
       });
     }
 
-    // GA4 – Événement dédié fournisseurs
     if (typeof window !== "undefined" && window.gtag) {
       window.gtag("event", "supplier_signup", {
         name_filled: !!name,
@@ -1300,7 +1322,6 @@ function SupplierSignupView() {
       const data = await res.json();
 
       if (data.success) {
-        // Popup de confirmation au lieu du message sous le formulaire
         alert(
           "Merci ! Votre demande a bien été envoyée. L’équipe EasyTex vous recontactera sur WhatsApp."
         );
@@ -1420,21 +1441,23 @@ function FaqView() {
             EasyTex est-il un site de vente en ligne ?
           </h2>
           <p className="mt-1">
-            EasyTex est une plateforme de mise en relation. Nous aidons les
-            acheteurs à trouver des fournisseurs de textile adaptés à leurs
-            besoins, puis les échanges se font directement entre vous et le
-            fournisseur (WhatsApp, téléphone, etc.).
+            EasyTex n’est pas une boutique en ligne classique, mais un service
+            de conciergerie textile et de tiers de confiance. Vous consultez un
+            catalogue de tissus, puis vous passez commande via EasyTex
+            (WhatsApp). EasyTex centralise vos demandes, coordonne avec les
+            fournisseurs partenaires et sécurise les paiements en séquestre
+            jusqu’à confirmation de la bonne réception.
           </p>
         </div>
         <div>
-          <h2 className="font_semibold">
+          <h2 className="font-semibold">
             Comment sont définis les prix indiqués ?
           </h2>
           <p className="mt-1">
             Les prix affichés sont indicatifs. Ils peuvent varier en fonction de
             la quantité, des options de finition, des délais et des conditions
-            de livraison. Le prix final est confirmé par le fournisseur lors du
-            devis.
+            de livraison. Le prix final est confirmé lors de la commande gérée
+            avec EasyTex et les fournisseurs.
           </p>
         </div>
         <div>
@@ -1442,8 +1465,12 @@ function FaqView() {
             EasyTex intervient-il dans le paiement ou la livraison ?
           </h2>
           <p className="mt-1">
-            Non. EasyTex ne gère ni le paiement ni la logistique. Ces aspects
-            sont à convenir directement avec le fournisseur choisi.
+            EasyTex peut intervenir comme tiers de confiance pour le paiement.
+            Vos règlements se font via Mobile Money (Wave, Orange Money, Yass…)
+            sur un compte sécurisé EasyTex. Les fonds ne sont libérés au
+            fournisseur qu’après validation de la bonne réception. La livraison
+            reste organisée par le fournisseur ou un transporteur partenaire, en
+            accord avec vous.
           </p>
         </div>
         <div>
@@ -1453,7 +1480,8 @@ function FaqView() {
           <p className="mt-1">
             Remplissez le formulaire dans la section « Devenir fournisseur ». Un
             membre de l’équipe EasyTex vous contactera pour valider votre
-            profil.
+            profil et les types de tissus que vous souhaitez référencer sur la
+            plateforme.
           </p>
         </div>
       </div>
@@ -1477,9 +1505,14 @@ function CguView() {
           <h2 className="font-semibold">1. Objet de la plateforme</h2>
           <p className="mt-1">
             EasyTex met en relation des professionnels et particuliers en
-            recherche de textile avec des fournisseurs. La plateforme ne vend
-            pas directement de produits et n’est pas partie aux contrats
-            conclus entre acheteurs et fournisseurs.
+            recherche de textile avec des fournisseurs. La plateforme n’est en
+            principe pas propriétaire des stocks et ne vend pas directement les
+            produits, sauf mention contraire. EasyTex agit comme intermédiaire
+            et tiers de confiance, notamment pour le traitement des paiements
+            lorsque l’acheteur choisit de régler via les solutions proposées
+            (Mobile Money, etc.). Les contrats sont conclus entre acheteurs et
+            fournisseurs ; EasyTex intervient comme facilitateur et, le cas
+            échéant, comme gestionnaire du paiement en séquestre.
           </p>
         </div>
         <div>
@@ -1487,16 +1520,22 @@ function CguView() {
           <p className="mt-1">
             L’utilisateur s’engage à fournir des informations exactes, à
             respecter les lois en vigueur et à ne pas utiliser EasyTex à des
-            fins frauduleuses ou illicites.
+            fins frauduleuses ou illicites. Les échanges commerciaux (quantités,
+            délais, modalités de livraison) sont à convenir entre l’acheteur,
+            EasyTex et le fournisseur.
           </p>
         </div>
         <div>
           <h2 className="font-semibold">3. Responsabilités</h2>
           <p className="mt-1">
             EasyTex ne peut être tenu responsable de la qualité des produits,
-            des délais, des paiements ou de tout litige commercial entre
-            acheteurs et fournisseurs. La responsabilité d’EasyTex se limite au
-            bon fonctionnement raisonnable de la plateforme.
+            des délais de livraison ou de tout litige commercial entre acheteurs
+            et fournisseurs, en dehors de son rôle de tiers de confiance pour le
+            paiement. La responsabilité d’EasyTex se limite au bon
+            fonctionnement raisonnable de la plateforme et à la bonne exécution
+            des flux de paiement lorsqu’ils sont réalisés via EasyTex (réception
+            des fonds, conservation temporaire, restitution ou transfert aux
+            fournisseurs selon les conditions convenues).
           </p>
         </div>
         <div>
@@ -1504,7 +1543,8 @@ function CguView() {
           <p className="mt-1">
             Les données collectées dans le cadre de l’utilisation de la
             plateforme sont traitées conformément à la Politique de
-            confidentialité d’EasyTex.
+            confidentialité d’EasyTex, notamment les informations relatives aux
+            commandes et, le cas échéant, les métadonnées de paiement.
           </p>
         </div>
         <div>
@@ -1538,24 +1578,32 @@ function PrivacyView() {
             Nous pouvons collecter : votre nom, vos coordonnées (e-mail,
             téléphone), votre numéro WhatsApp, ainsi que les informations
             nécessaires au traitement de vos demandes de devis ou de votre
-            inscription comme fournisseur.
+            inscription comme fournisseur. Nous pouvons également collecter des
+            informations relatives à vos commandes (tissus sélectionnés,
+            montants, historique) et, le cas échéant, certaines métadonnées de
+            paiement (moyen de paiement, statut de la transaction), sans
+            conserver vos codes confidentiels qui restent gérés par l’opérateur
+            de Mobile Money.
           </p>
         </div>
         <div>
           <h2 className="font-semibold">2. Finalités</h2>
           <p className="mt-1">
             Ces données sont utilisées pour : répondre à vos demandes, vous
-            mettre en relation avec des fournisseurs, améliorer le service et,
-            le cas échéant, vous envoyer des informations sur EasyTex (si vous y
-            avez consenti).
+            mettre en relation avec des fournisseurs, sécuriser les paiements en
+            tant que tiers de confiance, assurer le suivi de vos commandes,
+            améliorer le service et, le cas échéant, vous envoyer des
+            informations sur EasyTex (si vous y avez consenti), y compris dans
+            le cadre du programme de fidélité EasyPoints.
           </p>
         </div>
         <div>
           <h2 className="font-semibold">3. Partage des données</h2>
           <p className="mt-1">
             Certaines informations peuvent être partagées avec des fournisseurs
-            partenaires lorsque c’est nécessaire pour traiter votre demande.
-            EasyTex ne vend pas vos données personnelles.
+            partenaires ou des prestataires de paiement lorsque c’est nécessaire
+            pour traiter votre commande ou sécuriser le paiement. EasyTex ne
+            vend pas vos données personnelles.
           </p>
         </div>
         <div>
@@ -1563,7 +1611,8 @@ function PrivacyView() {
           <p className="mt-1">
             Nous mettons en œuvre des mesures raisonnables de sécurité pour
             protéger vos données et les conservons pendant une durée limitée,
-            proportionnée aux finalités poursuivies.
+            proportionnée aux finalités poursuivies (gestion des commandes,
+            obligations légales, suivi de la relation commerciale).
           </p>
         </div>
         <div>
@@ -1932,7 +1981,8 @@ export default function App() {
                 Restez informés des nouveautés textile
               </div>
               <div className="text-sm text-gray-700">
-                Recevez notre sélection de tissus et offres EasyTex en exclusivité.
+                Recevez notre sélection de tissus et offres EasyTex en
+                exclusivité.
               </div>
             </div>
             <form
