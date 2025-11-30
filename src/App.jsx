@@ -5,7 +5,7 @@ import React, { useState, useEffect, useRef } from "react";
    CONFIG
 ----------------------------------------------------------- */
 
-const WA_NUMBER = "221707546281";
+const WA_NUMBER = "221761258799";
 const GA_MEASUREMENT_ID = "G-3N99WM3PW2"; // (pas utilisé directement ici, mais gardé)
 
 /**
@@ -1932,8 +1932,7 @@ export default function App() {
                 Restez informés des nouveautés textile
               </div>
               <div className="text-sm text-gray-700">
-                Recevez notre sélection de tissus et offres EasyTex (MVP en
-                cours de déploiement).
+                Recevez notre sélection de tissus et offres EasyTex en exclusivité.
               </div>
             </div>
             <form
