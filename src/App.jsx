@@ -32,12 +32,11 @@ const formatPrice = (n) =>
 const DEMO_PRODUCTS = [
   {
   id: "TX-BAZ-001",
-  name: "Bazin riche 1,8 m",
+  name: "Bazin riche",
   category: "Tissus habillement",
   type: "Bazin",
   color: "Plusieurs couleurs",
-  priceLabel: "Sur demande",
-  price: null,
+  price: "Sur demande",
   material: "Coton",
   images: [
     "/catalog/habillement/bazin/TX-BAZ-001/1.jpg",
