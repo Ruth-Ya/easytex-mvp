@@ -98,7 +98,7 @@ const DEMO_PRODUCTS = [
   featured: true,
   supplierCity: "Dakar",
   supplierCountry: "Sénégal"
-}
+},
      {
     id: "TX-LAF-001",
     name: "Brodé Lafaya",
