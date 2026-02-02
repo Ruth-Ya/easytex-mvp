@@ -1554,7 +1554,7 @@ function EasyPointsView() {
         <p className="mt-2 text-sm text-gray-700">
           EasyPoints est le programme de fidélité d’EasyTex pour les
           professionnels (ateliers, créateurs, hôtels, écoles, revendeurs…)
-          qui passent régulièrement commande via Mobile Money. À chaque
+          et particuliers qui passent régulièrement commande via Mobile Money. À chaque
           commande validée, vous cumulez des points qui se transforment en
           avantages concrets.
         </p>
