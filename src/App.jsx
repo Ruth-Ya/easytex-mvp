@@ -274,7 +274,7 @@ function Lightbox({
               Fournisseur : {product.supplierCity}, {product.supplierCountry}
             </div>
            <div className="mt-2 text-base font-bold text-gray-900">
-  {product.priceLabel ? product.priceLabel : formatPrice(product.price)}
+  Prix : {product.priceLabel ? product.priceLabel : formatPrice(product.price)}
 </div>
           </div>
         )}
