@@ -31,7 +31,7 @@ const formatPrice = (n) =>
 
 const DEMO_PRODUCTS = [
   {
-    id: "p1",
+    id: "TX-BAZ-001",
     name: "Bazin riche 1,8 m",
     category: "Tissus habillement",
     type: "Bazin",
@@ -41,13 +41,16 @@ const DEMO_PRODUCTS = [
     material: "Coton",
     weight: "Moyen",
     pattern: "Uni",
-    images: ["/p1-1.jpg", "/p1-2.jpg"],
+    images: [
+  "/catalog/habillement/bazin/TX-BAZ-001/1.jpg",
+  "/catalog/habillement/bazin/TX-BAZ-001/2.jpg"
+],
     featured: true,
     supplierCity: "Dakar",
     supplierCountry: "Sénégal",
   },
   {
-    id: "p2",
+    id: "TX-WAX-001",
     name: "Wax premium 6 yards",
     category: "Tissus habillement",
     type: "Wax",
@@ -57,10 +60,13 @@ const DEMO_PRODUCTS = [
     material: "Coton",
     weight: "Léger",
     pattern: "Imprimé Wax",
-    images: ["/p2-1.jpg", "/p2-2.jpg"],
+    images: [
+  "/catalog/habillement/wax/TX-WAX-001/1.jpg",
+  "/catalog/habillement/wax/TX-WAX-001/2.jpg"
+],
     featured: true,
-    supplierCity: "Abidjan",
-    supplierCountry: "Côte d’Ivoire",
+    supplierCity: "Dakar",
+    supplierCountry: "Sénégal",
   },
   {
     id: "p3",
