@@ -36,7 +36,8 @@ const DEMO_PRODUCTS = [
   category: "Tissus habillement",
   type: "Bazin",
   color: "Plusieurs couleurs",
-  price: "Sur demande",
+  priceLabel: "Sur demande",
+  price: null,
   material: "Coton",
   images: [
     "/catalog/habillement/bazin/TX-BAZ-001/1.jpg",
@@ -264,17 +265,17 @@ function Lightbox({
               {product.name}
             </div>
             <div className="mt-1 text-xs text-gray-700">
-              {product.material} • {product.weight} • {product.pattern}
+              {product.material} 
             </div>
             <div className="mt-1 text-xs text-gray-700">
-              {product.type} • {product.color} • Origine : {product.origin}
+              {product.type} • {product.color} 
             </div>
             <div className="mt-1 text-xs text-gray-700">
               Fournisseur : {product.supplierCity}, {product.supplierCountry}
             </div>
-            <div className="mt-2 text-base font-bold text-gray-900">
-              {formatPrice(product.price)}
-            </div>
+           <div className="mt-2 text-base font-bold text-gray-900">
+  {product.priceLabel ? product.priceLabel : formatPrice(product.price)}
+</div>
           </div>
         )}
       </div>
